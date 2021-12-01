@@ -1,12 +1,15 @@
-# The main entry point of your workflow.
-# After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
+include: "rules/common.smk"
 
-
+##### Target rules #####
 rule all:
     input:
-        # The first rule should define the default target files
-        # Subsequent target rules can be specified below. They should start with all_*.
+        "results/qc/qc.html",
+        "results/plots/depths.svg",
 
 
-# use includes for common helper functions and sets of rules that serve a common theme
-include: "rules/common.smk"
+##### Modules #####
+
+include: "rules/ref_genome.smk"
+include: "rules/read_qc.smk"
+include: "rules/mapping.smk"
+include: "rules/bam_qc.smk"
