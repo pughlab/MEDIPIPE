@@ -22,7 +22,7 @@ The pipeline were developed in collaboration with ###, ###, ..
 2) Git clone this pipeline.
 	```bash
 	$ cd
-	$ git clone https://github.com/yzeng-lol/cfMeDIP-seq
+	$ git clone https://github.com/yzeng-lol/cfmedip-seq-pipeline
 
 3) Install pipeline's Conda enviroments
 	```bash
@@ -33,9 +33,10 @@ The pipeline were developed in collaboration with ###, ###, ..
 
 ## Input file spefification
 
+....
 
 ## Running on local computer/HPCs
 
-
+......
 
 
