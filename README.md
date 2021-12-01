@@ -28,8 +28,11 @@ The pipeline were developed in collaboration with ###, ###, ..
 	```bash
 	$ cd cfmedip-seq-pipeline
 	$ conda activate base
-	$ mamba env create --name cfmedip-seq-pipeline --file conda_env.yaml
+	# It might take a while to download and intall all depedencies
+	$ mamba env create --file conda_env.yaml
 	```
+
+4) Test run 
 
 ## Input file spefification
 
