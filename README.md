@@ -24,7 +24,7 @@ The pipeline were developed in collaboration with ###, ###, ..
 	$ cd
 	$ git clone https://github.com/yzeng-lol/cfmedip-seq-pipeline
 
-3) Install pipeline's Conda enviroments
+3) Install pipeline\'s Conda enviroments
 	```bash
 	$ cd cfmedip-seq-pipeline
 	$ conda activate base
@@ -32,7 +32,10 @@ The pipeline were developed in collaboration with ###, ###, ..
 	$ mamba env create --file conda_env.yaml
 	```
 
-4) Test run 
+4) Test run
+	```bash
+	$ snakemake --cores 2 --snakefile ~/cfmedip-seq-pipeline/workflow/Snakefile --configfile ~/cfmedip-seq-pipeline/workflow/config/config.yaml
+  ````
 
 ## Input file spefification
 
@@ -41,5 +44,3 @@ The pipeline were developed in collaboration with ###, ###, ..
 ## Running on local computer/HPCs
 
 ......
-
-

@@ -1,0 +1,1 @@
+(bwa mem -R '@RG\tID:A\tSM:A' -t 2  data/bwa_index/genome.fa tmp/trimmed/A_trimmed.fq | samtools view -Sb - > tmp/mapped_reads/A.bam) 2> tmp/logs/A_bwa_map.log

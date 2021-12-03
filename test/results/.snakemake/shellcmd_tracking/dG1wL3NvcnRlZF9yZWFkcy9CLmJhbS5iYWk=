@@ -1,0 +1,1 @@
+samtools index tmp/sorted_reads/B.bam

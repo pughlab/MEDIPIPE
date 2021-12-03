@@ -1,0 +1,1 @@
+fastqc data/fastq_se/B.fastq.gz --outdir tmp/qc/

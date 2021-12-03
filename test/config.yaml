@@ -1,0 +1,9 @@
+samples:
+    A: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/fastq_se/A.fastq.gz
+    B: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/fastq_se/B.fastq.gz
+
+bwa_index: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/bwa_index/genome.fa
+
+workdir: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/temp
+
+#workdir: /Users/yong/OneDrive - UHN/Projects/snakemake/cfMeDIP-seq/test/temp

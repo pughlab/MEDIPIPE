@@ -1,0 +1,1 @@
+trim_galore -q 20 --stringency 3 --length 20 --dont_gzip -o /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/results/tmp/trimmed/ /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/fastq_se/A.fastq.gz

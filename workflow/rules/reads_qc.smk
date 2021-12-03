@@ -1,43 +1,30 @@
+rule fastqc_before_trim:
+    input:
+        get_fastq
+    output:
+        "tmp/qc/{sample}_fastqc.html",
+        "tmp/qc/{sample}_fastqc.zip"
+    shell:
+        "fastqc {input} --outdir tmp/qc/"
 
-## automatically remove adapters for single-end reads
 rule trim_galore_se:
     input:
-        "reads/{sample}.fastq.gz"
+        get_fastq
     output:
-        "trimmed/{sample}_trimmed.fq.gz",
-         "trimmed/{sample}.fastq.gz_trimming_report.txt"
+        temp("tmp/trimmed/{sample}_trimmed.fq"),                     ## suffix .fq.gz
+        "tmp/trimmed/{sample}.fastq.gz_trimming_report.txt",
     params:
-        extra="--illumina -q 20"
+        path= config["workdir"] + "/tmp/trimmed/"                 ## path needs to be full path: failed to recognize space
     log:
-        "logs/trim_galore/{sample}.log"
-    wrapper:
-        "0.71.0/bio/trim_galore/se"
+        "tmp/trimmed/{sample}.log",
+    shell:
+        "trim_galore -q 20 --stringency 3 --length 20 --dont_gzip -o {params.path} {input}"             ## --dont_gzip is a walkaround of OneDirve - UNN
 
-## automatically remove adapters for paired-end reads
-rule trim_galore_pe:
+rule fastqc_after_trim:
     input:
-        ["reads/{sample}.1.fastq.gz", "reads/{sample}.2.fastq.gz"]
+        "tmp/trimmed/{sample}_trimmed.fq"
     output:
-        "trimmed/{sample}.1_val_1.fq.gz",
-         "trimmed/{sample}.1.fastq.gz_trimming_report.txt",
-         "trimmed/{sample}.2_val_2.fq.gz",
-         "trimmed/{sample}.2.fastq.gz_trimming_report.txt"
-    params:
-        extra="--illumina -q 20"
-    log:
-        "logs/trim_galore/{sample}.log"
-    wrapper:
-        "0.71.0/bio/trim_galore/pe"
-
-## Fastqc report for reads after removing adapters
-rule fastqc:
-    input:
-        unpack(get_fastq),
-    output:
-        html="results/qc/fastqc/{sample}-{unit}.html",
-        zip="results/qc/fastqc/{sample}-{unit}.zip",
-    log:
-        "logs/fastqc/{sample}-{unit}.log",
-    wrapper:
-        "0.74.0/bio/fastqc"
-
+        "tmp/trimmed/{sample}_trimmed_fastqc.html",
+        "tmp/trimmed/{sample}_trimmed_fastqc.zip"
+    shell:
+        "fastqc {input}"
