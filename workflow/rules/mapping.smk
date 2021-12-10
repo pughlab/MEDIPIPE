@@ -1,33 +1,52 @@
+## BWA alignment
 rule bwa_map:
     input:
         config["bwa_index"],
-        "tmp/trimmed/{sample}_trimmed.fq"
+        get_trimmed_fastq
     output:
-        temp("tmp/mapped_reads/{sample}.bam")
+        ("mapped_reads/{sample}.bam")
     threads: 2
     log:
-        "tmp/logs/{sample}_bwa_map.log"
-    params:
-        rg=r"@RG\tID:{sample}\tSM:{sample}"
+        "logs/{sample}_bwa_map.log"
     shell:
-        "(bwa mem -R '{params.rg}' -t {threads}  {input} | "
+        "(bwa mem -t {threads}  {input} | "
         "samtools view -Sb - > {output}) 2> {log}"
 
-
-rule samtools_sort:
+## fixmate, sort, index and stats bam file
+rule samtools_sort_index:
     input:
-        "tmp/mapped_reads/{sample}.bam"
+        "mapped_reads/{sample}.bam"
     output:
-        "tmp/sorted_reads/{sample}.bam"
+        bam = "sorted_reads/{sample}_sorted.bam",
+        bai = "sorted_reads/{sample}_sorted.bam.bai",
+        stat= "sorted_reads/{sample}_sorted.bam.stats.txt"
     shell:
-        "samtools sort -T tmp/sorted_reads/{wildcards.sample} "
-        "-O bam {input} > {output}"
+        "samtools fixmate -m {input} - | "
+        "samtools sort -o {output.bam} && "
+        "samtools index {output.bam} && "
+        "samtools stats {output.bam} > {output.stat}"
 
-
-rule samtools_index:
+## markup, index and stats deduplicated file
+rule samtools_markdup:
     input:
-        "tmp/sorted_reads/{sample}.bam"
+        "sorted_reads/{sample}_sorted.bam"
     output:
-        "tmp/sorted_reads/{sample}.bam.bai"
+        bam = "rmdup_reads/{sample}_rmdup.bam",
+        bai = "rmdup_reads/{sample}_rmdup.bam.bai",
+        stat= "rmdup_reads/{sample}_rmdup.bam.stats.txt"
     shell:
-        "samtools index {input}"
+        "samtools markdup -r {input} {output.bam} && "
+        "samtools index {output.bam} && "
+        "samtools stats {output.bam} > {output.stat}"
+
+## infer insert size for paired-end reads_qc
+rule insert_size:
+    input:
+        "rmdup_reads/{sample}_rmdup.bam"
+    output:
+        txt = "rmdup_reads/{sample}_insert_size_metrics.txt",
+        hist = "rmdup_reads/{sample}_insert_size_histogram.pdf",
+    shell:
+        "java -jar ~/miniconda3/envs/cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar "
+        "CollectInsertSizeMetrics M=0.05 I={input} O={output.txt} "
+        "H={output.hist}"

@@ -1,19 +1,21 @@
 
 workdir: config["workdir"]
 
-rule all:
-    input:
-        expand("tmp/qc/{sample}_fastqc.html", sample=config["samples"]),
-        #expand("tmp/trimmed/{sample}_trimmed.fq", sample=config["samples"]),
-        #expand("tmp/trimmed/{sample}_trimmed_fastqc.html", sample=config["samples"]),
-        expand("tmp/sorted_reads/{sample}.bam.bai", sample=config["samples"])
-
-
 ##### Modules #####
-
 #include: "rules/ref_genome.smk"    ## build bwa index for custome genomes
 include: "rules/common.smk"
 include: "rules/reads_qc.smk"
 include: "rules/mapping.smk"
 
-#include: "rules/bam_qc.smk"
+## target rules
+rule all:
+    input:
+        get_rule_all_input()
+
+
+#rule all:
+#    input:
+#        expand("tmp/qc/{sample}_fastqc.html", sample=config["samples"]),
+        #expand("tmp/trimmed/{sample}_trimmed.fq", sample=config["samples"]),
+        #expand("tmp/trimmed/{sample}_trimmed_fastqc.html", sample=config["samples"]),
+#        expand("tmp/sorted_reads/{sample}.bam.bai", sample=config["samples"])

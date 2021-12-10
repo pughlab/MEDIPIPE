@@ -1,1 +1,0 @@
-(bwa mem -R '@RG\tID:B\tSM:B' -t 1  /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/bwa_index/genome.fa tmp/trimmed/B_trimmed.fq | samtools view -Sb - > tmp/mapped_reads/B.bam) 2> tmp/logs/B_bwa_map.log

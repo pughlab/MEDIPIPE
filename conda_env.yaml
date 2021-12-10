@@ -9,3 +9,5 @@ dependencies:
   - trim-galore=0.6.7
   - samtools=1.9
   - graphviz=2.40.1
+  - picard=2.26.6
+  - gnuplot=4.6.0  ## for samtools plot-bamstats

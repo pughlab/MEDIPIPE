@@ -1,9 +1,7 @@
-samples:
-    A: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/fastq_se/A.fastq.gz
-    B: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/fastq_se/B.fastq.gz
+samples: /Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/sample_pe.tsv
 
-bwa_index: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/data/bwa_index/genome.fa
+paired-end: True
 
-workdir: /Users/yong/OneDrive_UHN/Projects/snakemake/cfMeDIP-seq/test/results
+bwa_index: /Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/Reference/genome.fa
 
-#workdir: /Users/yong/OneDrive - UHN/Projects/snakemake/cfMeDIP-seq/test/temp
+workdir: /Users/yong/tmp
