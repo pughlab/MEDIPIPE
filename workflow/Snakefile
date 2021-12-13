@@ -6,11 +6,14 @@ workdir: config["workdir"]
 include: "rules/common.smk"
 include: "rules/reads_qc.smk"
 include: "rules/mapping.smk"
+include: "rules/medips.smk"
 
 ## target rules
 rule all:
     input:
-        get_rule_all_input()
+        #get_rule_all_input()
+        #"rmdup_reads/test_ori.txt",
+        "rmdup_reads/test_out.txt"
 
 
 #rule all:

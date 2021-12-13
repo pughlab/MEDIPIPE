@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+#  - bioconductor-medips
+  - r-ggplot2
+  - r-gplots
+  - bioconductor-medips
