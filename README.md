@@ -11,6 +11,10 @@ The pipeline were developed in collaboration with ###, ###, ..
 - **Portability**: The pipeline run can be performed across different cluster engines such as SLURM, SGE and PBS.
 - **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for hg38, hg19, hg38+tair10 and hg19+tair10. You can also build genome database from FASTA for your costom genome.
 
+### How it works
+This is schematic diagram shows you how pipeline works:
+
+<img src="config/cfmedip-seq-pipeline.png" alt="Schematic_diagram" style="width:100.0%" />
 
 ## Installation
 
