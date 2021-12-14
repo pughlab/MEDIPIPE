@@ -1,0 +1,1 @@
+samtools markdup -r sorted_reads/A_sorted.bam rmdup_reads/A_rmdup.bam && samtools index rmdup_reads/A_rmdup.bam && samtools stats rmdup_reads/A_rmdup.bam > rmdup_reads/A_rmdup.bam.stats.txt
