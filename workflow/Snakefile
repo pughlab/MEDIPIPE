@@ -11,9 +11,9 @@ include: "rules/medips.smk"
 ## target rules
 rule all:
     input:
-        #get_rule_all_input()
+        get_rule_all_input()
         #"rmdup_reads/test_ori.txt",
-        "rmdup_reads/test_out.txt"
+        # "rmdup_reads/test_out.txt"
 
 
 #rule all:

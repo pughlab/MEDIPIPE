@@ -1,7 +1,7 @@
-samples: /Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/sample_pe.tsv
+samples: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/sample_pe.tsv
 
 paired-end: True
 
-bwa_index: /Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/Reference/genome.fa
+bwa_index: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Reference/genome.fa
 
-workdir: /Users/yong/tmp
+workdir: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/res

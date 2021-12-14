@@ -1,0 +1,1 @@
+java -jar ~/miniconda3/envs/cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar CollectInsertSizeMetrics M=0.05 I=rmdup_reads/A_rmdup.bam O=rmdup_reads/A_insert_size_metrics.txt H=rmdup_reads/A_insert_size_histogram.pdf

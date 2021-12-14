@@ -1,3 +1,2 @@
 sample	layout	R1	R2
-A	pe /Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/Fastq/A_R1.fastq.gz	/Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/Fastq/A_R2.fastq.gz
-B	pe	/Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/Fastq/B_R1.fastq.gz	/Users/yong/OneDrive_UHN/Projects/snakemake/cfmedip-seq-pipeline/test/data/Fastq/B_R2.fastq.gz
+A	pe	/cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Fastq/A_R1.fastq.gz	/cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Fastq/A_R2.fastq.gz

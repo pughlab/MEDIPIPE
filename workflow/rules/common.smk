@@ -18,6 +18,9 @@ def get_rule_all_input():
     #fastqc_raw_se = expand("qc/{sample}_fastqc.html", sample = SAMPLES["sample"]),
     map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
     rmdup_out = expand("rmdup_reads/{sample}_rmdup.bam.bai", sample = SAMPLES["sample"]),
+    medes_out = expand( "medestrand/{sample}_abs_methy.txt", sample = SAMPLES["sample"]),
+    medips_out = expand( "medips/{sample}_medips_qc.txt", sample = SAMPLES["sample"]),
+
 
     if config["paired-end"]:
         ## FASQC out for raw and trimmed paired-end fqs
@@ -34,7 +37,7 @@ def get_rule_all_input():
         inferred_insert_size = expand("rmdup_reads/{sample}_insert_size_histogram.pdf",
                                       sample = SAMPLES["sample"]),
 
-        return fastqc_pe_out + map_out + rmdup_out + inferred_insert_size
+        return fastqc_pe_out + map_out + rmdup_out + inferred_insert_size + medips_out + medes_out
 
 
     else:
