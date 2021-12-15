@@ -1,1 +1,0 @@
-samtools fixmate -m mapped_reads/A.bam - | samtools sort -o sorted_reads/A_sorted.bam && samtools index sorted_reads/A_sorted.bam && samtools stats sorted_reads/A_sorted.bam > sorted_reads/A_sorted.bam.stats.txt

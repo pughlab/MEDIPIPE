@@ -1,1 +1,0 @@
-trim_galore -q 20 --stringency 3 --length 20 --paired -o /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/res/trimmed_fq/ /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Fastq/A_R1.fastq.gz /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Fastq/A_R2.fastq.gz
