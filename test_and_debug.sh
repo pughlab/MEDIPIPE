@@ -27,31 +27,31 @@ conda activate cfmedip-seq-pipeline
 
 ################################################################################
 ## for paired-end inputs
-snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
-          -p --dag | dot -Tpdf > /cluster/home/yzeng/cfmedip-seq-pipeline/figures/dag_pe.pdf
+snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
+          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/figures/dag_pe.pdf
 
 ## for single-end inputs
-snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/config/config_se_template.yaml \
-          -p --dag | dot -Tpdf > /cluster/home/yzeng/cfmedip-seq-pipeline/figures/dag_se.pdf
+snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_se_template.yaml \
+          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/figures/dag_se.pdf
 
 
 #### test run on H4H without sbatch
-snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
+snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
           --use-conda -np
 
 #### test run on H4H with sbatch
-snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
+snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
           --use-conda -np --core 2 --cluster "sbatch -p all " --jobs 8
 
 
 
 ################################################################################
 #### test run with cfmeDIP-seq data
-snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
+snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/projects/tcge/cell_free_epigenomics/test_run/config_test.yaml \
           --use-conda -np
 

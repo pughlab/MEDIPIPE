@@ -56,21 +56,22 @@ saturation = MEDIPS.saturation(
 
 ## saturation plot
 png(satu_png, res = 300, width = 5, height = 5, units = "in")
-MEDIPS.plotSaturation(
-  saturationObj = saturation,
+MEDIPS.plotSaturation(saturationObj = saturation)
 dev.off()
 
 
 ################
 ## CpG coverage
-coverage =  MEDIPS.seqCoverage(
+################
+
+coverage = MEDIPS.seqCoverage(
   file = bam_file,
   BSgenome = bsgenome,
   paired = ispaired,
   chr.select = chr
 )
 
-# coverage plot
+## coverage plot
 png(file = covr_png, res = 300, width = 5, height = 5, units = "in")
 MEDIPS.plotSeqCoverage(
   seqCoverageObj=coverage,
@@ -95,7 +96,7 @@ numberCpG = length(coverage$cov.res)
 
 medips_qc = data.frame(
 
-  sample = sample_id,
+  sample = sampleid,
 
   saturation.numberReads = saturation$numberReads,
   saturation.maxEstCor = saturation$maxEstCor[2],
@@ -131,7 +132,7 @@ mset = MEDIPS.createSet(
 
 #############################################################
 ## methylation profile: region CF(# of CpG), count, rpkm, rms
-if(False) {
+if (FALSE) {
 ## coupling set
 cset = MEDIPS.couplingVector(pattern = "CG", refObj = mset)
 
@@ -148,7 +149,6 @@ colnames(meth)[5:7] = c("count", "rpkm", "rms")
 write.table(meth, file = meth_qua,
             row.names = F, quote = F, sep ="\t")
 }
-
 
 ##########################
 ## without calculating rms
@@ -167,4 +167,4 @@ write.table(meth, file = meth_qua,
 ########################################
 ## export coverage profile in wig format
 MEDIPS.exportWIG(Set = mset, file = rpkm_wig,
-                 format = "rpkm", descr = sample_id)
+                 format = "rpkm", descr = sampleid)

@@ -11,11 +11,13 @@ rule medips:
     params:
         ispaired = config["paired-end"],
         bsgenome = config["bsgenome"]
+    log:
+        "logs/{sample}_medips.log"
     conda:                       ## failed to call env after created it in .snakemek/conda on iMAC
         "conda_env_R.yaml"
     shell:
-        "Rscript --vanilla /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/scripts/medips.R "
-        "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} {output}"
+        "(Rscript --vanilla /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/scripts/medips.R "
+        "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} {output}) 2> {log}"
 
 
 ## run R script throuth script directive is still under testing
