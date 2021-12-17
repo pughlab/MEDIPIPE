@@ -15,11 +15,9 @@ SAMPLES = (
 
 def get_rule_all_input():
 
-    #fastqc_raw_se = expand("qc/{sample}_fastqc.html", sample = SAMPLES["sample"]),
-    map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
-    rmdup_out = expand("rmdup_reads/{sample}_rmdup.bam.bai", sample = SAMPLES["sample"]),
-    medes_out = expand( "medestrand/{sample}_abs_methy.txt", sample = SAMPLES["sample"]),
-    medips_out = expand( "medips/{sample}_medips_qc.txt", sample = SAMPLES["sample"]),
+    #map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
+    dedup_out = expand("dedup_reads/{sample}_dedup.bam.bai", sample = SAMPLES["sample"]),
+    medips_out = expand( "medips/{sample}_qc_report.txt", sample = SAMPLES["sample"]),
 
 
     if config["paired-end"]:
@@ -34,10 +32,10 @@ def get_rule_all_input():
         fastqc_pe_out = fastqc_raw_pe + fastqc_trimmed_r1 + fastqc_trimmed_r2
 
         ## inferred insert size
-        inferred_insert_size = expand("rmdup_reads/{sample}_insert_size_histogram.pdf",
+        inferred_insert_size = expand("dedup_reads/{sample}_insert_size_histogram.pdf",
                                       sample = SAMPLES["sample"]),
 
-        return fastqc_pe_out + map_out + rmdup_out + inferred_insert_size + medips_out + medes_out
+        return fastqc_pe_out + dedup_out + inferred_insert_size + medips_out
 
 
     else:
@@ -48,7 +46,7 @@ def get_rule_all_input():
                                     sample = SAMPLES["sample"]),
         fastqc_se_out = fastqc_raw_se + fastqc_trimmed_se
 
-        return fastqc_se_out + map_out + rmdup_out
+        return fastqc_se_out + dedup_out + dedup_out + medips_out
 
 
 

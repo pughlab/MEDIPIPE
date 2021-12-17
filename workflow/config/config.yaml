@@ -1,7 +1,0 @@
-samples: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/sample_pe.tsv
-
-paired-end: True
-
-bwa_index: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Reference/genome.fa
-
-workdir: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/res

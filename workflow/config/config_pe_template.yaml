@@ -1,0 +1,9 @@
+workdir: /cluster/home/yzeng/tmp
+
+## sample information
+samples: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/sample_pe.tsv
+paired-end: True
+
+## reference
+bwa_index: /cluster/home/yzeng/cfmedip-seq-pipeline/test/data/Reference/genome.fa
+bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3

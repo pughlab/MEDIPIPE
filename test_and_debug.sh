@@ -29,12 +29,12 @@ conda activate cfmedip-seq-pipeline
 ## for paired-end inputs
 snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
-          -p --dag | dot -Tpng > /cluster/home/yzeng/cfmedip-seq-pipeline/figures/dag_pe.png
+          -p --dag | dot -Tpdf > /cluster/home/yzeng/cfmedip-seq-pipeline/figures/dag_pe.pdf
 
 ## for single-end inputs
 snakemake --snakefile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/cfmedip-seq-pipeline/workflow/config/config_se_template.yaml \
-          -p --dag | dot -Tpng > /cluster/home/yzeng/cfmedip-seq-pipeline/figures/dag_se.png
+          -p --dag | dot -Tpdf > /cluster/home/yzeng/cfmedip-seq-pipeline/figures/dag_se.pdf
 
 
 #### test run on H4H without sbatch
