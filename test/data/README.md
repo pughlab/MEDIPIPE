@@ -3,7 +3,7 @@
 
 This test data (ATAC-seq) was download from [nf-core/atacseq](https://github.com/nf-core/test-datasets/tree/0c58a9f36205cc5f8c6bbb2ca03c401c61cb849d).
 
-`Reference/`: Genome reference and BWA index (iGenomes R64-1-1 Ensembl release)   
+`Reference/`: Genome reference and BWA index (iGenomes sacCer3 release)   
 `Fastq/` : FastQ files sub-sampled to 100,000 paired-end reads   
 
 ## test dataset origin:
