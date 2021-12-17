@@ -10,10 +10,10 @@ rule trim_galore_se:
         ## path needs to be full path: failed to recognize space
         path= config["workdir"] + "/trimmed_fq/"
     log:
-        "trimmed_fq/{sample}.log",
+        "logs/{sample}_trim_galore_se.log"
     shell:
-        "trim_galore -q 20 --stringency 3 --length 20 "
-        "-o {params.path} {input}"
+        "(trim_galore -q 20 --stringency 3 --length 20 "
+        "-o {params.path} {input}) 2> {log}"
 
 
 ### automatically trimming adapters for paied-end reads
@@ -29,10 +29,10 @@ rule trim_galore_pe:
         ## path needs to be full path: failed to recognize space
         path= config["workdir"] + "/trimmed_fq/"
     log:
-        "trimmed_fq/{sample}.log",
+        "logs/{sample}_trim_galore_pe.log"
     shell:
-        "trim_galore -q 20 --stringency 3 --length 20 "
-        "--paired -o {params.path} {input}"
+        "(trim_galore -q 20 --stringency 3 --length 20 "
+        "--paired -o {params.path} {input}) 2> {log}"
 
 ### FASTQC for raw and trimmed single-end reads
 rule fastqc_se:
