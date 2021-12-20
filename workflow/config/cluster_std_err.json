@@ -5,7 +5,7 @@
 {
     "__default__":
     {
-        "std": "logs/cluster/{rule}_{wildcars.sample}_%j.out",
-        "err": "logs/cluster/{rule}_{wildcars.sample}_%j.err"
+        "std": "submit_{rule}_{wildcards.sample}_%j.out",
+        "err": "submit_{rule}_{wildcards.sample}_%j.err"
     },
 }

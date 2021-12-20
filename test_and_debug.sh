@@ -22,6 +22,10 @@ conda env export -c bioconda  --from-history | grep -v "^prefix" >  conda_env_r.
 
 conda activate cfmedip-seq-pipeline
 
+## for h4h
+## need to excute test run in workdir to install conda_env_R.yaml in .snakmake
+## on the build node with internet
+
 ## generate the DGA plots ####
 ## dot -Tsvg
 
@@ -43,9 +47,14 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflo
           --use-conda -np
 
 #### test run on H4H with sbatch
+## using the --unlock flag to remove a wkdir lock
 snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
-          --use-conda -np --core 2 --cluster "sbatch -p all " --jobs 8
+          --cluster-config /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/cluster_std_err.json \
+          --use-conda --core 2 --cluster "sbatch -p all -o {cluster.std} -e {cluster.err}" \
+          --latency-wait 10 --jobs 8 -np
+
+
 
 
 

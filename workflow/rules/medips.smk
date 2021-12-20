@@ -13,7 +13,7 @@ rule medips:
         bsgenome = config["bsgenome"]
     log:
         "logs/{sample}_medips.log"
-    conda:                       ## failed to call env after created it in .snakemek/conda on iMAC
+    conda:
         "conda_env_R.yaml"
     shell:
         "(Rscript --vanilla /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/scripts/medips.R "
