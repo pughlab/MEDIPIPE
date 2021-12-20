@@ -57,6 +57,6 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflo
 
 
 ## run on cluster by sbatch  :: multiple jobs will submitted
-snakemake --snakefile /cluster/projects/tcge/script/snakemake/test/Snakefile \
+snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/projects/tcge/cell_free_epigenomics/test_run/config_test.yaml \
           --use-conda --cores 2 --cluster "sbatch -p all" --jobs 8

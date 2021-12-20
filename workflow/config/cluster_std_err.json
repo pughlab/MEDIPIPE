@@ -1,0 +1,11 @@
+## Althought the cluster configuration was deprecated due to the limitation of
+## workflow's portability, the "__default__" can be used to specify uniform std
+## and err in the cluster mode
+
+{
+    "__default__":
+    {
+        "std": "logs/cluster/{rule}_{wildcars.sample}_%j.out",
+        "err": "logs/cluster/{rule}_{wildcars.sample}_%j.err"
+    },
+}
