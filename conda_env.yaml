@@ -1,10 +1,10 @@
 name: cfmedip-seq-pipeline
 channels:
-  - defaults
   - bioconda
   - anaconda
+  - conda-forge
 dependencies:
-  - snakemake=3.13.3
+  - snakemake
   - bwa=0.7.17
   - trim-galore=0.6.7
   - samtools=1.9

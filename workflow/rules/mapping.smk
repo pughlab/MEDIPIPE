@@ -5,12 +5,12 @@ rule bwa_map:
         get_trimmed_fastq
     output:
         temp("mapped_reads/{sample}.bam")
-    threads: 2
+    threads: 4
     log:
         "logs/{sample}_bwa_map.log"
     shell:
-        "(bwa mem -t {threads}  {input} | "
-        "samtools view -Sb - > {output}) 2> {log}"
+        "(bwa mem -M -t {threads}  {input} | "
+        "samtools view -Sb --threads {threads} - > {output}) 2> {log}"
 
 ## fixmate, sort, index and stats bam file
 rule samtools_sort_index_stats:
@@ -20,11 +20,13 @@ rule samtools_sort_index_stats:
         bam = "sorted_reads/{sample}_sorted.bam",
         bai = "sorted_reads/{sample}_sorted.bam.bai",
         stat= "sorted_reads/{sample}_sorted.bam.stats.txt"
+    threads: 2
     shell:
-        "(samtools fixmate -m {input} - | "
-        "samtools sort -o {output.bam} && "
-        "samtools index {output.bam} && "
-        "samtools stats {output.bam} > {output.stat})"
+        ## --threads flag failed
+        "(samtools fixmate -@ {threads} -m {input} - | "
+        "samtools sort  -@ {threads} -o {output.bam} && "
+        "samtools index -@ {threads} {output.bam} && "
+        "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
 ## markup, index and stats deduplicated file
 rule samtools_markdup_stats:
@@ -34,10 +36,11 @@ rule samtools_markdup_stats:
         bam = "dedup_reads/{sample}_dedup.bam",
         bai = "dedup_reads/{sample}_dedup.bam.bai",
         stat= "dedup_reads/{sample}_dedup.bam.stats.txt"
+    threads: 2
     shell:
-        "(samtools markdup -r {input} {output.bam} && "
-        "samtools index {output.bam} && "
-        "samtools stats {output.bam} > {output.stat})"
+        "(samtools markdup -@ {threads} -r {input} {output.bam} && "
+        "samtools index -@ {threads} {output.bam} && "
+        "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
 ## infer insert size for paired-end reads_qc
 rule insert_size:

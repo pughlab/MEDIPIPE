@@ -9,11 +9,12 @@ rule trim_galore_se:
     params:
         ## path needs to be full path: failed to recognize space
         path= config["workdir"] + "/trimmed_fq/"
+    threads: 2
     log:
         "logs/{sample}_trim_galore_se.log"
     shell:
         "(trim_galore -q 20 --stringency 3 --length 20 "
-        "-o {params.path} {input}) 2> {log}"
+        "--cores {threads} -o {params.path} {input}) 2> {log}"
 
 
 ### automatically trimming adapters for paied-end reads
@@ -28,11 +29,12 @@ rule trim_galore_pe:
     params:
         ## path needs to be full path: failed to recognize space
         path= config["workdir"] + "/trimmed_fq/"
+    threads: 2
     log:
         "logs/{sample}_trim_galore_pe.log"
     shell:
         "(trim_galore -q 20 --stringency 3 --length 20 "
-        "--paired -o {params.path} {input}) 2> {log}"
+        "--cores {threads} --paired -o {params.path} {input}) 2> {log}"
 
 ### FASTQC for raw and trimmed single-end reads
 rule fastqc_se:
@@ -44,7 +46,7 @@ rule fastqc_se:
         "qc/se/{sample}_trimmed_fastqc.html"
     run:
         for fq in input:
-            shell("fastqc {} --outdir qc/se/".format(fq))
+            shell("fastqc {} -t 2 --outdir qc/se/".format(fq))
 
 ### FASTQC for raw and trimmed paired-end reads
 rule fastqc_pe:
@@ -58,4 +60,4 @@ rule fastqc_pe:
         "qc/pe/{sample}_R2_val_2_fastqc.html",
     run:
         for fq in input:
-            shell("fastqc {} --outdir qc/pe/".format(fq))
+            shell("fastqc {} -t 2 --outdir qc/pe/".format(fq))
