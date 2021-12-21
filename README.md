@@ -26,25 +26,33 @@ This is schematic diagram shows you how pipeline works:
 2) Git clone this pipeline.
 	```bash
 	$ cd
+	## token request for private repository
 	$ git clone https://github.com/yzeng-lol/cfmedip-seq-pipeline
 
 3) Install pipeline\'s Conda enviroments
 	```bash
 	$ cd cfmedip-seq-pipeline
 	$ conda activate base
-	# It might take a while to download and intall all depedencies
+	# It might take a while to download and instal the core environment
 	$ mamba env create --file conda_env.yaml
+
+	# Install sub enviroments
+	$ conda activate cfmedip-seq-pipeline
+	$ snakmake
 	```
 
 4) Test run
 	```bash
-	$ snakemake --cores 2 --snakefile ~/cfmedip-seq-pipeline/workflow/Snakefile --configfile ~/cfmedip-seq-pipeline/workflow/config/config.yaml
-  ````
+	## run on local
+	$ snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
+	          --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
+	          --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/cfmedip-seq-pipeline_R \
+	          --cores 4 -p
+
+	## submit to SLURM cluster
+	$ sbatch /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/sbatch_snakemake_template.sh
+  ```
 
 ## Input file spefification
 
 ....
-
-## Running on local computer/HPCs
-
-......
