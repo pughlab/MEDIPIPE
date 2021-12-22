@@ -1,0 +1,220 @@
+Building DAG of jobs...
+Creating conda environment ../tcge-cfmedip-seq-pipeline/workflow/rules/conda_env_R.yaml...
+Downloading and installing remote packages.
+Environment for ../tcge-cfmedip-seq-pipeline/workflow/rules/conda_env_R.yaml created (location: ../../miniconda3/envs/tcge-cfmedip-seq-pipeline-sub/d9adbc0301fdab19f025ed367c52b0b2)
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job                          count    min threads    max threads
+-------------------------  -------  -------------  -------------
+all                              1              1              1
+bwa_map                          2              4              4
+fastqc_pe                        2              1              1
+insert_size                      2              1              1
+medips                           2              1              1
+samtools_markdup_stats           2              2              2
+samtools_sort_index_stats        2              2              2
+trim_galore_pe                   2              2              2
+total                           15              1              4
+
+Select jobs to execute...
+
+[Wed Dec 22 12:39:51 2021]
+rule trim_galore_pe:
+    input: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_R1.fastq.gz, /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_R2.fastq.gz
+    output: trimmed_fq/A_R1_val_1.fq.gz, trimmed_fq/A_R2_val_2.fq.gz, trimmed_fq/A_R1.fastq.gz_trimming_report.txt, trimmed_fq/A_R2.fastq.gz_trimming_report.txt
+    log: logs/A_trim_galore_pe.log
+    jobid: 2
+    wildcards: sample=A
+    threads: 2
+    resources: tmpdir=/tmp
+
+(trim_galore -q 20 --stringency 3 --length 20 --cores 2 --paired -o /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run/trimmed_fq/ /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_R1.fastq.gz /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_R2.fastq.gz) 2> logs/A_trim_galore_pe.log
+
+[Wed Dec 22 12:39:51 2021]
+rule trim_galore_pe:
+    input: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_R1.fastq.gz, /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_R2.fastq.gz
+    output: trimmed_fq/B_R1_val_1.fq.gz, trimmed_fq/B_R2_val_2.fq.gz, trimmed_fq/B_R1.fastq.gz_trimming_report.txt, trimmed_fq/B_R2.fastq.gz_trimming_report.txt
+    log: logs/B_trim_galore_pe.log
+    jobid: 4
+    wildcards: sample=B
+    threads: 2
+    resources: tmpdir=/tmp
+
+(trim_galore -q 20 --stringency 3 --length 20 --cores 2 --paired -o /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run/trimmed_fq/ /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_R1.fastq.gz /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_R2.fastq.gz) 2> logs/B_trim_galore_pe.log
+[Wed Dec 22 12:40:13 2021]
+Finished job 2.
+1 of 15 steps (7%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:40:13 2021]
+rule fastqc_pe:
+    input: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_R1.fastq.gz, /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_R2.fastq.gz, trimmed_fq/A_R1_val_1.fq.gz, trimmed_fq/A_R2_val_2.fq.gz
+    output: qc/pe/A_R1_fastqc.html, qc/pe/A_R2_fastqc.html, qc/pe/A_R1_val_1_fastqc.html, qc/pe/A_R2_val_2_fastqc.html
+    jobid: 1
+    wildcards: sample=A
+    resources: tmpdir=/tmp
+
+[Wed Dec 22 12:40:13 2021]
+Finished job 4.
+2 of 15 steps (13%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:40:13 2021]
+rule fastqc_pe:
+    input: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_R1.fastq.gz, /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_R2.fastq.gz, trimmed_fq/B_R1_val_1.fq.gz, trimmed_fq/B_R2_val_2.fq.gz
+    output: qc/pe/B_R1_fastqc.html, qc/pe/B_R2_fastqc.html, qc/pe/B_R1_val_1_fastqc.html, qc/pe/B_R2_val_2_fastqc.html
+    jobid: 3
+    wildcards: sample=B
+    resources: tmpdir=/tmp
+
+[Wed Dec 22 12:41:01 2021]
+Finished job 1.
+3 of 15 steps (20%) done
+Select jobs to execute...
+[Wed Dec 22 12:41:02 2021]
+Finished job 3.
+4 of 15 steps (27%) done
+
+[Wed Dec 22 12:41:02 2021]
+rule bwa_map:
+    input: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa, trimmed_fq/B_R1_val_1.fq.gz, trimmed_fq/B_R2_val_2.fq.gz
+    output: mapped_reads/B.bam
+    log: logs/B_bwa_map.log
+    jobid: 10
+    wildcards: sample=B
+    threads: 4
+    resources: tmpdir=/tmp
+
+(bwa mem -M -t 4  /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa trimmed_fq/B_R1_val_1.fq.gz trimmed_fq/B_R2_val_2.fq.gz | samtools view -Sb --threads 4 - > mapped_reads/B.bam) 2> logs/B_bwa_map.log
+Removing temporary output file trimmed_fq/B_R1_val_1.fq.gz.
+Removing temporary output file trimmed_fq/B_R2_val_2.fq.gz.
+[Wed Dec 22 12:41:13 2021]
+Finished job 10.
+5 of 15 steps (33%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:41:13 2021]
+rule bwa_map:
+    input: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa, trimmed_fq/A_R1_val_1.fq.gz, trimmed_fq/A_R2_val_2.fq.gz
+    output: mapped_reads/A.bam
+    log: logs/A_bwa_map.log
+    jobid: 7
+    wildcards: sample=A
+    threads: 4
+    resources: tmpdir=/tmp
+
+(bwa mem -M -t 4  /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa trimmed_fq/A_R1_val_1.fq.gz trimmed_fq/A_R2_val_2.fq.gz | samtools view -Sb --threads 4 - > mapped_reads/A.bam) 2> logs/A_bwa_map.log
+Removing temporary output file trimmed_fq/A_R1_val_1.fq.gz.
+Removing temporary output file trimmed_fq/A_R2_val_2.fq.gz.
+[Wed Dec 22 12:41:22 2021]
+Finished job 7.
+6 of 15 steps (40%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:41:22 2021]
+rule samtools_sort_index_stats:
+    input: mapped_reads/A.bam
+    output: sorted_reads/A_sorted.bam, sorted_reads/A_sorted.bam.bai, sorted_reads/A_sorted.bam.stats.txt
+    jobid: 6
+    wildcards: sample=A
+    threads: 2
+    resources: tmpdir=/tmp
+
+(samtools fixmate -@ 2 -m mapped_reads/A.bam - | samtools sort  -@ 2 -o sorted_reads/A_sorted.bam && samtools index -@ 2 sorted_reads/A_sorted.bam && samtools stats -@ 2 sorted_reads/A_sorted.bam > sorted_reads/A_sorted.bam.stats.txt)
+
+[Wed Dec 22 12:41:22 2021]
+rule samtools_sort_index_stats:
+    input: mapped_reads/B.bam
+    output: sorted_reads/B_sorted.bam, sorted_reads/B_sorted.bam.bai, sorted_reads/B_sorted.bam.stats.txt
+    jobid: 9
+    wildcards: sample=B
+    threads: 2
+    resources: tmpdir=/tmp
+
+(samtools fixmate -@ 2 -m mapped_reads/B.bam - | samtools sort  -@ 2 -o sorted_reads/B_sorted.bam && samtools index -@ 2 sorted_reads/B_sorted.bam && samtools stats -@ 2 sorted_reads/B_sorted.bam > sorted_reads/B_sorted.bam.stats.txt)
+Removing temporary output file mapped_reads/A.bam.
+[Wed Dec 22 12:41:35 2021]
+Finished job 6.
+7 of 15 steps (47%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:41:35 2021]
+rule samtools_markdup_stats:
+    input: sorted_reads/A_sorted.bam
+    output: dedup_reads/A_dedup.bam, dedup_reads/A_dedup.bam.bai, dedup_reads/A_dedup.bam.stats.txt
+    jobid: 5
+    wildcards: sample=A
+    threads: 2
+    resources: tmpdir=/tmp
+
+(samtools markdup -@ 2 -r sorted_reads/A_sorted.bam dedup_reads/A_dedup.bam && samtools index -@ 2 dedup_reads/A_dedup.bam && samtools stats -@ 2 dedup_reads/A_dedup.bam > dedup_reads/A_dedup.bam.stats.txt)
+Removing temporary output file mapped_reads/B.bam.
+[Wed Dec 22 12:41:41 2021]
+Finished job 9.
+8 of 15 steps (53%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:41:41 2021]
+rule samtools_markdup_stats:
+    input: sorted_reads/B_sorted.bam
+    output: dedup_reads/B_dedup.bam, dedup_reads/B_dedup.bam.bai, dedup_reads/B_dedup.bam.stats.txt
+    jobid: 8
+    wildcards: sample=B
+    threads: 2
+    resources: tmpdir=/tmp
+
+(samtools markdup -@ 2 -r sorted_reads/B_sorted.bam dedup_reads/B_dedup.bam && samtools index -@ 2 dedup_reads/B_dedup.bam && samtools stats -@ 2 dedup_reads/B_dedup.bam > dedup_reads/B_dedup.bam.stats.txt)
+[Wed Dec 22 12:41:42 2021]
+Finished job 5.
+9 of 15 steps (60%) done
+Select jobs to execute...
+
+[Wed Dec 22 12:41:42 2021]
+rule medips:
+    input: dedup_reads/A_dedup.bam
+    output: medips/A_saturation.png, medips/A_seqCoverage.png, medips/A_qc_report.txt, medips/A_meth_quant.txt, medips/A_rpkm.wig
+    log: logs/A_medips.log
+    jobid: 13
+    wildcards: sample=A
+    resources: tmpdir=/tmp
+
+(Rscript --vanilla /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/scripts/medips.R A dedup_reads/A_dedup.bam BSgenome.Scerevisiae.UCSC.sacCer3 True medips/A_saturation.png medips/A_seqCoverage.png medips/A_qc_report.txt medips/A_meth_quant.txt medips/A_rpkm.wig) 2> logs/A_medips.log
+Activating conda environment: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub/d9adbc0301fdab19f025ed367c52b0b2
+
+[Wed Dec 22 12:41:42 2021]
+rule insert_size:
+    input: dedup_reads/A_dedup.bam
+    output: dedup_reads/A_insert_size_metrics.txt, dedup_reads/A_insert_size_histogram.pdf
+    log: logs/A_picard_insert_size.log
+    jobid: 11
+    wildcards: sample=A
+    resources: tmpdir=/tmp
+
+(java -jar /cluster/home/yzeng/miniconda3/envs/cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar CollectInsertSizeMetrics M=0.05 I=dedup_reads/A_dedup.bam O=dedup_reads/A_insert_size_metrics.txt H=dedup_reads/A_insert_size_histogram.pdf) 2> logs/A_picard_insert_size.log
+[Wed Dec 22 12:41:42 2021]
+Error in rule insert_size:
+    jobid: 11
+    output: dedup_reads/A_insert_size_metrics.txt, dedup_reads/A_insert_size_histogram.pdf
+    log: logs/A_picard_insert_size.log (check log file(s) for error message)
+    shell:
+        (java -jar /cluster/home/yzeng/miniconda3/envs/cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar CollectInsertSizeMetrics M=0.05 I=dedup_reads/A_dedup.bam O=dedup_reads/A_insert_size_metrics.txt H=dedup_reads/A_insert_size_histogram.pdf) 2> logs/A_picard_insert_size.log
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Wed Dec 22 12:41:46 2021]
+Finished job 8.
+10 of 15 steps (67%) done
+[Wed Dec 22 12:41:47 2021]
+Error in rule medips:
+    jobid: 13
+    output: medips/A_saturation.png, medips/A_seqCoverage.png, medips/A_qc_report.txt, medips/A_meth_quant.txt, medips/A_rpkm.wig
+    log: logs/A_medips.log (check log file(s) for error message)
+    conda-env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub/d9adbc0301fdab19f025ed367c52b0b2
+    shell:
+        (Rscript --vanilla /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/scripts/medips.R A dedup_reads/A_dedup.bam BSgenome.Scerevisiae.UCSC.sacCer3 True medips/A_saturation.png medips/A_seqCoverage.png medips/A_qc_report.txt medips/A_meth_quant.txt medips/A_rpkm.wig) 2> logs/A_medips.log
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/.snakemake/log/2021-12-22T123434.057154.snakemake.log

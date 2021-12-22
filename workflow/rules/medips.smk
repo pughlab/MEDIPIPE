@@ -16,7 +16,7 @@ rule medips:
     conda:
         "conda_env_R.yaml"
     shell:
-        "(Rscript --vanilla /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/scripts/medips.R "
+        "(Rscript --vanilla /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/scripts/medips.R "
         "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} {output}) 2> {log}"
 
 

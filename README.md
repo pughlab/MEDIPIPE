@@ -19,6 +19,7 @@ This is schematic diagram shows you how pipeline works:
 ## Installation
 
 1) Make sure that you have a Conda-based Python3 distribution. The recommended choice is [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge). In case you don't use Mambafore, you can always install [Mamba](https://github.com/mamba-org/mamba) into any other Conda-based Python distribution with:
+
 	```bash
 	$ conda install -n base -c conda-forge mamba
 	```
@@ -27,7 +28,8 @@ This is schematic diagram shows you how pipeline works:
 	```bash
 	$ cd
 	## token request for private repository
-	$ git clone https://github.com/yzeng-lol/cfmedip-seq-pipeline
+	$ git clone https://github.com/yzeng-lol/tcge-cfmedip-seq-pipeline
+	```
 
 3) Install pipeline\'s core enviroments
 	```bash
@@ -38,6 +40,7 @@ This is schematic diagram shows you how pipeline works:
 
 4) Test run
   > **IMPORTANT**: sub envs will also be created during the test run
+
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
 
@@ -52,4 +55,13 @@ This is schematic diagram shows you how pipeline works:
 	            --cores 4 -p
   ```
 
-## Input file spefification
+## Run on HPCs
+
+You can submit this pipeline on clusters after ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
+
+	```bash
+	$ vim ./workflow/sbatch_snakemake_template.sh
+	$ sbatch ./workflow/sbatch_snakemake_template.sh
+	```
+
+## Input files specification

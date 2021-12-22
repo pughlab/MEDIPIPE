@@ -52,6 +52,6 @@ rule insert_size:
     log:
         "logs/{sample}_picard_insert_size.log"
     shell:
-        "(java -jar /cluster/home/yzeng/miniconda3/envs/cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar "
+        "(java -jar /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar "
         "CollectInsertSizeMetrics M=0.05 I={input} O={output.txt} "
         "H={output.hist}) 2> {log}"
