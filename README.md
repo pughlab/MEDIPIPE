@@ -40,7 +40,7 @@ This is schematic diagram shows you how pipeline works:
 
 4) Test run
   > **IMPORTANT**: sub envs will also be created during the test run
-
+	
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
 
@@ -54,6 +54,7 @@ This is schematic diagram shows you how pipeline works:
 	            --use-conda  --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
 	            --cores 4 -p
   ```
+
 
 ## Run on HPCs
 
