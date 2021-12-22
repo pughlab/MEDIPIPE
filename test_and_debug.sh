@@ -60,7 +60,7 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflo
 snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/cfmedip-seq-pipeline_R \
-          --cores 4 -p
+          --cores 4 -np
 
 
 #### test run on H4H with sbatch

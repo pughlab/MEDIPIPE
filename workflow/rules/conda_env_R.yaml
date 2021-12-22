@@ -1,11 +1,8 @@
+name: tcge-cfmedip-seq-pipeline-r
 channels:
   - conda-forge
   - bioconda
-  - r
 dependencies:
-#  - bioconductor-medips
-  - r-ggplot2
-  - r-gplots
   - bioconductor-medips
   - bioconductor-bsgenome.hsapiens.ucsc.hg19
   - bioconductor-bsgenome.hsapiens.ucsc.hg38

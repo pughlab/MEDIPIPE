@@ -14,7 +14,7 @@ The pipeline were developed in collaboration with ###, ###, ..
 ### How it works
 This is schematic diagram shows you how pipeline works:
 
-<img src="config/cfmedip-seq-pipeline.png" alt="Schematic_diagram" style="width:100.0%" />
+<img src="figures/cfmedip-seq-pipeline.png" alt="Schematic_diagram" style="width:100.0%" />
 
 ## Installation
 
@@ -29,30 +29,27 @@ This is schematic diagram shows you how pipeline works:
 	## token request for private repository
 	$ git clone https://github.com/yzeng-lol/cfmedip-seq-pipeline
 
-3) Install pipeline\'s Conda enviroments
+3) Install pipeline\'s core enviroments
 	```bash
 	$ cd cfmedip-seq-pipeline
 	$ conda activate base
-	# It might take a while to download and instal the core environment
 	$ mamba env create --file conda_env.yaml
-
-	# Install sub enviroments
-	$ conda activate cfmedip-seq-pipeline
-	$ snakmake
 	```
 
 4) Test run
+  > **IMPORTANT**: sub envs will also be created during the test run
 	```bash
-	## run on local
-	$ snakemake --snakefile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/Snakefile \
-	          --configfile /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
-	          --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/cfmedip-seq-pipeline_R \
-	          --cores 4 -p
+	$ conda activate tcge-cfmedip-seq-pipeline
 
-	## submit to SLURM cluster
-	$ sbatch /cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/workflow/sbatch_snakemake_template.sh
+	## then edit ./workflow/config/config_pe_template.yaml accordingly
+	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
+	$ vim ./workflow/config/config_test_run.yaml
+
+	## run with the internet connection as well
+	$ snakemake --snakefile ./workflow/Snakefile \
+	            --configfile ./workflow/config/config_test_run.yaml \
+	            --use-conda  --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
+	            --cores 4 -p
   ```
 
 ## Input file spefification
-
-....

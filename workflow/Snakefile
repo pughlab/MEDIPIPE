@@ -7,7 +7,7 @@
 #################
 ## initialization
 ## working dir for outputs
-workdir: config["workdir"]
+workdir: config["workdir"]        ## 
 
 ## loading rule modules
 include: "rules/common.smk"         ## self-defined functions

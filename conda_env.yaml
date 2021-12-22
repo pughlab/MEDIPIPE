@@ -1,10 +1,10 @@
-name: cfmedip-seq-pipeline
+name: tcge-cfmedip-seq-pipeline
 channels:
-  - bioconda
   - anaconda
+  - bioconda
   - conda-forge
 dependencies:
-  - snakemake
+  - snakemake=6.12.3
   - bwa=0.7.17
   - trim-galore=0.6.7
   - samtools=1.9
