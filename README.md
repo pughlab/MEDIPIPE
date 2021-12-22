@@ -39,21 +39,21 @@ This is schematic diagram shows you how pipeline works:
 	```
 
 4) Test run
-  > **IMPORTANT**: sub envs will also be created during the test run
-	
-	```bash
-	$ conda activate tcge-cfmedip-seq-pipeline
+  > **IMPORTANT**: sub envs will also be created during the test run.
 
-	## then edit ./workflow/config/config_pe_template.yaml accordingly
-	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
-	$ vim ./workflow/config/config_test_run.yaml
+		```bash
+		$ conda activate tcge-cfmedip-seq-pipeline
 
-	## run with the internet connection as well
-	$ snakemake --snakefile ./workflow/Snakefile \
+		## then edit ./workflow/config/config_pe_template.yaml accordingly
+		$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
+		$ vim ./workflow/config/config_test_run.yaml
+
+		## run with the internet connection as well
+		$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./workflow/config/config_test_run.yaml \
 	            --use-conda  --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
 	            --cores 4 -p
-  ```
+  	```
 
 
 ## Run on HPCs
