@@ -10,9 +10,8 @@
 ## sbatch /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/sbatch_snakemake_template.sh
 
 # run snakemake
-conda init bash
+#conda init bash
 conda activate tcge-cfmedip-seq-pipeline
-
 
 ## unlock workdir just in case the folder locked accidently before
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
@@ -27,7 +26,7 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cluster-config /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/cluster_std_err.json \
           --cluster "sbatch -p all --mem=16G -o {cluster.std} -e {cluster.err}" \
-          --latency-wait 60 --cores 8 --jobs 4 -p
+          --latency-wait 500 --cores 8 --jobs 4 -p
 
 
 ## move all submission std and and err to logs

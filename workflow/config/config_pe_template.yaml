@@ -1,4 +1,4 @@
-#workdir: /cluster/home/yzeng/tmp_1
+#workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/tmp
 workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 
 ## sample information
