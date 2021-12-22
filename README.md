@@ -60,9 +60,9 @@ This is schematic diagram shows you how pipeline works:
 
 You can submit this pipeline on clusters after ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
 
-	```bash
-	$ vim ./workflow/sbatch_snakemake_template.sh
-	$ sbatch ./workflow/sbatch_snakemake_template.sh
-	```
+```bash
+$ vim ./workflow/sbatch_snakemake_template.sh
+$ sbatch ./workflow/sbatch_snakemake_template.sh
+```
 
 ## Input files specification
