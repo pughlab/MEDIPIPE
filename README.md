@@ -51,7 +51,7 @@ This is schematic diagram shows you how pipeline works:
 	## run with the internet connection as well
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./workflow/config/config_test_run.yaml \
-		          --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
+		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
 	            --use-conda --cores 4 -p
 	```
 
