@@ -1,5 +1,5 @@
-#workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/tmp
-workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
+workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/tmp
+#workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 
 ## sample information
 samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv

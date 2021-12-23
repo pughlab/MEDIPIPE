@@ -5,7 +5,7 @@ rule bwa_map:
         get_trimmed_fastq
     output:
         temp("mapped_reads/{sample}.bam")
-    threads: 4
+    threads: 8
     log:
         "logs/{sample}_bwa_map.log"
     shell:
@@ -20,7 +20,7 @@ rule samtools_sort_index_stats:
         bam = "sorted_reads/{sample}_sorted.bam",
         bai = "sorted_reads/{sample}_sorted.bam.bai",
         stat= "sorted_reads/{sample}_sorted.bam.stats.txt"
-    threads: 2
+    threads: 8
     shell:
         ## --threads flag failed
         "(samtools fixmate -@ {threads} -m {input} - | "
@@ -36,7 +36,7 @@ rule samtools_markdup_stats:
         bam = "dedup_reads/{sample}_dedup.bam",
         bai = "dedup_reads/{sample}_dedup.bam.bai",
         stat= "dedup_reads/{sample}_dedup.bam.stats.txt"
-    threads: 2
+    threads: 8
     shell:
         "(samtools markdup -@ {threads} -r {input} {output.bam} && "
         "samtools index -@ {threads} {output.bam} && "
