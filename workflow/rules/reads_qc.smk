@@ -8,8 +8,8 @@ rule trim_galore_se:
         "trimmed_fq/{sample}.fastq.gz_trimming_report.txt",
     params:
         ## path needs to be full path: failed to recognize space
-        path = config["workdir"] + "/trimmed_fq"
-    threads: 8
+        path = wd + "/trimmed_fq"
+    threads: 12
     log:
         "logs/{sample}_trim_galore_se.log"
     shell:
@@ -28,8 +28,8 @@ rule trim_galore_pe:
         "trimmed_fq/{sample}_R2.fastq.gz_trimming_report.txt",
     params:
         ## path needs to be full path: failed to recognize space
-        path = config["workdir"] + "/trimmed_fq"
-    threads: 8
+        path = wd + "/trimmed_fq"
+    threads: 12
     log:
         "logs/{sample}_trim_galore_pe.log"
     shell:
@@ -57,7 +57,7 @@ rule fastqc_pe:
         "qc/pe/{sample}_R1_fastqc.html",
         "qc/pe/{sample}_R2_fastqc.html",
         "qc/pe/{sample}_R1_val_1_fastqc.html",
-        "qc/pe/{sample}_R2_val_2_fastqc.html",
+        "qc/pe/{sample}_R2_val_2_fastqc.html"
     run:
         for fq in input:
             shell("fastqc {} -t 8 --outdir qc/pe/".format(fq))

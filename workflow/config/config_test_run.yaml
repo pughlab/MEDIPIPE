@@ -1,4 +1,5 @@
 workdir: /path/to/tcge-cfmedip-seq-pipeline-test-run
+pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
 
 ## sample information
 samples: /path/to/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv

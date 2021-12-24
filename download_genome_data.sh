@@ -13,7 +13,7 @@ if [[ "$#" -lt 2 ]]; then
   echo "This script downloads/installs data for genome [GENOME] on a directory [DEST_DIR]."
   echo "A TSV file [DEST_DIR]/[GENOME].tsv will be generated. Use it for pipeline."
   echo
-  echo "Supported genomes: hg19 and hg38
+  echo "Supported genomes: hg19 and hg38"
   echo
   echo "Usage: ./download_genome_data.sh [GENOME] [DEST_DIR]"
   echo "Example: ./download_genome_data.sh hg38 /your/genome/data/path/hg38"
@@ -23,7 +23,6 @@ fi
 
 
 # parameters for genome database version (v1: <ENCODE4, v3: >=ENCODE4)
-
 
 GENOME=$1
 DEST_DIR=$(cd $(dirname $2) && pwd -P)/$(basename $2)
@@ -52,112 +51,74 @@ if [[ "${GENOME}" == "hg38" ]]; then
   DNASE="https://www.encodeproject.org/files/ENCFF304XEX/@@download/ENCFF304XEX.bed.gz"
   PROM="https://www.encodeproject.org/files/ENCFF140XLU/@@download/ENCFF140XLU.bed.gz"
   ENH="https://www.encodeproject.org/files/ENCFF212UAV/@@download/ENCFF212UAV.bed.gz"
-  REG2MAP_BED="https://storage.googleapis.com/encode-pipeline-genome-data/hg38/ataqc/hg38_celltype_compare_subsample.bed.gz"
-  REG2MAP="https://storage.googleapis.com/encode-pipeline-genome-data/hg38/ataqc/hg38_dnase_avg_fseq_signal_formatted.txt.gz"
-  ROADMAP_META="https://storage.googleapis.com/encode-pipeline-genome-data/hg38/ataqc/hg38_dnase_avg_fseq_signal_metadata.txt"
+fi
+
+if [[ "${GENOME}" == "hg19" ]]; then
+  REGEX_BFILT_PEAK_CHR_NAME="chr[\dXY]+"
+  MITO_CHR_NAME="chrM"
+  REF_FA="http://hgdownload.cse.ucsc.edu/goldenpath/hg19/encodeDCC/referenceSequences/male.hg19.fa.gz"
+  REF_MITO_FA="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/male.hg19.chrM.fa.gz"
+  CHRSZ="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/hg19.chrom.sizes"
+  BWT2_IDX="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/bowtie2_index/male.hg19.fa.tar"
+  BWT2_MITO_IDX="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/bowtie2_index/male.hg19.chrM.fa.tar"
+  BWA_IDX="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/bwa_index/male.hg19.fa.tar"
+  BWA_MITO_IDX="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/bwa_index/male.hg19.chrM.fa.tar"
+  BLACKLIST="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/wgEncodeDacMapabilityConsensusExcludable.bed.gz"
+  TSS="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/hg19_gencode_tss_unique.bed.gz"
+  DNASE="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_all_p10_ucsc.bed.gz"
+  PROM="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_prom_p2.bed.gz"
+  ENH="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_enh_p2.bed.gz"
 fi
 
 
-
-  if [[ -z "${REF_FA}" ]]; then
-    echo "Error: unsupported genome $GENOME"
-    exit 1
-  fi
-  if [[ -z "${MITO_CHR_NAME}" ]]; then
-    echo "Error: Mitochondrial chromosome name must be defined"
-    exit 1
-  fi
-  if [[ -z "${REGEX_BFILT_PEAK_CHR_NAME}" ]]; then
-    echo "Error: Perl style reg-ex for filtering peaks must be defined"
-    exit 1
-  fi
 
 ####################
 ## Downloading files
 ####################
 
-  echo "=== Downloading files..."
-  wget -c -O $(basename ${REF_FA}) ${REF_FA}
-  wget -c -O $(basename ${REF_MITO_FA}) ${REF_MITO_FA}
-  if [[ ! -z "${BLACKLIST}" ]]; then wget -N -c ${BLACKLIST}; fi
+echo "=== Downloading files..."
+wget -c -O $(basename ${REF_FA}) ${REF_FA}
+wget -c -O $(basename ${REF_MITO_FA}) ${REF_MITO_FA}
+wget -c -O $(basename ${CHRSZ}) ${CHRSZ}
 
-  echo "=== Processing reference fasta file..."
-  REF_FA_PREFIX=$(basename ${REF_FA})
-  REF_MITO_FA_PREFIX=$(basename ${REF_MITO_FA})
+## annotated regions
+wget -N -c ${BLACKLIST}
+wget -N -c ${TSS}
+wget -N -c ${DNASE}
+wget -N -c ${PROM}
+wget -N -c ${ENH}
 
-  echo "=== Generating fasta index and chrom.sizes file..."
-  cd ${DEST_DIR}
-  wget -c -O $(basename ${CHRSZ}) ${CHRSZ}
-  CHRSZ=$(basename ${CHRSZ})
+###  to add CpG islands, sea, shore ..
 
-  echo "=== Determinig gensz..."
-  cd ${DEST_DIR}
-  GENSZ=$(cat ${CHRSZ} | awk '{sum+=$2} END{print sum}')
-  if [[ "${GENOME}" == hg* ]]; then GENSZ=hs; fi
-  if [[ "${GENOME}" == mm* ]]; then GENSZ=mm; fi
+gunzip *.gz
 
-  echo "=== Downloading bowtie2 index..."
-  mkdir -p ${DEST_DIR}/bowtie2_index
-  cd ${DEST_DIR}/bowtie2_index
-  wget -c ${BWT2_IDX}
-  wget -c ${BWT2_MITO_IDX}
+echo "=== Downloading bwa index..."
+mkdir -p ${DEST_DIR}/bwa_index
+cd ${DEST_DIR}/bwa_index
+wget -c ${BWA_IDX}
+tar xvzf *.tar.gz
+rm *.tar.gz
 
-  echo "=== Downloading bwa index..."
-  mkdir -p ${DEST_DIR}/bwa_index
-  cd ${DEST_DIR}/bwa_index
-  wget -c ${BWA_IDX}
-  wget -c ${BWA_MITO_IDX}
+####################
+## Creating TSV file
+####################
+cd ${DEST_DIR}
+rm -f ${TSV}
+touch ${TSV}
 
-  echo "=== Creating TSV file... (${TSV})"
-  cd ${DEST_DIR}
-  rm -f ${TSV}
-  touch ${TSV}
+echo -e "genome_name\t${GENOME}" >> ${TSV}
+echo -e "ref_fa\t${DEST_DIR}/$(basename ${REF_FA})" >> ${TSV}
+echo -e "ref_mito_fa\t${DEST_DIR}/$(basename ${REF_MITO_FA})" >> ${TSV}
+echo -e "chrsz\t${DEST_DIR}/$(basename ${CHRSZ})" >> ${TSV}
+echo -e "blacklist\t${DEST_DIR}/$(basename ${BLACKLIST})" >> ${TSV}
+echo -e "tss\t${DEST_DIR}/$(basename ${TSS})" >> ${TSV}
+echo -e "dnase\t${DEST_DIR}/$(basename ${DNASE})" >> ${TSV}
+echo -e "prom\t${DEST_DIR}/$(basename ${PROM})" >> ${TSV}
+echo -e "enh\t${DEST_DIR}/$(basename ${ENH})" >> ${TSV}
 
-  echo -e "genome_name\t${GENOME}" >> ${TSV}
-  echo -e "ref_fa\t${DEST_DIR}/$(basename $REF_FA_PREFIX)" >> ${TSV}
-  echo -e "ref_mito_fa\t${DEST_DIR}/$(basename $REF_MITO_FA_PREFIX)" >> ${TSV}
-  echo -e "mito_chr_name\t${MITO_CHR_NAME}" >> ${TSV}
-  printf "regex_bfilt_peak_chr_name\t%s\n" "${REGEX_BFILT_PEAK_CHR_NAME}" >> ${TSV}
-  echo -e "blacklist\t${DEST_DIR}/$(basename ${BLACKLIST})" >> ${TSV};
-  echo -e "chrsz\t${DEST_DIR}/$(basename ${CHRSZ})" >> ${TSV}
-  echo -e "gensz\t${GENSZ}" >> ${TSV}
-  echo -e "bowtie2_idx_tar\t${DEST_DIR}/bowtie2_index/$(basename $BWT2_IDX)" >> ${TSV}
-  echo -e "bowtie2_mito_idx_tar\t${DEST_DIR}/bowtie2_index/$(basename $BWT2_MITO_IDX)" >> ${TSV}
-  echo -e "bwa_idx_tar\t${DEST_DIR}/bwa_index/$(basename $BWA_IDX)" >> ${TSV}
-  echo -e "bwa_mito_idx_tar\t${DEST_DIR}/bwa_index/$(basename $BWA_MITO_IDX)" >> ${TSV}
+bwa_idx=$(ls $PWD/bwa_index/*fna)
+echo -e "bwa_idx\t${bwa_idx}" >> ${TSV}
 
-  echo "=== Downloading ATAQC file... (${TSV})"
-  cd ${DEST_DIR}
-  mkdir -p ataqc
-  cd ataqc
+sed -i 's/.gz//g' ${TSV}
 
-  if [[ ! -z "${TSS}" ]]; then
-    wget -N -c ${TSS}
-    echo -e "tss\t${DEST_DIR}/ataqc/$(basename ${TSS})" >> ${TSV}
-  fi
-  if [[ ! -z "${DNASE}" ]]; then
-    wget -N -c ${DNASE}
-    echo -e "dnase\t${DEST_DIR}/ataqc/$(basename ${DNASE})" >> ${TSV}
-  fi
-  if [[ ! -z "${PROM}" ]]; then
-    wget -N -c ${PROM}
-    echo -e "prom\t${DEST_DIR}/ataqc/$(basename ${PROM})" >> ${TSV}
-  fi
-  if [[ ! -z "${ENH}" ]]; then
-    wget -N -c ${ENH}
-    echo -e "enh\t${DEST_DIR}/ataqc/$(basename ${ENH})" >> ${TSV}
-  fi
-  if [[ ! -z "${REG2MAP}" ]]; then
-    wget -N -c ${REG2MAP}
-    echo -e "reg2map\t${DEST_DIR}/ataqc/$(basename ${REG2MAP})" >> ${TSV}
-  fi
-  if [[ ! -z "${REG2MAP_BED}" ]]; then
-    wget -N -c ${REG2MAP_BED}
-    echo -e "reg2map_bed\t${DEST_DIR}/ataqc/$(basename ${REG2MAP_BED})" >> ${TSV}
-  fi
-  if [[ ! -z "${ROADMAP_META}" ]]; then
-    wget -N -c ${ROADMAP_META}
-    echo -e "roadmap_meta\t${DEST_DIR}/ataqc/$(basename ${ROADMAP_META})" >> ${TSV}
-  fi
-
-  echo "=== All done."
+echo "=== Done! ==="

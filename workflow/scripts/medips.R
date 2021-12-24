@@ -29,14 +29,14 @@ if (bsgenome == "BSgenome.Scerevisiae.UCSC.sacCer3")
 if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
 {
   library("BSgenome.Hsapiens.UCSC.hg19")
-  chr = c(pate0("chr", 1:22), "chrX", "chrY")
+  chr = c(paste0("chr", 1:22), "chrX", "chrY")
 }
 
 ## hg38
 if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
 {
   library("BSgenome.Hsapiens.UCSC.hg38")
-  chr = c(pate0("chr", 1:22), "chrX", "chrY")
+  chr = c(paste0("chr", 1:22), "chrX", "chrY")
 }
 
 

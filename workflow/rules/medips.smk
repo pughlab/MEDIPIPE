@@ -10,13 +10,14 @@ rule medips:
         "medips/{sample}_rpkm.wig"
     params:
         ispaired = config["paired-end"],
-        bsgenome = config["bsgenome"]
+        bsgenome = config["bsgenome"],
+        scr_dir = config["pipeline_dir"]
     log:
         "logs/{sample}_medips.log"
     conda:
         "conda_env_R.yaml"
     shell:
-        "(Rscript --vanilla /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/scripts/medips.R "
+        "(Rscript --vanilla {params.scr_dir}/workflow/scripts/medips.R "
         "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} {output}) 2> {log}"
 
 

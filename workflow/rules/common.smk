@@ -9,6 +9,10 @@ SAMPLES = (
 )
 
 
+## working directory
+wd = config["workdir"]
+pipe_dir = config["pipeline_dir"]
+
 #############################################
 ## get taget outputs based on the config file
 #############################################
@@ -17,7 +21,7 @@ def get_rule_all_input():
 
     #map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
     dedup_out = expand("dedup_reads/{sample}_dedup.bam.bai", sample = SAMPLES["sample"]),
-    medips_out = expand( "medips/{sample}_qc_report.txt", sample = SAMPLES["sample"]),
+    medips_out = expand("medips/{sample}_qc_report.txt", sample = SAMPLES["sample"]),
 
 
     if config["paired-end"]:
