@@ -1,28 +1,18 @@
 #!/bin/bash
-# Stop on error
-## ENCODDE DCC v3: >=ENCODE4 reference genome data
+
 ## the script was modified based on :
 ## https://github.com/ENCODE-DCC/atac-seq-pipeline/blob/master/scripts/download_genome_data.sh
+## ENCODE DCC Version: v3 for >=ENCODE4
 
-## tuning !!
-
-set -e
-
-if [[ "$#" -lt 2 ]]; then
-  echo
-  echo "This script downloads/installs data for genome [GENOME] on a directory [DEST_DIR]."
-  echo "A TSV file [DEST_DIR]/[GENOME].tsv will be generated. Use it for pipeline."
-  echo
-  echo "Supported genomes: hg19 and hg38"
-  echo
-  echo "Usage: ./download_genome_data.sh [GENOME] [DEST_DIR]"
-  echo "Example: ./download_genome_data.sh hg38 /your/genome/data/path/hg38"
-  echo
-  exit 2
-fi
+## "A TSV file [DEST_DIR]/[GENOME].tsv will be generated. Use it for pipeline."
+## "Supported genomes: hg19 and hg38"; Arabidopsis TAIR10 genome will be downloaded as well.
+## "Usage: ./download_genome_data.sh [GENOME] [DEST_DIR]"
+## "Example: ./download_genome_data.sh hg38 /your/genome/data/path/hg38"
 
 
-# parameters for genome database version (v1: <ENCODE4, v3: >=ENCODE4)
+#################
+## initilizaiton
+#################
 
 GENOME=$1
 DEST_DIR=$(cd $(dirname $2) && pwd -P)/$(basename $2)
@@ -51,6 +41,9 @@ if [[ "${GENOME}" == "hg38" ]]; then
   DNASE="https://www.encodeproject.org/files/ENCFF304XEX/@@download/ENCFF304XEX.bed.gz"
   PROM="https://www.encodeproject.org/files/ENCFF140XLU/@@download/ENCFF140XLU.bed.gz"
   ENH="https://www.encodeproject.org/files/ENCFF212UAV/@@download/ENCFF212UAV.bed.gz"
+
+  REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
+
 fi
 
 if [[ "${GENOME}" == "hg19" ]]; then
@@ -68,6 +61,8 @@ if [[ "${GENOME}" == "hg19" ]]; then
   DNASE="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_all_p10_ucsc.bed.gz"
   PROM="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_prom_p2.bed.gz"
   ENH="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_enh_p2.bed.gz"
+
+  REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
 fi
 
 
@@ -80,6 +75,7 @@ echo "=== Downloading files..."
 wget -c -O $(basename ${REF_FA}) ${REF_FA}
 wget -c -O $(basename ${REF_MITO_FA}) ${REF_MITO_FA}
 wget -c -O $(basename ${CHRSZ}) ${CHRSZ}
+wget -c -O $(basename ${REF_FA_TAIR10}) ${REF_FA_TAIR10}
 
 ## annotated regions
 wget -N -c ${BLACKLIST}
@@ -115,6 +111,7 @@ echo -e "tss\t${DEST_DIR}/$(basename ${TSS})" >> ${TSV}
 echo -e "dnase\t${DEST_DIR}/$(basename ${DNASE})" >> ${TSV}
 echo -e "prom\t${DEST_DIR}/$(basename ${PROM})" >> ${TSV}
 echo -e "enh\t${DEST_DIR}/$(basename ${ENH})" >> ${TSV}
+echo -e "ref_fa_tair10\t${DEST_DIR}/$(basename ${REF_FA_TAIR10})" >> ${TSV}
 
 bwa_idx=$(ls $PWD/bwa_index/*fna)
 echo -e "bwa_idx\t${bwa_idx}" >> ${TSV}

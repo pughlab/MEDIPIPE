@@ -82,11 +82,14 @@ dev.off()
 
 #################
 ## CpG enrichment
+## all chromosomes failed
+
+chr_cpg = paste0("chr", 1:5)            ## check chr1-5
 cpg_enrich = MEDIPS.CpGenrich(
   file = bam_file,
   BSgenome = bsgenome,
   paired = ispaired,
-  chr.select = chr
+  chr.select = chr_cpg
 )
 
 ###################

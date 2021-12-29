@@ -26,10 +26,10 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
           --configfile /cluster/projects/tcge/cell_free_epigenomics/test_run/config_test.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cluster-config /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/cluster_std_err.json \
-          --cluster "sbatch -p long -c 12 --mem=16G -o {cluster.std} -e {cluster.err}" \
+          --cluster "sbatch -p himem -c 12 --mem=30G -o {cluster.std} -e {cluster.err}" \
           --latency-wait 60 --jobs 8 -p
 
 ## move all submission std and and err to logs
-mv submit* ./logs
+#mv submit* ./logs
 
 conda deactivate
