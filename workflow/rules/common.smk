@@ -8,6 +8,9 @@ SAMPLES = (
     .sort_index()
 )
 
+## read in refrence files' info
+REF = pd.read_csv(config["ref_files"] sep="\t", header = None, index_col = 0)
+
 
 ## working directory
 wd = config["workdir"]
@@ -52,6 +55,14 @@ def get_rule_all_input():
 
         return fastqc_se_out + dedup_out + dedup_out + medips_out
 
+
+###############################
+##  get corresponding bwa_index
+def get_bwa_index():
+    if config["spike_in"]:
+        return REF.loc["bwa_index_add"][1]
+    else:
+        return REF.loc["bwa_index"][1]
 
 
 ##############################################

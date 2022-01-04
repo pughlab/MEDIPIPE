@@ -1,5 +1,5 @@
-workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/tmp
-#workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
+#workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/tmp
+workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
 
 ## sample information
@@ -7,5 +7,11 @@ samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sampl
 paired-end: True
 
 ## reference
+ref_files: /cluster/projects/tcge/DB/cfmedip-seq-pepeline/hg38/hg38.tsv
+
+# Arabidopsis spike in
+spike_in: False
+add_umi: False
+
 bwa_index: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3

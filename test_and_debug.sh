@@ -36,8 +36,6 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
 
 
 
-
-
 ################################
 #### test run on H4H with sbatch
 
