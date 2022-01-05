@@ -5,14 +5,19 @@
 ## ENCODE DCC Version: v3 for >=ENCODE4
 
 ## "A TSV file [DEST_DIR]/[GENOME].tsv will be generated. Use it for pipeline."
-## "Supported genomes: hg19 and hg38"; Arabidopsis TAIR10 genome will be downloaded as well.
-## "Usage: ./download_genome_data.sh [GENOME] [DEST_DIR]"
-## "Example: ./download_genome_data.sh hg38 /your/genome/data/path/hg38"
+## "Supported genomes: hg19 and hg38"; Arabidopsis TAIR10 genome will be downloaded,
+##  as well as building bwa index for merged genomes.
+## "Usage: ./download_build_reference.sh [GENOME] [DEST_DIR]"
+## "Example: ./download_build_reference.sh hg38 /your/genome/data/path/hg38"
 
 
 #################
 ## initilizaiton
 #################
+source ~/miniconda3/etc/profile.d/conda.sh
+
+# OR:
+# source ~/conda3/etc/profile.d/conda.sh
 
 GENOME=$1
 DEST_DIR=$(cd $(dirname $2) && pwd -P)/$(basename $2)
@@ -75,7 +80,14 @@ echo "=== Downloading files..."
 wget -c -O $(basename ${REF_FA}) ${REF_FA}
 wget -c -O $(basename ${REF_MITO_FA}) ${REF_MITO_FA}
 wget -c -O $(basename ${CHRSZ}) ${CHRSZ}
+
+## TAIR10
 wget -c -O $(basename ${REF_FA_TAIR10}) ${REF_FA_TAIR10}
+sed -i -e 's/^>/>tair10_chr/' TAIR10_chr_all.fas
+gzip  TAIR10_chr_all.fas
+
+## combine genomes
+cat $(basename ${REF_FA}) TAIR10_chr_all.fas.gz > ${GENOME}_tair10.fa.gz
 
 ## annotated regions
 wget -N -c ${BLACKLIST}
@@ -89,11 +101,35 @@ wget -N -c ${ENH}
 gunzip *.gz
 
 echo "=== Downloading bwa index..."
-mkdir -p ${DEST_DIR}/bwa_index
-cd ${DEST_DIR}/bwa_index
+
+if [[ "${GENOME}" == "hg38" ]]; then
+mkdir -p ${DEST_DIR}/bwa_index_${GENOME}
+cd ${DEST_DIR}/bwa_index_${GENOME}
 wget -c ${BWA_IDX}
 tar xvzf *.tar.gz
 rm *.tar.gz
+fi
+
+if [[ "${GENOME}" == "hg19" ]]; then
+mkdir -p ${DEST_DIR}/bwa_index_${GENOME}
+cd ${DEST_DIR}/bwa_index_${GENOME}
+wget -c ${BWA_IDX}
+tar xf *.tar
+#rm *.tar
+fi
+
+#################################################
+## build bwa index for combined reference genomes
+#################################################
+
+cd ${DEST_DIR}
+echo "=== Building bwa index for mereged genomes ..."
+
+conda activate tcge-cfmedip-seq-pipeline
+bwa index -a bwtsw ${GENOME}_tair10.fa
+
+mkdir -p bwa_index_${GENOME}_tair10
+mv ${GENOME}_tair10* ./bwa_index_${GENOME}_tair10
 
 ####################
 ## Creating TSV file
@@ -113,9 +149,23 @@ echo -e "prom\t${DEST_DIR}/$(basename ${PROM})" >> ${TSV}
 echo -e "enh\t${DEST_DIR}/$(basename ${ENH})" >> ${TSV}
 echo -e "ref_fa_tair10\t${DEST_DIR}/$(basename ${REF_FA_TAIR10})" >> ${TSV}
 
-bwa_idx=$(ls $PWD/bwa_index/*fna)
-echo -e "bwa_idx\t${bwa_idx}" >> ${TSV}
+## bwa index
+if [[ "${GENOME}" == "hg38" ]]; then
+bwa_idx=$(ls $PWD/bwa_index_${GENOME}/*fna)
+echo -e "bwa_idx_${GENOME}\t${bwa_idx}" >> ${TSV}
+fi
 
+if [[ "${GENOME}" == "hg19" ]]; then
+mv male.hg19.fa ./bwa_index_${GENOME}
+bwa_idx=$(ls $PWD/bwa_index_${GENOME}/*fa)
+echo -e "bwa_idx_${GENOME}\t${bwa_idx}" >> ${TSV}
+fi
+
+## bwa index merged
+bwa_idx_merged=$(ls $PWD/bwa_index_${GENOME}_tair10/*fa)
+echo -e "bwa_idx_${GENOME}_tair10\t${bwa_idx_merged}" >> ${TSV}
+
+## remove gz suffix
 sed -i 's/.gz//g' ${TSV}
 
 echo "=== Done! ==="

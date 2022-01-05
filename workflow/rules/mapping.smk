@@ -2,7 +2,7 @@
 rule bwa_map:
     input:
         #config["bwa_index"],
-        get_bwa_index,
+        get_bwa_index(),
         get_trimmed_fastq
     output:
         temp("mapped_reads/{sample}.bam")
