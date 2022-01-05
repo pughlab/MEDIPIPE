@@ -68,15 +68,12 @@ $ sbatch ./workflow/sbatch_snakemake_template.sh
 ## Input files specification
 
 ### Download or customize reference genome data
-You can download reference genome, pre-build BWA index and annotated regions from ENCODE for hg38 and hg19. The Arabidopsis genome TAIR10 will also be downloaded for the libraries with corresponding spike-ins.
+You can download reference genome, pre-build BWA index and annotated regions from ENCODE for hg38 and hg19. The Arabidopsis genome TAIR10 will also be downloaded to build merged genomes BWA index.
 
 ```bash
-$ ./download_genome_data.sh [GENOME] [DEST_DIR]
+## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
+$ ./download_build_reference.sh [GENOME] [DEST_DIR]
 ```
 
-Then, you can build merged BWA index for the scenarios with spike-ins after downloading genomes.
-```bash
-$ ./build_genome_data.sh [GENOME1] [GENOME2] [DEST_DIR]
-```
 
 ### config file for input samples
