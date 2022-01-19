@@ -8,6 +8,8 @@ rule medips:
         "medips/{sample}_qc_report.txt",
         "medips/{sample}_meth_quant.txt",
         "medips/{sample}_rpkm.wig"
+    resources:
+        mem_mb=60000
     params:
         ispaired = config["paired-end"],
         bsgenome = config["bsgenome"],
