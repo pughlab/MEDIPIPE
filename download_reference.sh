@@ -67,7 +67,9 @@ if [[ "${GENOME}" == "hg19" ]]; then
   PROM="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_prom_p2.bed.gz"
   ENH="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_enh_p2.bed.gz"
 
+  ## Arabidopsis
   REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
+
 fi
 
 
@@ -122,17 +124,15 @@ fi
 ## build bwa index for combined reference genomes
 #################################################
 
-cd ${DEST_DIR}
-
 ## Might need to build index separatly due to the storage limitation
 ## in login homefolder (50G quota for H4H)
-echo "=== Building bwa index for mereged genomes ..."
+## echo "=== Building bwa index for mereged genomes ..."
 
-conda activate tcge-cfmedip-seq-pipeline
-bwa index -a bwtsw ${GENOME}_tair10.fa
+#conda activate tcge-cfmedip-seq-pipeline
+#bwa index -a bwtsw ${GENOME}_tair10.fa
 
-mkdir -p bwa_index_${GENOME}_tair10
-mv ${GENOME}_tair10* ./bwa_index_${GENOME}_tair10
+#mkdir -p bwa_index_${GENOME}_tair10
+#mv ${GENOME}_tair10* ./bwa_index_${GENOME}_tair10
 
 
 ####################
@@ -151,7 +151,7 @@ echo -e "tss\t${DEST_DIR}/$(basename ${TSS})" >> ${TSV}
 echo -e "dnase\t${DEST_DIR}/$(basename ${DNASE})" >> ${TSV}
 echo -e "prom\t${DEST_DIR}/$(basename ${PROM})" >> ${TSV}
 echo -e "enh\t${DEST_DIR}/$(basename ${ENH})" >> ${TSV}
-echo -e "ref_fa_tair10\t${DEST_DIR}/$(basename ${REF_FA_TAIR10})" >> ${TSV}
+#echo -e "ref_fa_tair10\t${DEST_DIR}/$(basename ${REF_FA_TAIR10})" >> ${TSV}
 
 ## bwa index
 if [[ "${GENOME}" == "hg38" ]]; then
@@ -166,8 +166,8 @@ echo -e "bwa_idx_hg\t${bwa_idx}" >> ${TSV}
 fi
 
 ## bwa index merged
-bwa_idx_merged=$(ls $PWD/bwa_index_${GENOME}_tair10/*fa)
-echo -e "bwa_idx_hg_tair\t${bwa_idx_merged}" >> ${TSV}
+#bwa_idx_merged=$(ls $PWD/bwa_index_${GENOME}_tair10/*fa)
+#echo -e "bwa_idx_hg_tair\t${bwa_idx_merged}" >> ${TSV}
 
 ## remove gz suffix
 sed -i 's/.gz//g' ${TSV}

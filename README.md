@@ -9,7 +9,7 @@ The pipeline was developed based on the prior works of Wenbin Ye, Eric Zhao, ..
 ### Features
 
 - **Portability**: The pipeline run can be performed across different cluster engines such as SLURM,...
-- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis genome TAIR10 and two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3. You can also build genome database from FASTA for your custom genomes.
+- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis thaliana genome TAIR10. In addition, fasta sequence for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3 was enclosed in `data/BAC_F19K16_F24B22.fa`. You can also build genome database from FASTA for your custom genomes.
 
 
 ### How it works
@@ -68,12 +68,20 @@ $ sbatch ./workflow/sbatch_snakemake_template.sh
 
 ## Input files specification
 
-### Download or customize reference genome data
-You can download reference genome, pre-build BWA index and annotated regions from ENCODE for hg38 and hg19. The Arabidopsis genome TAIR10 will also be downloaded to build merged genomes BWA index.
+### Download reference genome data
+You can download reference genome, pre-build BWA index and annotated regions from ENCODE for hg38 and hg19 via following command line. The manifest file hg38/hg19.tsv will be generated accordingly.
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
-$ ./download_build_reference.sh [GENOME] [DEST_DIR]
+$ ./download_reference.sh [GENOME] [DEST_DIR]
+```
+
+### Build reference genome data
+If your sequencing libraries come with spike-ins, you can build new aligner index after combining spike-in genome with human genome. The new index information will be appended to corresponding manifest file.
+
+```bash
+## eg: ./build_reference.sh hg38  ./data/BAC_F19K16_F24B22.fa  /your/genome/data/path/hg38
+$ ./build_reference.sh [GENOME] [SPIKEIN_FA] [DEST_DIR]
 ```
 
 
