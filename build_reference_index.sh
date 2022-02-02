@@ -3,8 +3,7 @@
 ## the script will build BWA index for combined human and spike-in genomes.
 ## "Usage: ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]"
 ## "Example: ./build_reference_index.sh hg38 ./data/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /your/genome/data/path/hg38"
-
-## "Example: ./build_reference_index.sh hg38 ./data/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /cluster/projects/tcge/DB/cfmedip-seq-pepeline/hg38"
+## "Example: ./build_reference_index.sh hg19 ./data/BAC_F19K16_F24B22.fa  hg19_BAC_F19K16_F24B22  /cluster/projects/tcge/DB/cfmedip-seq-pepeline/hg19"
 
 #################
 ## initilizaiton
@@ -31,8 +30,6 @@ cat ${hg_fa} ${SPIKEIN_FA} > ${DEST_DIR}/${INDEX_PREFIX}.fa
 ## build bwa index for combined reference genomes
 #################################################
 
-
-## Might need to build index separatly due to the storage limitation
 cd ${DEST_DIR}
 
 echo "=== Building bwa index for mereged genomes ..."
