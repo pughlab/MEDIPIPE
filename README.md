@@ -2,14 +2,15 @@
 
 ## Intoduction
 
-This pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploye the execution enviroment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to QC matirx and signal track generation. The pipeline supports both signle-end and paired-end data. The outputs produced by the pipeline include 1) formatted HTML QC reports, 2) enrichment signal tracks, 3)...
+This pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to QC matrix and signal track generation. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The outputs produced by the pipeline include 1) formatted QC reports, 2) enrichment signal tracks, 3)...
 
-The pipeline were developed in collaboration with ###, ###, ..
+The pipeline was developed based on the prior works of Wenbin Ye, Eric Zhao, ..
 
 ### Features
 
-- **Portability**: The pipeline run can be performed across different cluster engines such as SLURM, SGE and PBS.
-- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for hg38, hg19, hg38+tair10 and hg19+tair10. You can also build genome database from FASTA for your costom genome.
+- **Portability**: The pipeline run can be performed across different cluster engines such as SLURM,...
+- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis genome TAIR10 and two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3. You can also build genome database from FASTA for your custom genomes.
+
 
 ### How it works
 This is schematic diagram shows you how pipeline works:
@@ -33,7 +34,7 @@ This is schematic diagram shows you how pipeline works:
 
 3) Install pipeline\'s core enviroments
 	```bash
-	$ cd cfmedip-seq-pipeline
+	$ cd tcge-cfmedip-seq-pipeline
 	$ conda activate base
 	$ mamba env create --file conda_env.yaml
 	```
