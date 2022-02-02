@@ -123,6 +123,9 @@ fi
 #################################################
 
 cd ${DEST_DIR}
+
+## Might need to build index separatly due to the storage limitation
+## in login homefolder (50G quota for H4H)
 echo "=== Building bwa index for mereged genomes ..."
 
 conda activate tcge-cfmedip-seq-pipeline
@@ -130,6 +133,7 @@ bwa index -a bwtsw ${GENOME}_tair10.fa
 
 mkdir -p bwa_index_${GENOME}_tair10
 mv ${GENOME}_tair10* ./bwa_index_${GENOME}_tair10
+
 
 ####################
 ## Creating TSV file
@@ -158,12 +162,12 @@ fi
 if [[ "${GENOME}" == "hg19" ]]; then
 mv male.hg19.fa ./bwa_index_${GENOME}
 bwa_idx=$(ls $PWD/bwa_index_${GENOME}/*fa)
-echo -e "bwa_idx_${GENOME}\t${bwa_idx}" >> ${TSV}
+echo -e "bwa_idx_hg\t${bwa_idx}" >> ${TSV}
 fi
 
 ## bwa index merged
 bwa_idx_merged=$(ls $PWD/bwa_index_${GENOME}_tair10/*fa)
-echo -e "bwa_idx_${GENOME}_tair10\t${bwa_idx_merged}" >> ${TSV}
+echo -e "bwa_idx_hg_tair\t${bwa_idx_merged}" >> ${TSV}
 
 ## remove gz suffix
 sed -i 's/.gz//g' ${TSV}

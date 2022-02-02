@@ -59,9 +59,9 @@ def get_rule_all_input():
 ##  get corresponding bwa_index
 def get_bwa_index():
     if config["spike_in"]:
-        return REF.loc["bwa_idx_add"][1]
+        return REF.loc["bwa_idx_hg_tair"][1]
     else:
-        return REF.loc["bwa_idx"][1]
+        return REF.loc["bwa_idx_hg"][1]
 
 
 
