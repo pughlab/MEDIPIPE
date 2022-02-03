@@ -42,6 +42,6 @@ mv ${INDEX_PREFIX}.* ./bwa_index_${INDEX_PREFIX}
 
 ## adding new bwa index into manifest file
 bwa_idx_merged=$(ls $PWD/bwa_index_${INDEX_PREFIX}/*fa)
-echo -e "bwa_idx_hg_spikein\t${bwa_idx_merged}" >> ${TSV}
+echo -e "bwa_idx_spikein\t${bwa_idx_merged}" >> ${TSV}
 
 echo "=== Done! ==="

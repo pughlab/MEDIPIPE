@@ -1,0 +1,18 @@
+#########################################
+## PATH for pipeline and working diretor
+pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
+workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
+
+#################################
+## Sequencing samples information
+samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv
+paired-end: True
+
+## Spike-in or UMI sequence
+spike_in: False
+add_umi: False
+
+############
+## reference
+ref_files: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/test.tsv
+bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3

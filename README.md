@@ -51,20 +51,11 @@ This is schematic diagram shows you how pipeline works:
 
 	## run with the internet connection as well
 	$ snakemake --snakefile ./workflow/Snakefile \
-	            --configfile ./workflow/config/config_test_run.yaml \
+	            --configfile ./workflow/config/config_template.yaml \
 		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
 	            --use-conda --cores 4 -p
 	```
 
-
-## Run on HPCs
-
-You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
-
-```bash
-$ vim ./workflow/sbatch_snakemake_template.sh
-$ sbatch ./workflow/sbatch_snakemake_template.sh
-```
 
 ## Input files specification
 
@@ -84,5 +75,14 @@ If your sequencing libraries come with spike-ins, you can build new aligner inde
 $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 ```
 
-
 ### config file for input samples
+
+
+## Run on HPCs
+
+You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
+
+```bash
+$ vim ./workflow/sbatch_snakemake_template.sh
+$ sbatch ./workflow/sbatch_snakemake_template.sh
+```

@@ -1,17 +1,15 @@
 ##################################################
-##### conda_env.yaml and conda_env_r.yaml  #######
+##### conda_env.yaml and conda_env_R.yaml  #######
 
 ## conda_env.ymal
-
 
 conda install -c anaconda graphviz
 conda env export -c bioconda  --from-history | grep -v "^prefix" >  conda_env.yaml
 
 
-## conda_env_r.yaml
+## conda_env_R.yaml
 conda install -c bioconda bioconductor-medips
-conda env export -c bioconda  --from-history | grep -v "^prefix" >  conda_env_r.yaml
-
+conda env export -c bioconda  --from-history | grep -v "^prefix" >  conda_env_R.yaml
 
 
 
@@ -26,29 +24,29 @@ conda activate tcge-cfmedip-seq-pipeline
 ## generate the DGA plots with dot -Tsvg
 ## for paired-end inputs
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
-          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/figures/dag_pe.pdf
-
-## for single-end inputs
-snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_se_template.yaml \
-          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/figures/dag_se.pdf
+          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_template.yaml \
+          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/figures/dag.pdf
 
 
+############################
+#### test run with test data
+############################
 
-################################
-#### test run on H4H with sbatch
 
 ##  stand-alone dry-run
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
+          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_template.yaml \
+          --unlock
+
+snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_template.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cores 4 -pn
 
 ## sbatch /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/sbatch_snakemake_template.sh
 ## using the --unlock flag to unlock workdir
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_pe_template.yaml \
+          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_template.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cluster-config /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/cluster_std_err.json \
           --cluster "sbatch -p all --mem=16G -o {cluster.std} -e {cluster.err}" \

@@ -1,0 +1,18 @@
+#########################################
+## PATH for pipeline and working diretory
+pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
+workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/res
+
+#################################
+## Sequencing samples information
+samples: /cluster/projects/tcge/cell_free_epigenomics/test_run/samples-seq.tsv
+paired-end: True
+
+## Spike-in or UMI sequence
+spike_in: False
+add_umi: False
+
+############
+## reference
+ref_files: /cluster/projects/tcge/DB/cfmedip-seq-pepeline/hg38/hg38.tsv
+bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3

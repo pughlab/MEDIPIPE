@@ -16,14 +16,14 @@ conda activate tcge-cfmedip-seq-pipeline
 
 ## unlock workdir just in case the folder locked accidently before
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/projects/tcge/cell_free_epigenomics/test_run/config_test.yaml \
+          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_real_run.yaml \
           --unlock
 
 ## --jobs   ## number of samples
 ## sbatch -c :  maximal 8 threads per multithreading job by default, less -c INT  will be scaled down to INT
 
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/projects/tcge/cell_free_epigenomics/test_run/config_test.yaml \
+          --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_real_run.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cluster-config /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/cluster_std_err.json \
           --cluster "sbatch -p himem -c 12 --mem=60G -o {cluster.std} -e {cluster.err}" \

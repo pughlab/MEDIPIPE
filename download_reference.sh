@@ -162,12 +162,12 @@ fi
 if [[ "${GENOME}" == "hg19" ]]; then
 mv male.hg19.fa ./bwa_index_${GENOME}
 bwa_idx=$(ls $PWD/bwa_index_${GENOME}/*fa)
-echo -e "bwa_idx_hg\t${bwa_idx}" >> ${TSV}
+echo -e "bwa_idx\t${bwa_idx}" >> ${TSV}
 fi
 
 ## bwa index merged
 #bwa_idx_merged=$(ls $PWD/bwa_index_${GENOME}_tair10/*fa)
-#echo -e "bwa_idx_hg_tair\t${bwa_idx_merged}" >> ${TSV}
+#echo -e "bwa_idx_spikein\t${bwa_idx_merged}" >> ${TSV}
 
 ## remove gz suffix
 sed -i 's/.gz//g' ${TSV}

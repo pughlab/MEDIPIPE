@@ -1,10 +1,7 @@
 
-## Customized scripts
+# Dependencies
 
-Customized scripts were developed to achieve specific analyses.
-
-
-## Public packages are unavailable through conda/bioconda/r  
+The R/Pythone packages are unavailable through conda/bioconda/r were cloned.
 
 1. [ConsensusCruncher](https://github.com/pughlab/ConsensusCruncher) was cloned here to deal with the sequencing libraries come with custom barcodes, for instance, the Unique Molecular Identifier (UMI) enables accurate bioinformatic identification of PCR duplicates. A text file with these barcode sequences, one per line, is required for ConsensusCruncher's `--blist` parameter.  
 

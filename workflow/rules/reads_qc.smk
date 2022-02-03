@@ -1,4 +1,21 @@
+###################################################
+### extract UMI barcode and add it to FASTQ headers
+### pair-end unzipped FASTQ only, so far
+'''
+## tuning
+rule extract_barcode:
+    input:
+        get_raw_fastq
+    output:
+        extract_barcodes/{sample}_extract_barcode_R1.fastq'),
+        extract_barcodes/{sample}_extract_barcode_R2.fastq')
+    shell:
+        "python {extract_barcodes} --read1 {{input.R1}} --read2 {{input.R2}}"
+        "--outfile {{params.outprefix}}  "
+        "{{params.barcodes}}".format(extract_barcodes = pipe_dir)
+'''
 
+########################################################
 ### automatically trimming adapters for single-end reads
 rule trim_galore_se:
     input:
@@ -16,7 +33,7 @@ rule trim_galore_se:
         "(trim_galore -q 20 --stringency 3 --length 20 "
         "--cores {threads} -o {params.path} {input}) 2> {log}"
 
-
+#######################################################
 ### automatically trimming adapters for paied-end reads
 rule trim_galore_pe:
     input:
@@ -36,6 +53,7 @@ rule trim_galore_pe:
         "(trim_galore -q 20 --stringency 3 --length 20 "
         "--cores {threads} --paired -o {params.path} {input}) 2> {log}"
 
+###############################################
 ### FASTQC for raw and trimmed single-end reads
 rule fastqc_se:
     input:
@@ -48,6 +66,7 @@ rule fastqc_se:
         for fq in input:
             shell("fastqc {} -t 8 --outdir qc/se/".format(fq))
 
+###############################################
 ### FASTQC for raw and trimmed paired-end reads
 rule fastqc_pe:
     input:
