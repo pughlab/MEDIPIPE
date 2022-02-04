@@ -1,0 +1,12 @@
+name: tcge-cfmedip-seq-pipeline-sub
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - bioconductor-medips
+  - bioconductor-bsgenome.hsapiens.ucsc.hg19
+  - bioconductor-bsgenome.hsapiens.ucsc.hg38
+  - bioconductor-bsgenome.scerevisiae.ucsc.saccer3
+  - bioconductor-annotatr
+  - r-devtools

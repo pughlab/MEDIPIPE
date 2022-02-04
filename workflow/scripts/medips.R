@@ -30,13 +30,20 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
 {
   library("BSgenome.Hsapiens.UCSC.hg19")
   chr = c(paste0("chr", 1:22), "chrX", "chrY")
+  chr_enrich = paste0("chr", 1:5)
 }
 
 ## hg38
 if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
 {
   library("BSgenome.Hsapiens.UCSC.hg38")
+
   chr = c(paste0("chr", 1:22), "chrX", "chrY")
+
+  ## all chromosomes failed MEDIPS enrichment
+  ## checking chr1-5 temporally
+  chr_enrich = paste0("chr", 1:5)
+
 }
 
 
@@ -82,15 +89,12 @@ dev.off()
 
 #################
 ## CpG enrichment
-## all chromosomes failed
-## checking chr1-5 temporally
 
-chr_cpg = paste0("chr", 1:5)           
 cpg_enrich = MEDIPS.CpGenrich(
   file = bam_file,
   BSgenome = bsgenome,
   paired = ispaired,
-  chr.select = chr_cpg
+  chr.select = chr
 )
 
 ###################

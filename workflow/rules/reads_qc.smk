@@ -1,25 +1,66 @@
+#########################################
+## unzip fastq.gz for extracting barcodes
+'''
+rule gunzip_fq:
+    input:
+        get_raw_fastq
+    output:
+        temp("unzip_fq/{sample}_R1.fastq"),
+        temp("unzip_fq/{sample}_R2.fastq"),
+    params:
+        outfile = "unzip_fq/{sample}"
+    shell:
+        "gunzip {input[0]} -c > {params.outfile}_R1.fastq && "
+        "gunzip {input[1]} -c > {params.outfile}_R2.fastq"
+'''
+
+
 ###################################################
 ### extract UMI barcode and add it to FASTQ headers
 ### pair-end unzipped FASTQ only, so far
-'''
 ## tuning
+    ## unzip gz files
+    #"gunzip {input[0]} -c > {params.outfile}_R1.fastq && "
+    #"gunzip {input[1]} -c > {params.outfile}_R2.fastq && "
+
 rule extract_barcode:
     input:
         get_raw_fastq
     output:
-        extract_barcodes/{sample}_extract_barcode_R1.fastq'),
-        extract_barcodes/{sample}_extract_barcode_R2.fastq')
+        temp("barcoded_fq/{sample}_R1.fastq"),
+        temp("barcoded_fq/{sample}_R2.fastq"),
+        "barcoded_fq/{sample}_R1.fastq.gz",
+        "barcoded_fq/{sample}_R2.fastq.gz"
+    conda:
+        "extra_env/ConsensusCruncher.yaml"
+    params:
+        src = pipe_dir + "/workflow/dependencies/ConsensusCruncher/ConsensusCruncher/extract_barcodes.py",
+        blist = umi_list,
+        outfile = "barcoded_fq/{sample}"
     shell:
-        "python {extract_barcodes} --read1 {{input.R1}} --read2 {{input.R2}}"
-        "--outfile {{params.outprefix}}  "
-        "{{params.barcodes}}".format(extract_barcodes = pipe_dir)
-'''
+        ## unzip gz files
+        "gunzip {input[0]} -c > {params.outfile}_R1.fastq && "
+        "gunzip {input[1]} -c > {params.outfile}_R2.fastq && "
+
+        ## extract barcodes
+        "python  {params.src} --blist {params.blist} "
+        "--read1  {input[0]}  --read2   {input[0]} "
+        "--outfile  {params.outfile} && "
+
+        ## gzip
+        "gzip  {params.outfile}_barcode_R*.fastq  && "
+
+        ## change to consistant names for following steps
+        "mv {params.outfile}_barcode_R1.fastq.gz  {params.outfile}_R1.fastq.gz && "
+        "mv {params.outfile}_barcode_R2.fastq.gz  {params.outfile}_R2.fastq.gz"
+
 
 ########################################################
 ### automatically trimming adapters for single-end reads
 rule trim_galore_se:
     input:
-        get_raw_fastq
+        #get_raw_fastq
+        get_fastq_4trim
     output:
         temp("trimmed_fq/{sample}_trimmed.fq.gz"),
         "trimmed_fq/{sample}.fastq.gz_trimming_report.txt",
@@ -37,7 +78,8 @@ rule trim_galore_se:
 ### automatically trimming adapters for paied-end reads
 rule trim_galore_pe:
     input:
-        get_raw_fastq
+        #get_raw_fastq
+        get_fastq_4trim
     output:
         temp("trimmed_fq/{sample}_R1_val_1.fq.gz"),
         temp("trimmed_fq/{sample}_R2_val_2.fq.gz"),

@@ -20,5 +20,5 @@ include: "rules/medips.smk"         ## medips qc and quantification
 ## targeted outputs
 rule all:
     input:
-        get_rule_all_input()
-        # "rmdup_reads/test_out.txt"
+        get_rule_all_input()     ## for all
+        #"extract_barcodes/A_barcode_R1.fastq.gz"    ## for testing

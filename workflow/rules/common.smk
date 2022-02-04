@@ -14,6 +14,7 @@ REF = pd.read_csv(config["ref_files"], sep="\t", header = None, index_col = 0)
 ## working directory
 wd = config["workdir"]
 pipe_dir = config["pipeline_dir"]
+umi_list = config["umi_list"]
 
 #############################################
 ## get taget outputs based on the config file
@@ -64,8 +65,8 @@ def get_bwa_index():
         return REF.loc["bwa_idx"][1]
 
 
-##############################################
-##  get fastq files for FASTQC and TRIM_GALORE
+#######################################################
+##  get raw fastq files for FASTQC and extract barcodes
 def get_raw_fastq(wildcards):
     if config["paired-end"]:
         R1 = SAMPLES.loc[wildcards.sample]["R1"],
@@ -73,6 +74,22 @@ def get_raw_fastq(wildcards):
         return R1 + R2
     else:
         return SAMPLES.loc[wildcards.sample]["R1"]
+
+
+################################################
+## get fastq for TRIM GALORE
+## UMI extracted for paired-end reads, if exist
+def get_fastq_4trim(wildcards):
+    if config["paired-end"] == False:
+        return SAMPLES.loc[wildcards.sample]["R1"]
+    elif config["add_umi"]:
+        R1 = "barcoded_fq/{}_R1.fastq.gz".format(wildcards.sample),
+        R2 = "barcoded_fq/{}_R2.fastq.gz".format(wildcards.sample),
+        return R1 + R2
+    else:
+        R1 = SAMPLES.loc[wildcards.sample]["R1"],
+        R2 = SAMPLES.loc[wildcards.sample]["R2"],
+        return R1 + R2
 
 
 ##################################

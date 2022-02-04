@@ -1,0 +1,8 @@
+name: ConsensusCrucher
+channels:
+  - conda-forge
+dependencies:
+  - biopython
+  - pandas
+  - numpy
+  - matplotlib
