@@ -5,7 +5,7 @@ rule bwa_map:
         get_bwa_index(),
         get_trimmed_fastq
     output:
-        temp("mapped_reads/{sample}.bam")
+        temp("raw_bam/{sample}.bam")
     threads: 12
     log:
         "logs/{sample}_bwa_map.log"
@@ -16,11 +16,11 @@ rule bwa_map:
 ## fixmate, sort, index and stats bam file
 rule samtools_sort_index_stats:
     input:
-        "mapped_reads/{sample}.bam"
+        "raw_bam/{sample}.bam"
     output:
-        bam = "sorted_reads/{sample}_sorted.bam",
-        bai = "sorted_reads/{sample}_sorted.bam.bai",
-        stat= "sorted_reads/{sample}_sorted.bam.stats.txt"
+        bam = "raw_bam/{sample}_sorted.bam",
+        bai = "raw_bam/{sample}_sorted.bam.bai",
+        stat= "raw_bam/{sample}_sorted.bam.stats.txt"
     threads: 12
     shell:
         ## --threads flag failed
@@ -32,11 +32,11 @@ rule samtools_sort_index_stats:
 ## markup, index and stats deduplicated file
 rule samtools_markdup_stats:
     input:
-        "sorted_reads/{sample}_sorted.bam"
+        "raw_bam/{sample}_sorted.bam"
     output:
-        bam = "dedup_reads/{sample}_dedup.bam",
-        bai = "dedup_reads/{sample}_dedup.bam.bai",
-        stat= "dedup_reads/{sample}_dedup.bam.stats.txt"
+        bam = "dedup_bam/{sample}_dedup.bam",
+        bai = "dedup_bam/{sample}_dedup.bam.bai",
+        stat= "dedup_bam/{sample}_dedup.bam.stats.txt"
     threads: 12
     shell:
         "(samtools markdup -@ {threads} -r {input} {output.bam} && "
@@ -46,10 +46,10 @@ rule samtools_markdup_stats:
 ## infer insert size for paired-end reads_qc
 rule insert_size:
     input:
-        "dedup_reads/{sample}_dedup.bam"
+        "dedup_bam/{sample}_dedup.bam"
     output:
-        txt = "dedup_reads/{sample}_insert_size_metrics.txt",
-        hist = "dedup_reads/{sample}_insert_size_histogram.pdf",
+        txt = "dedup_bam/{sample}_insert_size_metrics.txt",
+        hist = "dedup_bam/{sample}_insert_size_histogram.pdf",
     log:
         "logs/{sample}_picard_insert_size.log"
     shell:

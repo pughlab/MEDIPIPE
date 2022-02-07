@@ -1,28 +1,8 @@
-#########################################
-## unzip fastq.gz for extracting barcodes
-'''
-rule gunzip_fq:
-    input:
-        get_raw_fastq
-    output:
-        temp("unzip_fq/{sample}_R1.fastq"),
-        temp("unzip_fq/{sample}_R2.fastq"),
-    params:
-        outfile = "unzip_fq/{sample}"
-    shell:
-        "gunzip {input[0]} -c > {params.outfile}_R1.fastq && "
-        "gunzip {input[1]} -c > {params.outfile}_R2.fastq"
-'''
 
 
 ###################################################
 ### extract UMI barcode and add it to FASTQ headers
 ### pair-end unzipped FASTQ only, so far
-## tuning
-    ## unzip gz files
-    #"gunzip {input[0]} -c > {params.outfile}_R1.fastq && "
-    #"gunzip {input[1]} -c > {params.outfile}_R2.fastq && "
-
 rule extract_barcode:
     input:
         get_raw_fastq
@@ -102,11 +82,11 @@ rule fastqc_se:
         get_raw_fastq,
         get_trimmed_fastq
     output:
-        "qc/se/{sample}_fastqc.html",
-        "qc/se/{sample}_trimmed_fastqc.html"
+        "fastqc/se/{sample}_fastqc.html",
+        "fastqc/se/{sample}_trimmed_fastqc.html"
     run:
         for fq in input:
-            shell("fastqc {} -t 8 --outdir qc/se/".format(fq))
+            shell("fastqc {} -t 8 --outdir fastqc/se/".format(fq))
 
 ###############################################
 ### FASTQC for raw and trimmed paired-end reads
@@ -115,10 +95,10 @@ rule fastqc_pe:
         get_raw_fastq,
         get_trimmed_fastq
     output:
-        "qc/pe/{sample}_R1_fastqc.html",
-        "qc/pe/{sample}_R2_fastqc.html",
-        "qc/pe/{sample}_R1_val_1_fastqc.html",
-        "qc/pe/{sample}_R2_val_2_fastqc.html"
+        "fastqc/pe/{sample}_R1_fastqc.html",
+        "fastqc/pe/{sample}_R2_fastqc.html",
+        "fastqc/pe/{sample}_R1_val_1_fastqc.html",
+        "fastqc/pe/{sample}_R2_val_2_fastqc.html"
     run:
         for fq in input:
-            shell("fastqc {} -t 8 --outdir qc/pe/".format(fq))
+            shell("fastqc {} -t 8 --outdir fastqc/pe/".format(fq))

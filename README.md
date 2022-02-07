@@ -2,9 +2,9 @@
 
 ## Intoduction
 
-This pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to QC matrix and signal track generation. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The outputs produced by the pipeline include 1) formatted QC reports, 2) enrichment signal tracks, 3)...
+The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to QC matrix and signal track generation. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The outputs produced by the pipeline include 1) formatted QC reports, 2) enrichment signal tracks, 3)...
 
-The pipeline was developed based on the prior works of Wenbin Ye, Eric Zhao, ..
+The pipeline was developed by Yong Zeng based on some prior works of Wenbin Ye, Eric Zhao, ..
 
 ### Features
 

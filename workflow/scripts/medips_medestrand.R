@@ -10,6 +10,7 @@ covr_png = args[6]
 qc_repor = args[7]
 meth_qua = args[8]
 rpkm_wig = args[9]
+medestrand = args[11]
 
 # default setting
 ws = 300
@@ -51,6 +52,7 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
 ###         MEDIPS QC           ###
 ###################################
 
+
 #############
 ## saturation
 saturation = MEDIPS.saturation(
@@ -65,6 +67,7 @@ saturation = MEDIPS.saturation(
 png(satu_png, res = 300, width = 5, height = 5, units = "in")
 MEDIPS.plotSaturation(saturationObj = saturation)
 dev.off()
+
 
 
 ################
@@ -176,3 +179,30 @@ write.table(meth, file = meth_qua,
 ## export coverage profile in wig format
 MEDIPS.exportWIG(Set = mset, file = rpkm_wig,
                  format = "rpkm", descr = sampleid)
+
+
+
+############################################
+## infer abosulate m6A leves via MeDEStrand
+###########################################
+
+library(devtools)
+devtools::load_all(medestrand)
+
+
+## MeDEStrand set: reads mapped to the positive and negative DNA strand are processed separately
+medset <-  MeDEStrand.createSet(file = bam_file,
+            BSgenome = bsgenome,
+            paired = ispaired,
+            window_size = ws,
+            chr.select = chr)
+
+medcset <- MeDEStrand.countCG(pattern = 'CG', refObj = medset)
+
+meth_abs <- MeDEStrand.binMethyl(
+  MSetInput = medset,
+  CSet = medcset,
+  Granges = FALSE,
+)
+
+saveRDS(meth_abs, file = paste0(sampleid, "_abs_methy.RDS"))

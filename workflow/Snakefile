@@ -13,7 +13,7 @@ workdir: config["workdir"]        ##
 include: "rules/common.smk"         ## self-defined functions
 include: "rules/reads_qc.smk"       ## fsatqc & trim-galore for pe and se
 include: "rules/mapping.smk"        ## bwa, samtools, infer intert size
-include: "rules/medips.smk"         ## medips qc and quantification
+include: "rules/methyQuant.smk"         ## medips qc and quantification
 
 
 ###################

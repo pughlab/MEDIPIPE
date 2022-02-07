@@ -22,5 +22,5 @@ spike_in: False
 
 ######################################################
 ## UMI sequence, if it's Ture, barcode list is requied
-add_umi: True
+add_umi: FALSE       ## set as TRUE for the test run to deploy related conda env
 umi_list: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
