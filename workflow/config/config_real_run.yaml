@@ -14,5 +14,16 @@ add_umi: False
 
 ############
 ## reference
-ref_files: /cluster/projects/tcge/DB/cfmedip-seq-pepeline/hg38/hg38.tsv
-bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
+ref_files: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/hg38.tsv
+bsgenome: BSgenome.Hsapiens.UCSC.hg38
+
+
+##################################################################################################
+## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
+## as bwa_idx_spikein
+spike_in: False
+
+######################################################
+## UMI sequence, if it's Ture, barcode list is requied
+add_umi: FALSE       ## set as TRUE for the test run to deploy related conda env
+umi_list: NA

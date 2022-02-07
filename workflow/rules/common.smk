@@ -24,8 +24,8 @@ def get_rule_all_input():
 
     #map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
     dedup_out = expand("dedup_bam/{sample}_dedup.bam.bai", sample = SAMPLES["sample"]),
-    medips_out = expand("methyQuant/{sample}_qc_report.txt", sample = SAMPLES["sample"]),
-    medestrand_out = expand("methyQuant/{sample}_abs_methy.RDS", sample = SAMPLES["sample"]),
+    medips_out = expand("meth_quant/{sample}_meth_qc_report.txt", sample = SAMPLES["sample"]),
+    medestrand_out = expand("meth_quant/{sample}_meth_abs.RDS", sample = SAMPLES["sample"]),
 
 
     if config["paired-end"]:

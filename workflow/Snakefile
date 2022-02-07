@@ -1,19 +1,16 @@
 #############
 ## validation
+## will be added
 #validate(config, "schema/config.schema.yaml")
 #validate(samples, "schema/samples.schema.yaml")
 
 
-#################
-## initialization
-## working dir for outputs
-workdir: config["workdir"]        ##
-
+#######################
 ## loading rule modules
 include: "rules/common.smk"         ## self-defined functions
 include: "rules/reads_qc.smk"       ## fsatqc & trim-galore for pe and se
 include: "rules/mapping.smk"        ## bwa, samtools, infer intert size
-include: "rules/methyQuant.smk"         ## medips qc and quantification
+include: "rules/meth_quant.smk"     ## medips and medestrand based qc and quantification
 
 
 ###################
@@ -21,4 +18,3 @@ include: "rules/methyQuant.smk"         ## medips qc and quantification
 rule all:
     input:
         get_rule_all_input()     ## for all
-        #"extract_barcodes/A_barcode_R1.fastq.gz"    ## for testing

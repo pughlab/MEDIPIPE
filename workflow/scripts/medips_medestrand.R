@@ -24,6 +24,7 @@ if (bsgenome == "BSgenome.Scerevisiae.UCSC.sacCer3")
 {
   library("BSgenome.Scerevisiae.UCSC.sacCer3")
   chr = "chrI"
+  chr_enrich  = "chrI"
 }
 
 ## hg19
@@ -31,7 +32,7 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
 {
   library("BSgenome.Hsapiens.UCSC.hg19")
   chr = c(paste0("chr", 1:22), "chrX", "chrY")
-  chr_enrich = paste0("chr", 1:5)
+  chr_enrich = "chr1"
 }
 
 ## hg38
@@ -43,7 +44,7 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
 
   ## all chromosomes failed MEDIPS enrichment
   ## checking chr1-5 temporally
-  chr_enrich = paste0("chr", 1:5)
+  chr_enrich = "chr1"
 
 }
 
@@ -97,7 +98,7 @@ cpg_enrich = MEDIPS.CpGenrich(
   file = bam_file,
   BSgenome = bsgenome,
   paired = ispaired,
-  chr.select = chr
+  chr.select = chr_enrich
 )
 
 ###################
@@ -205,4 +206,4 @@ meth_abs <- MeDEStrand.binMethyl(
   Granges = FALSE,
 )
 
-saveRDS(meth_abs, file = paste0(sampleid, "_abs_methy.RDS"))
+saveRDS(meth_abs, file = paste0("meth_quant/", sampleid, "_meth_abs.RDS"))

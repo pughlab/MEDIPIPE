@@ -13,7 +13,7 @@ The pipeline was developed by Yong Zeng based on some prior works of Wenbin Ye, 
 
 
 ### How it works
-This is schematic diagram shows you how pipeline works:
+This schematic diagram shows you how pipeline works:
 
 <img src="figures/cfmedip-seq-pipeline.png" alt="Schematic_diagram" style="width:100.0%" />
 

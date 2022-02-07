@@ -3,12 +3,12 @@ rule medips_medestrand:
     input:
         "dedup_bam/{sample}_dedup.bam"
     output:
-        "methyQuant/{sample}_saturation.png",
-        "methyQuant/{sample}_seqCoverage.png",
-        "methyQuant/{sample}_qc_report.txt",
-        "methyQuant/{sample}_meth_quant.txt",
-        "methyQuant/{sample}_rpkm.wig",
-        "methyQuant/{sample}_abs_methy.RDS"
+        "meth_quant/{sample}_saturation.png",
+        "meth_quant/{sample}_seqCoverage.png",
+        "meth_quant/{sample}_meth_qc_report.txt",
+        "meth_quant/{sample}_meth_quant.txt",
+        "meth_quant/{sample}_meth_rpkm.wig",
+        "meth_quant/{sample}_meth_abs.RDS"
     resources:
         mem_mb=60000
     params:
