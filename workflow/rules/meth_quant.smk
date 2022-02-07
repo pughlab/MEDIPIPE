@@ -18,7 +18,7 @@ rule medips_medestrand:
     log:
         "logs/{sample}_medips_medestrand.log"
     conda:
-        "conda_env_R.yaml"
+        "extra_env/conda_env_R.yaml"
     shell:
         "(Rscript --vanilla {params.scr_dir}/workflow/scripts/medips_medestrand.R "
         "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} {output} "
