@@ -76,11 +76,14 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 ```
 
 ### config file for input samples
+1) The config file template can be found at [here](./workflow/config/config_template.yaml)
+
+2) The samples's sequence data table template. PS: prepare the table for single-end and paired-end samples separately.
 
 | Sample ID   |     R1	    |  R2(p.r.n.)|
 |-------------|-------------|------------|
-|   sample A	|  path/to/A_R1.fq.|                 |
-|   sample B	|  path/to/B_R1.fq | path/to/B_R2.fq |
+|   sample A	|  full/path/to/A_R1.fq.gz |                 |
+|   sample B	|  full/path/to/B_R1.fq.gz | full/path/to/B_R2.fq.gz |
 
 
 ## Run on HPCs

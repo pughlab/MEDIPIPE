@@ -207,3 +207,59 @@ meth_abs <- MeDEStrand.binMethyl(
 )
 
 saveRDS(meth_abs, file = paste0("meth_quant/", sampleid, "_meth_abs.RDS"))
+
+
+##########################
+### QSEA: under developing
+##########################
+if(FALSE)
+{
+library(qsea)
+
+##################
+## create qsea set
+sample_info <- data.frame(sample_name = sample_id,
+                          file_name = bam,
+                          group = sample_id)
+
+qs = createQseaSet(sampleTable = sample_info,
+                   BSgenome = bsgenome,
+                   window_size = ws,
+                   chr.select = chr)
+
+
+#######################################
+## count reads per genomic regions/bins
+qs <- addCoverage(qs,
+            uniquePos = FALSE,   ## removed PCR duplicates in previous step
+            paired = ispaired)
+
+
+##################
+## add CpG density
+qs  <- addPatternDensity(qs, "CG", name="CpG")
+
+#################################
+## add library factor and offset
+qs <- addLibraryFactors(qs)
+qs <- addOffset(qs, "CpG", maxPatternDensity=0.7)
+
+
+###############################
+## add enrichment parameters
+## and plot enrichment profiles
+
+## need to specify the windows for enrichment analysis
+# QSEA assumes that regions with low CpG density is 80% methylated
+# on average, and regions within CpG islands are 25% methylated on average.
+
+wd_idx <-  which(getRegions(qs)$CpG_density > 1 & getRegions(qs)$CpG_density < 10)
+signal <- (15-getRegions(qs)$CpG_density[wd_idx])*.55/15+.25
+signal <- matrix(signal, length(signal), 1)
+
+qs <- addEnrichmentParameters(qs,
+                              enrichmentPattern = "CpG",
+                              windowIdx = wd_idx,
+                              signal = signal)
+
+}
