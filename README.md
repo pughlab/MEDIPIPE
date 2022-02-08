@@ -77,6 +77,11 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 
 ### config file for input samples
 
+| Sample ID   |     R1	    |  R2(p.r.n.)|
+|-------------|-------------|------------|
+|   sample A	|  path/to/A_R1.fq.|                 |
+|   sample B	|  path/to/B_R1.fq | path/to/B_R2.fq |
+
 
 ## Run on HPCs
 
