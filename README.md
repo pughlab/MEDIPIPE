@@ -84,8 +84,8 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 
 | Sample ID   |     R1	    |  R2(p.r.n.)|
 |-------------|-------------|------------|
-|   sample A	|  full/path/to/A_R1.fq.gz |                 |
-|   sample B	|  full/path/to/B_R1.fq.gz | full/path/to/B_R2.fq.gz |
+|  A	|  full/path/to/A_R1.fq.gz |                 |
+|  B	|  full/path/to/B_R1.fq.gz | full/path/to/B_R2.fq.gz |
 
 
 ## Run on HPCs

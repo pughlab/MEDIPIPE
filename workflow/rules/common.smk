@@ -4,7 +4,7 @@ import pandas as pd
 ## read in sample and corresponding fq files talbe
 SAMPLES = (
     pd.read_csv(config["samples"], sep="\t")
-    .set_index("sample", drop=False)
+    .set_index("sample_id", drop=False)
     .sort_index()
 )
 
@@ -31,12 +31,12 @@ def get_rule_all_input():
     if config["paired-end"]:
         ## FASQC out for raw and trimmed paired-end fqs
         fastqc_raw_pe = expand("fastqc/pe/{sample}_{mate}_fastqc.html",
-                                sample = SAMPLES["sample"],
+                                sample = SAMPLES["fq_prefix"],
                                 mate = ["R1", "R2"]),
         fastqc_trimmed_r1 = expand("fastqc/pe/{sample}_R1_val_1_fastqc.html",
-                                   sample = SAMPLES["sample"]),
+                                   sample = SAMPLES["fq_prefix"]),
         fastqc_trimmed_r2 = expand("fastqc/pe/{sample}_R2_val_2_fastqc.html",
-                                   sample = SAMPLES["sample"]),
+                                   sample = SAMPLES["fq_prefix"]),
         fastqc_pe_out = fastqc_raw_pe + fastqc_trimmed_r1 + fastqc_trimmed_r2
 
         ## inferred insert size
@@ -49,9 +49,9 @@ def get_rule_all_input():
     else:
         ## FASQC out for raw and trimmed single-end fq
         fastqc_raw_se = expand("fastqc/se/{sample}_fastqc.html",
-                                sample = SAMPLES["sample"]),
+                                sample = SAMPLES["fq_prefix"]),
         fastqc_trimmed_se = expand("fastqc/se/{sample}_trimmed_fastqc.html",
-                                    sample = SAMPLES["sample"]),
+                                    sample = SAMPLES["fq_prefix"]),
         fastqc_se_out = fastqc_raw_se + fastqc_trimmed_se
 
         return fastqc_se_out + dedup_out + dedup_out + medips_out + medestrand_out
