@@ -50,6 +50,7 @@ This schematic diagram shows you how pipeline works:
 	$ vim ./workflow/config/config_test_run.yaml
 
 	## run with the internet connection as well
+	## !! it will at MEDEStrand due to the test datasets, it's fine for real cfMeDIP-seq data
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./workflow/config/config_template.yaml \
 		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
