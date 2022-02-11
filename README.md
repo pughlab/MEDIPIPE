@@ -82,10 +82,10 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 
 2) The samples's sequence data table template. PS: prepare the table for single-end and paired-end samples separately.
 
-| Sample ID   |     R1	    |  R2(p.r.n.)|
-|-------------|-------------|------------|
-|  A	|  full/path/to/A_R1.fq.gz |                 |
-|  B	|  full/path/to/B_R1.fq.gz | full/path/to/B_R2.fq.gz |
+|	sample_id   |  fq_prefix  |   R1	     |  R2(p.r.n.)|
+|-------------|-------------|------------|------------|
+|  A	|  A_L001  |  full/path/to/A_L001_R1.fq.gz |                              |
+|  B	|  B_L001  |  full/path/to/B_L001_R1.fq.gz | full/path/to/B_L001_R2.fq.gz |
 
 
 ## Run on HPCs
