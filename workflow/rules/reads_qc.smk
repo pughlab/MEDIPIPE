@@ -1,9 +1,36 @@
+###############################################
+## get a copy of raw fq and rename to smaple ID
+## to make sure consistant wildcard.sample
+################################################
+## single end
+rule rename_fq_se:
+    input:
+        get_raw_fastq
+    output:
+        temp("renamed_fq/{sample}.fastq.gz"),
+    shell:
+        "cp {input} {output} "
+
+## paired-end
+rule rename_fq_pe:
+    input:
+        get_raw_fastq
+    output:
+        temp("renamed_fq/{sample}_R1.fastq.gz"),
+        temp("renamed_fq/{sample}_R2.fastq.gz"),
+    shell:
+        "cp {input[0]} {output[0]} && "
+        "cp {input[1]} {output[1]} "
+
+
+
 ###########################################################
 ### extract UMI barcode and add it to FASTQ headers, p.r.n.
 ### pair-end unzipped FASTQ only, so far
+###########################################################
 rule extract_barcode:
     input:
-        get_raw_fastq
+        get_renamed_fastq
     output:
         temp("barcoded_fq/{sample}_R1.fastq"),
         temp("barcoded_fq/{sample}_R2.fastq"),
@@ -33,11 +60,13 @@ rule extract_barcode:
         "mv {params.outfile}_barcode_R2.fastq.gz  {params.outfile}_R2.fastq.gz"
 
 
-########################################################
-### automatically trimming adapters for single-end reads
+
+###################################
+### automatically trimming adapters
+###################################
+#for single-end reads
 rule trim_galore_se:
     input:
-        #get_raw_fastq
         get_fastq_4trim
     output:
         temp("trimmed_fq/{sample}_trimmed.fq.gz"),
@@ -52,12 +81,9 @@ rule trim_galore_se:
         "(trim_galore -q 20 --stringency 3 --length 20 "
         "--cores {threads} -o {params.path} {input}) 2> {log}"
 
-
-#######################################################
-### automatically trimming adapters for paied-end reads
+#for paired-end reads
 rule trim_galore_pe:
     input:
-        #get_raw_fastq
         get_fastq_4trim
     output:
         temp("trimmed_fq/{sample}_R1_val_1.fq.gz"),
@@ -75,11 +101,14 @@ rule trim_galore_pe:
         "--cores {threads} --paired -o {params.path} {input}) 2> {log}"
 
 
-###############################################
-### FASTQC for raw and trimmed single-end reads
+
+##########################################
+### FASTQC for raw and trimmed fastq reads
+##########################################
+#for single-end reads
 rule fastqc_se:
     input:
-        get_raw_fastq,
+        get_renamed_fastq,
         get_trimmed_fastq
     output:
         "fastqc/se/{sample}_fastqc.html",
@@ -88,12 +117,10 @@ rule fastqc_se:
         for fq in input:
             shell("fastqc {} -t 8 --outdir fastqc/se/".format(fq))
 
-
-###############################################
-### FASTQC for raw and trimmed paired-end reads
+#for paired-end reads
 rule fastqc_pe:
     input:
-        get_raw_fastq,
+        get_renamed_fastq,
         get_trimmed_fastq
     output:
         "fastqc/pe/{sample}_R1_fastqc.html",

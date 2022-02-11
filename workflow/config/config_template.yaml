@@ -14,7 +14,6 @@ paired-end: True
 ref_files: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/test.tsv
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 
-
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein

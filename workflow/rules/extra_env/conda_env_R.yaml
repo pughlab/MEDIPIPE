@@ -1,5 +1,3 @@
-##  - bioconductor-qsea
-##  - bioconductor-spiky
 name: tcge-cfmedip-seq-pipeline-sub
 channels:
   - conda-forge
@@ -7,6 +5,8 @@ channels:
   - r
 dependencies:
   - bioconductor-medips
+  - bioconductor-qsea
+  - bioconductor-spiky
   - bioconductor-bsgenome.hsapiens.ucsc.hg19
   - bioconductor-bsgenome.hsapiens.ucsc.hg38
   - bioconductor-bsgenome.scerevisiae.ucsc.saccer3

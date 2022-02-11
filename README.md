@@ -80,12 +80,12 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 
 1) A config YAML file specifies all the input parameters and files that are necessary for successfully running this pipeline. This includes a specification of the path to the genome reference files. Please make sure to specify absolute paths rather than relative paths in your config files. The template can be found at [here](./workflow/config/config_template.yaml)
 
-2) The samples's sequence data table template. PS: prepare the table for single-end and paired-end samples separately.
+2) The samples's sequence data table template. PS: prepare the table for single-end and paired-end samples separately and, use exactly same `header`.
 
-|	sample_id   |  fq_prefix  |   R1	     |  R2(p.r.n.)|
-|-------------|-------------|------------|------------|
-|  A	|  A_L001  |  full/path/to/A_L001_R1.fq.gz |                              |
-|  B	|  B_L001  |  full/path/to/B_L001_R1.fq.gz | full/path/to/B_L001_R2.fq.gz |
+|	sample_id   |     R1	     |  R2(p.r.n.)|
+|-------------|--------------|------------|
+|  A	|  full/path/to/A_L001_R1.fq.gz |                              |
+|  B	|  full/path/to/B_L001_R1.fq.gz | full/path/to/B_L001_R2.fq.gz |
 
 
 ## Run on HPCs
