@@ -13,6 +13,7 @@ rule bwa_map:
         "(bwa mem -M -t {threads}  {input} | "
         "samtools view -Sb --threads {threads} - > {output}) 2> {log}"
 
+## raw bams without any filtering
 ## fixmate, sort, index and stats bam file
 rule samtools_sort_index_stats:
     input:
@@ -29,7 +30,8 @@ rule samtools_sort_index_stats:
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
-## markup, index and stats deduplicated file
+## to filter out unmapped & non-uniquely mapped, not properly paired reads
+## Deduplication with markup, index and stats deduplicated file
 rule samtools_markdup_stats:
     input:
         "raw_bam/{sample}_sorted.bam"
@@ -39,7 +41,8 @@ rule samtools_markdup_stats:
         stat= "dedup_bam/{sample}_dedup.bam.stats.txt"
     threads: 12
     shell:
-        "(samtools markdup -@ {threads} -r {input} {output.bam} && "
+        "(samtools view -b -f 2 -F 2828 --threads {threads} {input} | "
+        "samtools markdup -@ {threads} -r - {output.bam} && "
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 

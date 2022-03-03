@@ -63,6 +63,8 @@ rule extract_barcode:
 
 ###################################
 ### automatically trimming adapters
+### -q 20  Quality gz_trimming
+### mimimal length : 20 nt
 ###################################
 #for single-end reads
 rule trim_galore_se:
