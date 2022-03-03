@@ -23,7 +23,6 @@ rule rename_fq_pe:
         "cp {input[1]} {output[1]} "
 
 
-
 ###########################################################
 ### extract UMI barcode and add it to FASTQ headers, p.r.n.
 ### pair-end unzipped FASTQ only, so far

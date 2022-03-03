@@ -1,3 +1,6 @@
+## setting up working directory
+workdir: config['workdir']
+
 ## read in sample list
 import pandas as pd
 
@@ -11,7 +14,7 @@ SAMPLES = (
 ## read in refrence files' info
 REF = pd.read_csv(config["ref_files"], sep="\t", header = None, index_col = 0)
 
-## working directory
+## paths for pipeline and/or reference data
 wd = config["workdir"]
 pipe_dir = config["pipeline_dir"]
 umi_list = config["umi_list"]
