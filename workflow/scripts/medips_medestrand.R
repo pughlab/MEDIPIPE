@@ -18,6 +18,9 @@ ws = 300
 ## loading libraries
 library(MEDIPS)
 
+## all chromosomes failed MEDIPS enrichment
+## checking chr1-5 temporally
+
 ## loading corresponding genome and major chrs
 ## for testing dataset
 if (bsgenome == "BSgenome.Scerevisiae.UCSC.sacCer3")
@@ -41,9 +44,6 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
   library("BSgenome.Hsapiens.UCSC.hg38")
 
   chr = c(paste0("chr", 1:22), "chrX", "chrY")
-
-  ## all chromosomes failed MEDIPS enrichment
-  ## checking chr1-5 temporally
   chr_enrich = "chr1"
 
 }
@@ -53,7 +53,7 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
 ###         MEDIPS QC           ###
 ###################################
 
-
+{
 #############
 ## saturation
 saturation = MEDIPS.saturation(
@@ -93,6 +93,7 @@ dev.off()
 
 #################
 ## CpG enrichment
+################
 
 cpg_enrich = MEDIPS.CpGenrich(
   file = bam_file,
@@ -106,33 +107,66 @@ cpg_enrich = MEDIPS.CpGenrich(
 cov_sum = table(coverage$cov.res)
 numberCpG = length(coverage$cov.res)
 
+## fraction of CpG with more than 5 reads, not includes
+idx_6 <- (names(cov_sum) != "0" & names(cov_sum) != "1" & names(cov_sum) != "2" &
+          names(cov_sum) != "3" & names(cov_sum) != "4" & names(cov_sum) != "5")
+
+## output qc matrix
 medips_qc = data.frame(
 
   sample = sampleid,
 
+  ## saturation
   saturation.numberReads = saturation$numberReads,
   saturation.maxEstCor = saturation$maxEstCor[2],
   saturation.maxTruCor = saturation$maxTruCor[2],
 
+
   ## fraction of reads don't cover a CG
   coverage.fracReadsWoCpG = coverage$numberReadsWO / coverage$numberReads,
+
   ## fraction of CpG isn't covered by a read
-  coverage.fracCpGwoRead = cov_sum[1] / numberCpG,
-  ## fraction of CpG with more than 5 reads, not includes 5
-  coverage.fracCpGgt5Reads = sum(cov_sum[7:length(cov_sum)]) / numberCpG,
+  overage.fracCpGwoRead = cov_sum[names(cov_sum) == "0"] / numberCpG,
+
+  ## fraction of CpG isn't covered by 1,2,3,4,5,>5 read(s)
+  coverage.fracCpGw1Read = cov_sum[names(cov_sum) == "1"] / numberCpG,
+  coverage.fracCpGw2Read = cov_sum[names(cov_sum) == "2"] / numberCpG,
+  coverage.fracCpGw3Read = cov_sum[names(cov_sum) == "3"] / numberCpG,
+  coverage.fracCpGw4Read = cov_sum[names(cov_sum) == "4"] / numberCpG,
+  coverage.fracCpGw5Read = cov_sum[names(cov_sum) == "5"] / numberCpG,
+  coverage.fracCpGgt5Reads = sum(cov_sum[idx_6]) / numberCpG,
+
 
   ## enrichment scores: closer to 1 indicating less enriched
+  ## region
+  enrichment.regions.CG = cpg_enrich$regions.CG,
+  enrichment.regions.C = cpg_enrich$regions.C,
+  enrichment.regions.G = cpg_enrich$regions.G,
+  enrichment.regions.relH = cpg_enrich$regions.relH,
+  enrichment.regions.GoGe = cpg_enrich$regions.GoGe,
+
+  ## reference genome: will be consistants for same spciece
+  enrichment.genome.CG = cpg_enrich$genome.CG,
+  enrichment.genome.C = cpg_enrich$genome.C,
+  enrichment.genome.G = cpg_enrich$genome.G,
+  enrichment.genome.relH = cpg_enrich$genome.relH,
+  enrichment.genome.GoGe = cpg_enrich$genome.GoGe,
+
+  ## enrihment socres
   enrichment.relH = cpg_enrich$enrichment.score.relH,
   enrichment.GoGe = cpg_enrich$enrichment.score.GoGe
+
 )
 
 write.table(medips_qc, file = qc_repor,
             sep = "\t", row.names = F, quote = F)
 
+}
+
 ###################################
 ###   MEDIPS quantification     ###
 ###################################
-
+{
 ## MEDIPs set
 mset = MEDIPS.createSet(
           file = bam_file,
@@ -181,12 +215,14 @@ write.table(meth, file = meth_qua,
 MEDIPS.exportWIG(Set = mset, file = rpkm_wig,
                  format = "rpkm", descr = sampleid)
 
+}
+
 
 
 ############################################
 ## infer abosulate m6A leves via MeDEStrand
 ###########################################
-
+{
 library(devtools)
 devtools::load_all(medestrand)
 
@@ -207,7 +243,7 @@ meth_abs <- MeDEStrand.binMethyl(
 )
 
 saveRDS(meth_abs, file = paste0("meth_quant/", sampleid, "_meth_abs.RDS"))
-
+}
 
 ##########################
 ### QSEA: under developing
