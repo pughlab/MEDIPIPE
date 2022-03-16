@@ -1,0 +1,468 @@
+---
+title: "MeDEStrand tutorial"
+author: "Jingting Xu, Shimeng Liu, Ping Yin, Serdar Bulun, Yang Dai"
+date: "`r Sys.Date()`"
+package: "`r pkg_ver('MeDEStrand')`"
+abstract: >
+  MeDEStrand is a method improving previous method 'MEDIPS'[@RN4, @RN60] to infer absolute methylation levels from enrichment-based methylation profiling data, 
+  such as MeDIP-seq and MethylCap-seq/MBD-seq. MeDEStrand significantly improves 'MEDIPS' by providing more accurate inference of the absolute methylation levels and is one of the best 
+  method compared with other state-of-the-art methods with high resolution.
+  MeDEStrand also provides differential methylated analysis between two groups of samples based on the inferred absolute methylation results.
+vignette: >
+  %\VignetteIndexEntry{MeDEStrand}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+output: 
+    BiocStyle::html_document:   
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+bibliography: 
+  MeDEStrandTutorial.bib
+
+---
+
+# Introduction
+
+MeDEStrand stands for "Inferring genome-wide absolute methylation levels from DNA enrichment experiment utilizing strand-specific information". 
+MeDEStrand models and transforms MeDIP-seq enrichment data to absolute methylation levels at the resolution of 50bp or 100bp. MeDEStrand can also be 
+utilized on other enrichment-based method data such as MethylCap-seq/MBD-seq. Features of MeDEStrand includes using a sigmoid model to estimate and correct 
+the main confounding factor effects i.e. CpG density effects from the enrichment-based profiling data as well as utilizing asymmetric reads distribution mapped
+to the positive and negative DNA strands. Based on the inferred absolute methylation levels, MeDEStrand finds differently methylated regions (DMRs) 
+based on two-group t-test.   
+
+# Download and Installation
+
+“MeDEStrand” can be freely downloaded from GitHub: https://github.com/jxu1234/MeDEStrand.git .
+To install "MeDEStrand" package under Linux/Mac environment, open terminal and go to the directory where the package is placed and enter below command: 
+
+R CMD INSTALL MeDEStrand-master
+
+<a name="hg19install"></a>
+Next, it is necessary to have the genome of interest
+available in your R environment. 
+As soon as you have the `r Biocpkg("BSgenome")` package installed and the 
+library loaded using 
+
+```{r , eval=FALSE}
+biocLite("BSgenome")
+library("BSgenome")
+```
+In the given example, the short 
+reads data are mapped to the human genome build hg19. 
+Therefore, we download and install this genome build:
+```{r, eval=FALSE}
+biocLite("BSgenome.Hsapiens.UCSC.hg19")
+```
+MeDEStrand utilized some functions and datasets from `r Biocpkg("GenomicRanges")`, `r Biocpkg("MEDIPSData")` package, which can be installed by 
+```{r, eval=FALSE}
+biocLite(c("GenomicRanges","MEDIPSData"))
+```
+
+# MeDEStrand workflow
+Here, we show the main steps of the MeDEStrand workflow for the analysis of
+MeDIP-seq data. We assume that the reads have been aligned to reference genome hg19
+and are in .bam or .bed format. 
+
+## Preparation and import of short reads
+First, we load the MeDEStrand package:
+
+```{r lib_MeDEStrand, message=FALSE}
+library(MeDEStrand)
+```
+To access information of the reference genome, we load the pre-installed 
+(see chapter [Installation](#hg19install)) hg19 library and as well as other packages used for the workflow:
+
+```{r lib_BSgenome.Hsapiens.UCSC.hg19, message=FALSE}
+library(BSgenome.Hsapiens.UCSC.hg19)
+```
+```{r lib_GenomicRanges, message=FALSE}
+library(GenomicRanges)
+```
+```{r lib_MEDIPSData, message=FALSE}
+library(MEDIPSData)
+```
+MeDEStrand requires mapping results in BAM or tab-separated(|) .bed formate file with six columns in the order (chr | start | end | name | score | 
+strand) as input. Note the 4th and 5th columns can be empty with *, however, the 1st, 2nd, 3rd and 6th column information must be provided. A sample 
+.bed file looks like:
+
+chr20	73249	73300	R48/1	57	-
+
+chr20	73358	73409	R49/1	60	-
+
+chr20	73733	73784	R50/1	36	+
+
+chr20	73763	73814	R51/1	29	+
+
+...............
+
+
+It is also convenient to use the .BAM file. MeDIP-seq of GM12878 (i.e.ENCFF002BKV.bam), which can be downloaded from the ENCODE project: https://www.encodeproject.org/files/ENCFF002BKV/@@download/ENCFF002BKV.bam . For fast data importing, we have built the index file ENCFF002BKV.bam.bai for the .BAM file which can be downloaded from from GitHub: https://github.com/jxu1234/data.git . Place the .bai file with the .BAM file in the same folder.
+When the MeDIP-seq data is being imported into R, all relevant information of the enrichment experiment, including 
+sample information, the genomic read coverage, CpG density and other 
+parameters are stored in a list of "MEDIPS SET" object. 
+To create such an object, call the function "MeDEStrand.createSet()", 
+that takes the following parameters:
+
+* file: the path to the file and the file name.
+* BSgenome: The reference genome name as defined by BSgenome. 
+* extend: Extend the reads to the estimated fragment length. The sample data has sequencing length of 36bp and the estimated 
+  fragment length is 200bp. User can use a third-party tool to estimate average fragment length if this parameter is unknown, 
+  such as 'FastQC' tool.
+* shift: As an alternative to the extend parameter, the shift parameter can be used. Here, the reads are not extended but
+  shifted by the specified number of nucleotides with respect to the given strand infomation. One of the two parameters
+  extend or shift has to be 0.
+* uniq: Only one read is kept if multiple reads are mapped to the same position. Duplicate reads are likely 
+  to be the result of PCR error.
+* window_size: defines the genomic resolution by which 
+  short read coverage is calculated. (we recommend to use 50bp or 100bp) 
+* chr.select: Only data at the specified chromosomes will be processed. We recommend import all the chromosomes at once even   
+  if user does not have whole-genome chromosomes, it is recommended to import them all rather than to import 
+  each individual chromosome for more accurate inference.
+* paired: If the read is paired-end or single-end sequencing data. The sequencing data we used in the example is single-end.
+
+```{r , eval=FALSE}
+# Set global variables for importing short reads. For details, in R console, type "?MeDEStrand.createSet"
+BSgenome="BSgenome.Hsapiens.UCSC.hg19";  uniq = 1;  extend = 200;   shift = 0; ws = 100 
+chr.select = paste0('chr', c(1:22) )
+file.name = "/Users/jingting/MeDEStrand/GM12878/ENCFF002BKV.bam"
+MeDIP_seq = MeDEStrand.createSet(file=file.name, BSgenome=BSgenome, extend=extend, shift=shift, 
+uniq=uniq, window_size=ws, chr.select=chr.select, paired = F)
+
+## Reading bam alignment ENCFF002BKV.bam 
+##  considering  chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 
+##  chr17 chr18 chr19 chr20 chr21 chr22  using bam index 
+## Total number of imported short reads: 123132712
+## Extending reads...
+## Creating GRange Object...
+## Keep at most one 1 read mapping to the same genomic location.
+## Number of remaining reads: 105408366
+## Calculating genomic coordinates...
+## Creating Granges object for genome wide windows...
+## Calculating short read coverage at genome wide windows for positive strand...
+## Calculating short read coverage at genome wide windows for negative strand...
+
+#  count CpG pattern in the bins
+CS = MeDEStrand.countCG(pattern="CG", refObj=MeDIP_seq)
+```
+
+## Inference of absolute methylation levels
+MeDEStrand assumes a sigmoid-shaped CpG density bias curve and estimates the bias from genome-wide MeDIP-seq bin reads by fitting a logistic regression model(details see paper), we can take a look at the estimated CpG bias curve. To output the figure to a .pdf file in user-specified directory:
+```{r , eval=FALSE}
+pdf('/Users/jingting/MeDEStrand/figure.pdf', width= 7, height=6)
+MeDEStrand.plotCalibrationCurve( CSet = CS,  MSet = MeDIP_seq, main = NULL, xrange = TRUE)
+dev.off()
+```
+![estimate CpG density bias](/Users/jingting/Desktop/MeDEStrand/vignettes/CpG_bias_curve.png)
+
+To infer genome-wide absolute methylation levels:
+
+```{r, eval=FALSE}
+result.methylation = MeDEStrand.binMethyl(MSetInput = MeDIP_seq,CSet = CS)
+```
+Default of function 'MeDEStrand.binMethyl()' returns a vector of inferred absolute methylation values at user-specified resolution, i.e. 50bp or 100bp, which is an intermediate result for downstream differential methylation analysis if multiple samples from two groups are provided. However, for single cell methylation profiling, user can specify the return to be a GRanges object which shows loci information. GRanges object is easy to manipulate to find loci/bins with inferred absolute methylation levels within certain ranges. 
+```{r, eval=FALSE}
+result.methylation = MeDEStrand.binMethyl(MSetInput = MeDIP_seq, CSet = CS, Granges = TRUE)
+
+## Calculating calibration curve...
+## Estimating and correcting CG bias for reads mapped to the DNA positive strand...
+## Calculating calibration curve...
+## Estimating and correcting CG bias for reads mapped to the DNA negative strand...
+## Calculating genomic coordinates...
+## Creating Granges object for genome wide windows...
+## Warning messages:
+## 1: In eval(expr, envir, enclos) :
+##  non-integer #successes in a binomial glm!
+## 2: In eval(expr, envir, enclos) :
+##  non-integer #successes in a binomial glm!
+```
+```{r, eval=FALSE}
+head(result.methylation)
+
+## GRanges object with 6 ranges and 2 metadata columns:
+##      seqnames     ranges strand |        CF binMethyl
+##         <Rle>  <IRanges>  <Rle> | <integer> <numeric>
+##  [1]     chr1 [  1, 100]      * |         0         0
+##  [2]     chr1 [101, 200]      * |         0         0
+##  [3]     chr1 [201, 300]      * |         0         0
+##  [4]     chr1 [301, 400]      * |         0         0
+##  [5]     chr1 [401, 500]      * |         0         0
+##  [6]     chr1 [501, 600]      * |         0         0
+##  -------
+##  seqinfo: 1 sequence from an unspecified genome; no seqlengths
+```
+
+## Find correlation with RRBS data
+To validate the results and assess the performance of the method, we can use the corresponding RRBS data (which is ‘gold standard’) and find the correlation between inferred absolute methylation levels and binned RRBS CpG methylation levels.
+The RRBS data can be a ‘GRanges’ or ‘data.frame’ object with columns/metadata columns  ‘chr’, ‘start’, ‘end’, ‘strand’ and ‘methylation’. It is also convenience to use A 'methylRaw' object (returned by function "processBismarkAln()" from package `r Biocpkg("MethylKit")` [@RN12])
+MeDEStrand package contains the RRBS of GM12878, we can access it:
+```{r, eval= FALSE}
+attach(RRBS)
+RRBS
+
+## methylRaw object with 747207 rows
+## --------------
+##    chr  start    end strand coverage numCs numTs
+## 1 chr1  10497  10497      +       28    21     7
+## 2 chr1  10525  10525      +       27    27     0
+## 3 chr1 136876 136876      +       63    48    15
+## 4 chr1 136895 136895      +       57    36    21
+## 5 chr1 136911 136911      +       49    39    10
+## 6 chr1 567564 567564      -       10     0    10
+## --------------
+## sample.id: GM12878 
+## assembly: hg19 
+## context: CpG 
+## resolution: base 
+
+```
+We can find either PCC (Pearson correlation coefficient) or SCC (Spearman correlation coefficient) between inferred bin methylation levels with RRBS data, using bins with at least certain number of RRBS CpGs, i.e. 4
+```{r, eval= FALSE}
+# PCC (Pearson correlation coefficient)
+MeDEStrand.cor( MSetInput= MeDIP_seq, CS = CS, RRBS = RRBS, minRRBS = 4 , method = "pearson" )
+
+## Calculating pearson correlation coefficient for chromosome chr1, bin size 100 ... 
+##  pearson correlation coefficient for chromosome chr1, using bin size 100 is: 
+## 0.850117829815186
+## Calculating pearson correlation coefficient for chromosome chr2, bin size 100 ... 
+##  pearson correlation coefficient for chromosome chr2, using bin size 100 is: 
+## 0.826996666593428
+## ..........
+
+# SCC (Spearman correlation coefficient)
+MeDEStrand.cor( MSetInput= MeDIP_seq, CS = CS, RRBS = RRBS, minRRBS = 4 , method = "spearman" )
+
+## Calculating spearman correlation coefficient for chromosome chr1, bin size 100 ... 
+##  spearman correlation coefficient for chromosome chr1, using bin size 100 is: 
+##  0.785806 
+## Calculating spearman correlation coefficient for chromosome chr2, bin size 100 ... 
+##  spearman correlation coefficient for chromosome chr2, using bin size 100 is: 
+##  0.785293 
+## ..........
+
+```
+## Differential methylation analysis between two groups
+For the differential methylation analysis, we want to find all bins/loci that have differential methylation levels surpassing certain threshold between two groups of samples. We use two groups of non-small cell lung cancer (NSCLC) cohort and control MeDIP-seq data from R package `r Biocpkg("MEDIPSData")`. Each group has 3 replicate data of chromosome 20, chromosome 21 and chromosome 22.
+```{r, eval= FALSE}
+BSgenome="BSgenome.Hsapiens.UCSC.hg19"; uniq=1; extend =200; shift=0; ws = 100; chr.select=c('chr20','chr21','chr22')
+
+# Specify file paths for normal group
+bam.file.NSCLC_N.Rep1.MeDIP = system.file("extdata", "NSCLC_MeDIP_1N_fst_chr_20_21_22.bam", package = "MEDIPSData")
+bam.file.NSCLC_N.Rep2.MeDIP = system.file("extdata", "NSCLC_MeDIP_2N_fst_chr_20_21_22.bam", package = "MEDIPSData")
+bam.file.NSCLC_N.Rep3.MeDIP = system.file("extdata", "NSCLC_MeDIP_3N_fst_chr_20_21_22.bam", package = "MEDIPSData")
+
+# Specify file paths for tumor group
+bam.file.NSCLC_T.Rep1.MeDIP = system.file("extdata", "NSCLC_MeDIP_1T_fst_chr_20_21_22.bam", package = "MEDIPSData")
+bam.file.NSCLC_T.Rep2.MeDIP = system.file("extdata", "NSCLC_MeDIP_2T_fst_chr_20_21_22.bam", package = "MEDIPSData")
+bam.file.NSCLC_T.Rep3.MeDIP = system.file("extdata", "NSCLC_MeDIP_3T_fst_chr_20_21_22.bam", package = "MEDIPSData")
+
+# Import three replicates MeDIP-seq data of Normal group
+NSCLC_N.Rep1.MeDIP = MeDEStrand.createSet(file=bam.file.NSCLC_N.Rep1.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+NSCLC_N.Rep2.MeDIP = MeDEStrand.createSet(file=bam.file.NSCLC_N.Rep2.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+NSCLC_N.Rep3.MeDIP = MeDEStrand.createSet(file=bam.file.NSCLC_N.Rep3.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+
+# Put three replicates of Normal group into 1 dataset
+NSCLC_N.MeDIP = c( NSCLC_N.Rep1.MeDIP, NSCLC_N.Rep2.MeDIP, NSCLC_N.Rep3.MeDIP )
+
+# Import three replicates MeDIP-seq data of Tumor group
+NSCLC_T.Rep1.MeDIP = MeDEStrand.createSet(file=bam.file.NSCLC_T.Rep1.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+NSCLC_T.Rep2.MeDIP = MeDEStrand.createSet(file=bam.file.NSCLC_T.Rep2.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+NSCLC_T.Rep3.MeDIP = MeDEStrand.createSet(file=bam.file.NSCLC_T.Rep3.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+
+# Put three replicates of Tumor group into 1 dataset
+NSCLC_T.MeDIP = c( NSCLC_T.Rep1.MeDIP, NSCLC_T.Rep2.MeDIP, NSCLC_T.Rep3.MeDIP )
+
+# count CpG pattern in the bins. Since bin coordinates are the same for both groups and replicates, we can use any of the objects above.
+CS = MeDEStrand.countCG(pattern = "CG", refObj = NSCLC_N.MeDIP)
+
+# So we can also use 
+CS = MeDEStrand.countCG(pattern = "CG", refObj = NSCLC_N.Rep1.MeDIP)
+
+```
+Next, we used the two sample groups data we built above to function "MeDEStrand.meth()" to calculate for the statistics of two groups' methylation status. The result is an intermediate result to find bins/loci that are significantly differentially methylated between two sample groups. Parameters are specified as following:
+
+* MSet1: first group of imported dataset.
+* MSet2: second group of imported dataset.
+* CSet: corresponding Bin CpG pattern counts.
+* chr: specifies the chromosome(s) for t test for differential methylated loci between MSet1 and MSet2. Depending on chromosome(s) or all chromosomes are provided, multiple test correction are conducted at chromosome-wide or genome-wide levels. The latter one is more stringent.
+* p.adj: method for multiple-test control. R's p.adjust() function is used. Therefore, the following methods are available: holm, hochberg, hommel, bonferroni, BH, BY, fdr, none.
+* minRowSum: threshold for a minimum sum of counts across all samples bins (default=10). Bins with lower coverage will not be tested for differential methylation coverage.
+
+```{r, eval= FALSE}
+result = MeDEStrand.meth(MSet1=NSCLC_N.MeDIP,  MSet2=NSCLC_T.MeDIP, CSet=CS, chr=chr.select, p.adj="fdr",  minRowSum= 12)
+
+```
+Now, we can select bins/loci which show significant differential methylation levels between the two sample groups. Parameters are specified as following:
+
+* resuls: results table returned by the function MeDEStrand.meth().
+* p.value: threshold for significant differential methylation. default 0.1.
+* adj: TRUE or FALSE. Whether multiple test correction is conducted based on the methods: holm, hochberg, hommel, bonferroni, BH, BY, fdr, none.
+* bg.counts: threshold to filter some bins. The parameter requires a minimal number of reads for each group. To apply this condition, the mean of the counts per group is considered.
+* merge.within.distance: merges significant differential methylated bins within certain bp distance. default is NULL (do not merge).
+
+```{r, eval= FALSE}
+result.sig = MeDEStrand.selectSig(results = mr.edgeR, p.value = 0.1, adj = T, ratio = NULL, bg.counts = 1, merge.within.distance = NULL )
+
+## Total number of windows: 1624601
+## Number of windows tested for differential methylation: 482696
+## Remaining number of windows with adjusted p.value<=0.1: 13
+## Remaining number of windows where the mean count of at least one group is >=1: 13
+
+```
+```{r, results='asis'}
+data(result.sig, package="MeDEStrand")
+knitr::kable(result.sig)
+
+```
+
+# Quality controls
+`r Biocpkg("MEDIPS")` provides three different quality controls: 'Saturation analysis', 'Correlation between samples' and 'Sequence Pattern Coverage'. Since quality controls are procedure of data 'pre-processing' and based on the short reads thus functions from `r Biocpkg("MEDIPS")` can be used for data quality check for 'MeDEStrand' or any other method that infer genome-wide absolute methylation levels. User can use these functions from `r Biocpkg("MEDIPS")` directly.
+
+## Saturation analysis
+The saturation analysis addresses the question, whether the given set of mapped reads is sufficient to generate a
+saturated and reproducible coverage profile of the reference genome. Only if there is a sufficient number of short
+reads, the resulting genome wide coverage profile will be reproducible by another independent set of a similar number
+of short reads. The saturation analysis is not specific for MeDIP-seq data and can be applied to other types of
+sequencing data like e.g. ChIP-seq. The quality controls are demonstrated using sample data 'hESCs_Rep1_MeDIP.bam' from `r Biocpkg("MEDIPSData")`.
+```{r, eval= FALSE}
+hESCs.Rep1.MeDIP = system.file('extdata', 'hESCs.MeDIP.Rep1.chr22.bam', package = 'MEDIPSData')
+BSgenome="BSgenome.Hsapiens.UCSC.hg19";  uniq = 1;  extend = 200;   shift = 0; ws = 100 ; chr.select = 'chr22'
+sr = MEDIPS.saturation(file = hESCs.Rep1.MeDIP, BSgenome = BSgenome, uniq = uniq, extend = extend, shift = shift, window_size = ws, chr.select = chr.select,nit = 10, nrit = 1, empty_bins = TRUE, rank = FALSE)
+```
+The saturation analysis divides the total set of available regions into two distinct random sets (A and B) of equal size.
+Both sets A and B are again divided into random subsets of equal size where the number of subsets is determined
+by the parameter nit (default=10). For each set, A and B, the saturation analysis iteratively selects an increasing
+number of subsets and calculates short read coverage at genome wide windows where the window sizes are defined by the window_size parameter. In each iteration step, the resulting genome wide coverages for the current subsets of
+A and B are compared using pearson correlation. As the number of considered reads increases during each iteration
+step, it is assumed that the resulting genome wide coverages become more similar, a dependency that is expressed
+by an increased correlation.
+It has to be noted that the saturation analysis can be performed on two independent sets of short reads only.
+Therefore, a true saturation for one given sample can only be calculated for half of the available short reads. As it is
+of interest to examine the reproducibility for the total set of available short reads of the given sample, the saturation
+analysis is followed by an estimated saturation analysis. For the estimated saturation analysis, the full set of given
+regions is artifically doubled by considering each given region twice. Subsequently, the described saturation analysis
+is performed on the artificially doubled set of regions.
+The results of the saturation and of the estimated saturation analysis can be viewed by typing
+```{r, eval= FALSE}
+sr
+
+## $distinctSets
+##        [,1]      [,2]
+##  [1,]     0 0.0000000
+##  [2,]  7539 0.1194891
+##  [3,] 15078 0.2133494
+##  [4,] 22617 0.2882014
+##  [5,] 30156 0.3475563
+##  [6,] 37695 0.4048816
+##  [7,] 45234 0.4493257
+##  [8,] 52773 0.4878673
+##  [9,] 60312 0.5197915
+## [10,] 67851 0.5483936
+## [11,] 75396 0.5749502
+## 
+## $estimation
+##         [,1]      [,2]
+##  [1,]      0 0.0000000
+##  [2,]   7539 0.1435861
+##  [3,]  15078 0.2443759
+##  [4,]  22617 0.3252045
+##  [5,]  30156 0.3881633
+##  [6,]  37695 0.4443124
+##  [7,]  45234 0.4899389
+##  [8,]  52773 0.5288485
+##  [9,]  60312 0.5623891
+## [10,]  67851 0.5940193
+## [11,]  75390 0.6187121
+## [12,]  82929 0.6400664
+## [13,]  90468 0.6604680
+## [14,]  98007 0.6799439
+## [15,] 105546 0.6948736
+## [16,] 113085 0.7093251
+## [17,] 120624 0.7226273
+## [18,] 128163 0.7345872
+## [19,] 135702 0.7454830
+## [20,] 143241 0.7562866
+## [21,] 150793 0.7650336
+## 
+## $numberReads
+## [1] 150793
+## 
+## $maxEstCor
+## [1] 1.507930e+05 7.650336e-01
+## 
+## $maxTruCor
+## [1] 7.539600e+04 5.749502e-01
+```
+The maximal obtained correlation of the saturation analysis is stored at the maxTruCor slot and the maximal obtained
+correlation of the estimated saturation analysis is stored at the maxEstCor slot of the saturation results object (here
+sr, first column: total number of considered reads, second column: correlation). The results of each iteration step are
+stored in the distinctSets and estimation slots for the saturation and estimated saturation analysis, respectively
+(first column: total number of considered reads, second column: obtained correlation).
+Visualization by typing
+```{r, eval= FALSE}
+MEDIPS.plotSaturation(sr)
+```
+![estimate CpG density bias](/Users/jingting/Desktop/MeDEStrand/vignettes/SaturationPlot.png)
+Further parameters that can be specified for the saturation analysis are:
+
+* nrit: methods that randomly select data entries may be processed several times in order to obtain more stable
+results. By specifying the nrit parameter (default=1) it is possible to run the saturation analysis several times.
+The final results returned to the saturation results object are the averaged results of all random iteration steps.
+* empty_bins: can be either TRUE or FALSE (default TRUE). This parameter affects the way of calculating
+correlations between the resulting genome wide coverages. If there occur genomic bins which contain no
+overlapping regions, neither from the subset(s) of A nor from the subset(s) of B, these windows will be neglected
+when the paramter is set to FALSE.
+* rank: can be either TRUE or FALSE (default FALSE). This parameter also affects the way of calculating
+correlations between the resulting genome vectors. If rank is set to TRUE, the correlation will be calculated
+for the ranks of the bins instead of considering the counts (i.e. spearman correlation). Setting this parameter
+to TRUE is a more robust approach which reduces the effect of possible occuring outliers (i.e. windows with
+very high counts) on the correlation.
+
+## Correlation between samples
+Genome wide short read coverage profiles are expected to be similar for biological or technical replicates given a
+sufficient sequencing depth (compare section Saturation Analysis). The MEDIPS.correlation function compares genome wide coverage profiles of given MEDIPS SETs and returns a correlation matrix containing pair-wise
+correlations. We use sample data from `r Biocpkg("MEDIPSData")` for demonstration 
+```{r, eval= FALSE}
+BSgenome="BSgenome.Hsapiens.UCSC.hg19";  uniq = 1;  extend = 200;   shift = 0; ws = 100 ; chr.select = 'chr22'
+bam.file.hESCs.Rep1.MeDIP = system.file('extdata', 'hESCs.MeDIP.Rep1.chr22.bam', package = 'MEDIPSData')
+bam.file.hESCs.Rep2.MeDIP = system.file('extdata', 'hESCs.MeDIP.Rep2.chr22.bam', package = 'MEDIPSData')
+bam.file.hESCs_Input = system.file('extdata', 'hESCs.Input.chr22.bam', package = 'MEDIPSData')
+# Import data based on 'MEDIPS' method bin counts, i.e. reads of the positive and negative strands are merged 
+Rep1.MeDIP = MEDIPS.createSet(file=bam.file.hESCs.Rep1.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+Rep2.MeDIP = MEDIPS.createSet(file=bam.file.hESCs.Rep2.MeDIP, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+Input = MEDIPS.createSet(file=bam.file.hESCs_Input, BSgenome=BSgenome, extend=extend, shift=shift, uniq=uniq, window_size=ws, chr.select=chr.select,paired = F)
+# Find correlation between sample data
+cor.matrix = MEDIPS.correlation(MSets = c( Rep1.MeDIP, Rep2.MeDIP, Input ), plot = T, method = "pearson")
+cor.matrix
+
+##                            hESCs.MeDIP.Rep1.chr22.bam hESCs.MeDIP.Rep2.chr22.bam hESCs.Input.chr22.bam
+## hESCs.MeDIP.Rep1.chr22.bam                          1                   0.719911             0.3045561
+## hESCs.MeDIP.Rep2.chr22.bam                         NA                   1.000000             0.3504131
+## hESCs.Input.chr22.bam                              NA                         NA             1.0000000
+
+```
+
+## Sequence Pattern Coverage
+The main idea of the sequence pattern coverage analysis is to test the number of CpGs (or any other predefined
+sequence pattern) covered by the given short reads. In addition, the depth of coverage per CpG is tested. The
+sequence pattern coverage analysis can be started by typing
+```{r, eval= FALSE}
+cr = MEDIPS.seqCoverage(file = bam.file.hESCs.Rep1.MeDIP, pattern = "CG", BSgenome = BSgenome, chr.select = chr.select, extend = extend, shift = shift,uniq = uniq)
+```
+The sequence pattern coverage results object (here cr) contains four different slots:
+
+* cov.res: is a vector of length equal to the total number of sequence patterns (e.g. CpGs). The entries
+correspond to the number of overlapping regions (coverage).
+* pattern: the tested sequence pattern (e.g. CpG)
+* numberReads: the total number of tested reads
+* numberReadsWO: the number of reads which do not cover a tested sequence pattern
+
+A histogram can be plotted to visalizes the total number of CpGs that have been covered at different
+level
+```{r, eval= FALSE}
+MEDIPS.plotSeqCoverage(seqCoverageObj=cr, type="hist", t = 15, main="Sequence pattern coverage, histogram")
+```
+![estimate CpG density bias](/Users/jingting/Desktop/MeDEStrand/vignettes/SeqCoverage.png)
+
+# References
+

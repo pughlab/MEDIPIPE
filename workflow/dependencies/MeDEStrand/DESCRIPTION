@@ -1,0 +1,15 @@
+Package: MeDEStrand
+Type: Package
+Title: A method to infer absolute methylation from enrichment-based methylation profiling data 
+Version: 0.0.0.9000
+Author: Jingting Xu, Shimeng Liu, Ping Yin, Serdar Bulun, Yang Dai
+Maintainer: Jingting XU <jxu43@uic.edu>
+Description: MeDEStrand was developped to infer absolute methylation levels from enrichment-based methylation profiling data that includes MeDIP-seq, MethylCap-seq/MBD-seq etc. MeDEStrand acquires its strength by utilizing a sigmoid model to estimate and correct CpG bias, as well as utilizing asymmetric bin counts from reads mapped to positive and negative DNA strand to further improve the accuracy.License: GPL (>=2)
+Encoding: UTF-8
+LazyData: true
+Depends: MEDIPS
+Packaged: July 2017
+RoxygenNote: 6.0.1
+Suggests: knitr,
+          rmarkdown
+VignetteBuilder: knitr
