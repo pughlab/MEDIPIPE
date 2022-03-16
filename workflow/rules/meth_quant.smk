@@ -1,4 +1,6 @@
 ## run MEDIPS for QC and quantifying
+## MeDEStrand for absolute methylation levels estimation
+
 rule medips_medestrand:
     input:
         "dedup_bam/{sample}_dedup.bam"

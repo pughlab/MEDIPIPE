@@ -114,7 +114,7 @@ idx_6 <- (names(cov_sum) != "0" & names(cov_sum) != "1" & names(cov_sum) != "2" 
 ## output qc matrix
 medips_qc = data.frame(
 
-  sample = sampleid,
+  Sample = sampleid,
 
   ## saturation
   saturation.numberReads = saturation$numberReads,
