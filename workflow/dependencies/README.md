@@ -1,7 +1,7 @@
 
 # Dependencies
 
-The R/Pythone packages are unavailable through conda/bioconda/r were cloned.
+The R/Pythone packages are unavailable through conda/bioconda/r were cloned. Remember to remove the .git folder from cloned packages to avoid committing conflict.  
 
 1. [ConsensusCruncher](https://github.com/pughlab/ConsensusCruncher) was cloned here to deal with the sequencing libraries come with custom barcodes, for instance, the Unique Molecular Identifier (UMI) enables accurate bioinformatic identification of PCR duplicates. A text file with these barcode sequences, one per line, is required for ConsensusCruncher's `--blist` parameter.  
 
