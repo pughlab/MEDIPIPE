@@ -52,10 +52,12 @@ rule insert_size:
         "dedup_bam/{sample}_dedup.bam"
     output:
         txt = "dedup_bam/{sample}_insert_size_metrics.txt",
-        hist = "dedup_bam/{sample}_insert_size_histogram.pdf",
+        hist = "dedup_bam/{sample}_insert_size_histogram.pdf"
+    params:
+        pipeline_env = config["pipeline_env"]
     log:
         "logs/{sample}_picard_insert_size.log"
     shell:
-        "(java -jar /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline/share/picard-2.26.6-0/picard.jar "
+        "(java -jar {params.pipeline_env}/share/picard-2.26.6-0/picard.jar "
         "CollectInsertSizeMetrics M=0.05 I={input} O={output.txt} "
         "H={output.hist}) 2> {log}"

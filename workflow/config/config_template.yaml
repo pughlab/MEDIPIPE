@@ -1,6 +1,7 @@
 #########################################
 ## PATH for pipeline and working diretor
 pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
+pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline
 workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 
 #################################

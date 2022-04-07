@@ -1,6 +1,7 @@
 #########################################
 ## PATH for pipeline and working diretory
 pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
+pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline
 workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/res
 
 #################################
@@ -8,9 +9,6 @@ workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/res
 samples: /cluster/projects/tcge/cell_free_epigenomics/test_run/samples-seq.tsv
 paired-end: True
 
-## Spike-in or UMI sequence
-spike_in: False
-add_umi: False
 
 ############
 ## reference

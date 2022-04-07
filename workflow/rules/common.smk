@@ -27,10 +27,12 @@ def get_rule_all_input():
 
     #map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
     dedup_out = expand("dedup_bam/{sample}_dedup.bam.bai", sample = SAMPLES["sample_id"]),
-    medips_out = expand("meth_quant/{sample}_meth_qc_report.txt", sample = SAMPLES["sample_id"]),
-    medestrand_out = expand("meth_quant/{sample}_meth_abs.RDS", sample = SAMPLES["sample_id"]),
+    meth_qc = expand("meth_qc_quant/{sample}_meth_qc.txt", sample = SAMPLES["sample_id"]),
+    meth_quant = expand("meth_qc_quant/{sample}_meth_quant.RData", sample = SAMPLES["sample_id"]),
+    qc_reports = expand("aggregate_qc/meth_qc/{sample}_meth_qc.txt", sample = SAMPLES["sample_id"]),
+    summary = "summary/count.txt.gz",
 
-
+    ## single-end or paired-end
     if config["paired-end"]:
         ## FASQC out for raw and trimmed paired-end fqs
         fastqc_raw_pe = expand("fastqc/pe/{sample}_{mate}_fastqc.html",
@@ -46,7 +48,7 @@ def get_rule_all_input():
         inferred_insert_size = expand("dedup_bam/{sample}_insert_size_histogram.pdf",
                                       sample = SAMPLES["sample_id"]),
 
-        return fastqc_pe_out + dedup_out + inferred_insert_size + medips_out + medestrand_out
+        return fastqc_pe_out + dedup_out + inferred_insert_size + meth_qc + meth_quant #+ qc_reports + summary
 
 
     else:
@@ -57,7 +59,7 @@ def get_rule_all_input():
                                     sample = SAMPLES["sample_id"]),
         fastqc_se_out = fastqc_raw_se + fastqc_trimmed_se
 
-        return fastqc_se_out + dedup_out + dedup_out + medips_out + medestrand_out
+        return fastqc_se_out + dedup_out + dedup_out + meth_qc + meth_quant #+ qc_reports + summary
 
 
 ###############################
