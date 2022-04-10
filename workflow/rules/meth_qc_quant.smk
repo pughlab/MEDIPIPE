@@ -7,7 +7,7 @@ rule meth_qc_quant:
     output:
         "meth_qc_quant/{sample}_meth_qc.txt",
         "meth_qc_quant/{sample}_meth_quant.RData",
-        "meth_qc_quant/{sample}_Granges_CpGs.bed",
+        temp("meth_qc_quant/{sample}_Granges_CpGs.bed"),
         "meth_qc_quant/{sample}_count.txt",
         "meth_qc_quant/{sample}_rpkm.txt",
         "meth_qc_quant/{sample}_CNV_qsea.txt",

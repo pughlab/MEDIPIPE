@@ -6,7 +6,7 @@
     "__default__":
     {
         "jid": "{rule}_{wildcards.sample}",
-        "std": "submit_{rule}_{wildcards.sample}_%j.out",
-        "err": "submit_{rule}_{wildcards.sample}_%j.err"
+        "std": "/logs_cluster/submit_{rule}_{wildcards.sample}_%j.out",
+        "err": "/logs_cluster/submit_{rule}_{wildcards.sample}_%j.err"
     },
 }

@@ -14,6 +14,10 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 conda activate tcge-cfmedip-seq-pipeline
 
+## mkdir for cluster submission logs
+## defined in .workflow/config/cluster_std_err.json
+cd  /cluster/projects/tcge/cell_free_epigenomics/test_run/res
+mkdir -p logs_cluster
 
 ## unlock workdir just in case the folder locked accidently before
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
