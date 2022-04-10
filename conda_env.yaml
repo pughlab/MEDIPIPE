@@ -11,4 +11,3 @@ dependencies:
   - graphviz=2.40.1
   - picard=2.26.6
   - gnuplot=4.6.0  ## for samtools plot-bamstats
-  - multiqc

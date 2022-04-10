@@ -1,4 +1,4 @@
-name: tcge-cfmedip-seq-pipeline-sub
+name: R
 channels:
   - conda-forge
   - bioconda

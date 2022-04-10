@@ -1,14 +1,21 @@
+###########################################################
 ## run MEDIPS + MeDEStrand + QSEA for QC and quantification
 ## relative/absolute methylation levels will be estimated
-
 rule meth_qc_quant:
     input:
-        "dedup_bam/{sample}_dedup.bam"
+        get_dedup_bam
     output:
-        "meth_qc_quant/{sample}_saturation.png",
-        "meth_qc_quant/{sample}_seqCoverage.png",
         "meth_qc_quant/{sample}_meth_qc.txt",
-        "meth_qc_quant/{sample}_meth_quant.RData"
+        "meth_qc_quant/{sample}_meth_quant.RData",
+        "meth_qc_quant/{sample}_Granges_CpGs.bed",
+        "meth_qc_quant/{sample}_count.txt",
+        "meth_qc_quant/{sample}_rpkm.txt",
+        "meth_qc_quant/{sample}_CNV_qsea.txt",
+        "meth_qc_quant/{sample}_beta_qsea.txt",
+        "meth_qc_quant/{sample}_nrpm_qsea.txt",
+        "meth_qc_quant/{sample}_rms_medips.txt",
+        "meth_qc_quant/{sample}_rms_medestrand.txt",
+        "meth_qc_quant/{sample}_logitbeta_qsea.txt"
     resources:
         mem_mb=60000
     params:
@@ -18,7 +25,7 @@ rule meth_qc_quant:
     log:
         "logs/{sample}_medips_medestrand_qsea.log"
     conda:
-        "extra_env/conda_env_R.yaml"
+        "extra_env/R.yaml"
     shell:
         "(Rscript --vanilla {params.scr_dir}/workflow/scripts/medips_medestrand_qsea.R "
         "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} "

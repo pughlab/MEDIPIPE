@@ -1,3 +1,4 @@
+###############################
 ## setting up working directory
 workdir: config['workdir']
 
@@ -19,47 +20,37 @@ wd = config["workdir"]
 pipe_dir = config["pipeline_dir"]
 umi_list = config["umi_list"]
 
+
 #############################################
 ## get taget outputs based on the config file
 #############################################
 
 def get_rule_all_input():
-
+    ## outputs for each individual sample
     #map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
-    dedup_out = expand("dedup_bam/{sample}_dedup.bam.bai", sample = SAMPLES["sample_id"]),
-    meth_qc = expand("meth_qc_quant/{sample}_meth_qc.txt", sample = SAMPLES["sample_id"]),
-    meth_quant = expand("meth_qc_quant/{sample}_meth_quant.RData", sample = SAMPLES["sample_id"]),
-    qc_reports = expand("aggregate_qc/meth_qc/{sample}_meth_qc.txt", sample = SAMPLES["sample_id"]),
-    summary = "summary/count.txt.gz",
+    #dedup_out = expand("dedup_bam/{sample}_dedup.bam.bai", sample = SAMPLES["sample_id"]),
+    #meth_qc = expand("meth_qc_quant/{sample}_meth_qc.txt", sample = SAMPLES["sample_id"]),
+    #meth_quant = expand("meth_qc_quant/{sample}_meth_quant.RData", sample = SAMPLES["sample_id"]),
+
+    ## aggregated outputs for SAMPLES
+    meth_qc = "summary/meth_qc.txt",
+    meta_quant = "summary/meth_count.txt.gz",
 
     ## single-end or paired-end
     if config["paired-end"]:
-        ## FASQC out for raw and trimmed paired-end fqs
-        fastqc_raw_pe = expand("fastqc/pe/{sample}_{mate}_fastqc.html",
-                                sample = SAMPLES["sample_id"],
-                                mate = ["R1", "R2"]),
-        fastqc_trimmed_r1 = expand("fastqc/pe/{sample}_R1_val_1_fastqc.html",
-                                   sample = SAMPLES["sample_id"]),
-        fastqc_trimmed_r2 = expand("fastqc/pe/{sample}_R2_val_2_fastqc.html",
-                                   sample = SAMPLES["sample_id"]),
-        fastqc_pe_out = fastqc_raw_pe + fastqc_trimmed_r1 + fastqc_trimmed_r2
-
-        ## inferred insert size
-        inferred_insert_size = expand("dedup_bam/{sample}_insert_size_histogram.pdf",
-                                      sample = SAMPLES["sample_id"]),
-
-        return fastqc_pe_out + dedup_out + inferred_insert_size + meth_qc + meth_quant #+ qc_reports + summary
-
+        ## FASQC out for raw and trimmed paired-end fqs (individual sample)
+        #fastqc_raw_pe = expand("fastqc/pe/{sample}_{mate}_fastqc.zip",
+        #                        sample = SAMPLES["sample_id"],
+        #                        mate = ["R1", "R2"]),
+        mult_qc = "summary/QC_pe/multiqc_report.html",
+        return  mult_qc + meth_qc + meta_quant
 
     else:
         ## FASQC out for raw and trimmed single-end fq
-        fastqc_raw_se = expand("fastqc/se/{sample}_fastqc.html",
-                                sample = SAMPLES["fsample_id"]),
-        fastqc_trimmed_se = expand("fastqc/se/{sample}_trimmed_fastqc.html",
-                                    sample = SAMPLES["sample_id"]),
-        fastqc_se_out = fastqc_raw_se + fastqc_trimmed_se
-
-        return fastqc_se_out + dedup_out + dedup_out + meth_qc + meth_quant #+ qc_reports + summary
+        #fastqc_raw_se = expand("fastqc/se/{sample}_fastqc.zip",
+        #                        sample = SAMPLES["sample_id"]),
+        mult_qc = "summary/QC_se/multiqc_report.html",
+        return mult_qc + meth_qc + meta_quant
 
 
 ###############################
@@ -118,3 +109,34 @@ def get_trimmed_fastq(wildcards):
         return R1 + R2
     else:
         return "trimmed_fq/{}_trimmed.fq.gz".format(wildcards.sample)
+
+########################################
+## get dedup bam files for meth_qc_quant
+def get_dedup_bam(wildcards):
+    if config["paired-end"]:
+        return "dedup_bam_pe/{}_dedup.bam".format(wildcards.sample)
+    else:
+        return "dedup_bam_se/{}_dedup.bam".format(wildcards.sample)
+
+
+####################
+## get FASTQC stats
+def get_fastqc_stats():
+    if config["paired-end"]:
+        r1_raw  = expand("fastqc_pe/{samples}_R1_fastqc.zip", samples = SAMPLES["sample_id"]),
+        r2_raw  = expand("fastqc_pe/{samples}_R2_fastqc.zip", samples = SAMPLES["sample_id"]),
+        r1_trim = expand("fastqc_pe/{samples}_R1_val_1_fastqc.zip", samples = SAMPLES["sample_id"]),
+        r2_trim = expand("fastqc_pe/{samples}_R2_val_2_fastqc.zip", samples = SAMPLES["sample_id"]),
+        return r1_raw + r2_raw + r1_trim + r2_trim
+    else:
+         r1_raw  = expand("fastqc_se/{samples}_fastqc.zip", samples = SAMPLES["sample_id"]),
+         r1_trim = expand("fastqc_se/{samples}_trimmed_fastqc.zip", samples = SAMPLES["sample_id"]),
+         return r1_raw + r1_trim
+
+######################
+## get dedup bam stats
+def get_dedup_bam_stats():
+    if config["paired-end"]:
+        return expand("dedup_bam_pe/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
+    else:
+        return expand("dedup_bam_se/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])

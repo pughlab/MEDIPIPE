@@ -5,6 +5,7 @@
 {
     "__default__":
     {
+        "jid": "{rule}_{wildcards.sample}",
         "std": "submit_{rule}_{wildcards.sample}_%j.out",
         "err": "submit_{rule}_{wildcards.sample}_%j.err"
     },

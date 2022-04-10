@@ -14,6 +14,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 conda activate tcge-cfmedip-seq-pipeline
 
+
 ## unlock workdir just in case the folder locked accidently before
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_real_run.yaml \

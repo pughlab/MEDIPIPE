@@ -11,7 +11,7 @@ include: "rules/common.smk"         ## self-defined functions
 include: "rules/reads_qc.smk"       ## fsatqc & trim-galore for pe and se
 include: "rules/mapping.smk"        ## bwa, samtools, infer intert size
 include: "rules/meth_qc_quant.smk"     ## medips + medestrand + qsea based qc and quantification
-#include: "rules/aggregating.smk"       ## aggregating all samples' QC and quantifications
+include: "rules/aggregating.smk"       ## aggregating all samples' QC and quantifications
 
 ###################
 ## targeted outputs

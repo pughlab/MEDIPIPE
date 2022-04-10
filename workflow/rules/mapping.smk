@@ -1,3 +1,4 @@
+################
 ## BWA alignment
 rule bwa_map:
     input:
@@ -13,6 +14,8 @@ rule bwa_map:
         "(bwa mem -M -t {threads}  {input} | "
         "samtools view -Sb --threads {threads} - > {output}) 2> {log}"
 
+
+##########################################
 ## raw bams without any filtering
 ## fixmate, sort, index and stats bam file
 rule samtools_sort_index_stats:
@@ -20,7 +23,7 @@ rule samtools_sort_index_stats:
         "raw_bam/{sample}.bam"
     output:
         bam = "raw_bam/{sample}_sorted.bam",
-        bai = "raw_bam/{sample}_sorted.bam.bai",
+        #bai = "raw_bam/{sample}_sorted.bam.bai",
         stat= "raw_bam/{sample}_sorted.bam.stats.txt"
     threads: 12
     shell:
@@ -30,15 +33,17 @@ rule samtools_sort_index_stats:
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
+
+##########################################################################
 ## to filter out unmapped & non-uniquely mapped, not properly paired reads
 ## Deduplication with markup, index and stats deduplicated file
 rule samtools_markdup_stats:
     input:
         "raw_bam/{sample}_sorted.bam"
     output:
-        bam = "dedup_bam/{sample}_dedup.bam",
-        bai = "dedup_bam/{sample}_dedup.bam.bai",
-        stat= "dedup_bam/{sample}_dedup.bam.stats.txt"
+        bam = "dedup_bam_pe/{sample}_dedup.bam",
+        #bai = "dedup_bam/{sample}_dedup.bam.bai",
+        stat= "dedup_bam_pe/{sample}_dedup.bam.stats.txt"
     threads: 12
     shell:
         "(samtools view -b -f 2 -F 2828 --threads {threads} {input} | "
@@ -46,13 +51,31 @@ rule samtools_markdup_stats:
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
+
+## single-end
+## filtering differ
+rule samtools_markdup_stats_se:
+    input:
+        "raw_bam/{sample}_sorted.bam"
+    output:
+        bam = "dedup_bam_se/{sample}_dedup.bam",
+        #bai = "dedup_bam/{sample}_dedup.bam.bai",
+        stat= "dedup_bam_se/{sample}_dedup.bam.stats.txt"
+    threads: 12
+    shell:
+        "(samtools view -b -F 2820 --threads {threads} {input} | "
+        "samtools markdup -@ {threads} -r - {output.bam} && "
+        "samtools index -@ {threads} {output.bam} && "
+        "samtools stats -@ {threads} {output.bam} > {output.stat})"
+
+############################################
 ## infer insert size for paired-end reads_qc
 rule insert_size:
     input:
-        "dedup_bam/{sample}_dedup.bam"
+        "dedup_bam_pe/{sample}_dedup.bam"
     output:
-        txt = "dedup_bam/{sample}_insert_size_metrics.txt",
-        hist = "dedup_bam/{sample}_insert_size_histogram.pdf"
+        txt = "dedup_bam_pe/{sample}_insert_size_metrics.txt",
+        hist = "dedup_bam_pe/{sample}_insert_size_histogram.pdf"
     params:
         pipeline_env = config["pipeline_env"]
     log:

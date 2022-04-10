@@ -244,15 +244,32 @@ qset = createQseaSet(sampleTable = sample_info,
 
 #######################################
 ## count reads per genomic regions/bins
-qset <- addCoverage(qset,
+## CNV: only fragments without CpG dinucleotides are considered for MEDIP .
+
+if(ispaired){
+
+  qset <- addCoverage(qset,
                     uniquePos = FALSE,     ## using dedup_bam
                     paired = ispaired)
 
-## CNV: only fragments without CpG dinucleotides are considered for MEDIP .
-qset = addCNV(qset,
-              file_name="file_name",
-              paired = ispaired,
-              MeDIP = TRUE)
+  qset = addCNV(qset,
+                file_name="file_name",
+                paired = ispaired,
+                MeDIP = TRUE)
+} else {
+  qset <- addCoverage(qset,
+                  uniquePos = FALSE,     ## using dedup_bam
+                  paired = ispaired,
+                  fragment_length = 300)
+
+  qset = addCNV(qset,
+               file_name="file_name",
+               paired = ispaired,
+               fragment_length = 300,
+               MeDIP = TRUE)
+
+}
+
 
 ## add library factor and offset
 qset <- addLibraryFactors(qset)

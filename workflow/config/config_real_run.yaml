@@ -6,9 +6,8 @@ workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/res
 
 #################################
 ## Sequencing samples information
-samples: /cluster/projects/tcge/cell_free_epigenomics/test_run/samples-seq.tsv
+samples: /cluster/projects/tcge/cell_free_epigenomics/test_run/samples-seq_2.tsv
 paired-end: True
-
 
 ############
 ## reference

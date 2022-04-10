@@ -112,11 +112,11 @@ rule fastqc_se:
         get_renamed_fastq,
         get_trimmed_fastq
     output:
-        "fastqc/se/{sample}_fastqc.html",
-        "fastqc/se/{sample}_trimmed_fastqc.html"
+        "fastqc_se/{sample}_fastqc.zip",
+        "fastqc_se/{sample}_trimmed_fastqc.zip"
     run:
         for fq in input:
-            shell("fastqc {} -t 8 --outdir fastqc/se/".format(fq))
+            shell("fastqc {} -t 8 --outdir fastqc_se/".format(fq))
 
 #for paired-end reads
 rule fastqc_pe:
@@ -124,10 +124,10 @@ rule fastqc_pe:
         get_renamed_fastq,
         get_trimmed_fastq
     output:
-        "fastqc/pe/{sample}_R1_fastqc.html",
-        "fastqc/pe/{sample}_R2_fastqc.html",
-        "fastqc/pe/{sample}_R1_val_1_fastqc.html",
-        "fastqc/pe/{sample}_R2_val_2_fastqc.html"
+        "fastqc_pe/{sample}_R1_fastqc.zip",
+        "fastqc_pe/{sample}_R2_fastqc.zip",
+        "fastqc_pe/{sample}_R1_val_1_fastqc.zip",
+        "fastqc_pe/{sample}_R2_val_2_fastqc.zip"
     run:
         for fq in input:
-            shell("fastqc {} -t 8 --outdir fastqc/pe/".format(fq))
+            shell("fastqc {} -t 8 --outdir fastqc_pe/".format(fq))

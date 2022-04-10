@@ -1,0 +1,5 @@
+name: multiQC
+channels:
+  - bioconda
+dependencies:
+  - multiqc

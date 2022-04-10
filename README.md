@@ -2,14 +2,14 @@
 
 ## Intoduction
 
-The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to QC matrix and signal track generation. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The outputs produced by the pipeline include 1) formatted QC reports, 2) enrichment signal tracks, 3)...
+The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to QC matrix and methylation quantification/estimation matrixes. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The outputs produced by the pipeline include 1) formatted QC reports, 2) methylation quantification matrixes, 3)...
 
 The pipeline was developed by Yong Zeng based on some prior works of Wenbin Ye, Eric Zhao, ..
 
 ### Features
 
-- **Portability**: The pipeline run can be performed across different cluster engines such as SLURM,...
-- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis thaliana genome TAIR10. In addition, fasta sequence for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3 was enclosed in `data/BAC_F19K16_F24B22.fa`. You can also build genome database from FASTA for your custom genomes.
+- **Portability**: The pipeline run can be performed across different cluster engines such as SLURM (tested). For other platforms, please refer to [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
+- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis thaliana genome TAIR10. In addition, fasta sequence for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) from Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3 was enclosed in `data/BAC_F19K16_F24B22.fa`. You can also build genome database from FASTA for your custom genomes.
 
 
 ### How it works
@@ -40,7 +40,7 @@ This schematic diagram shows you how pipeline works:
 	```
 
 4) Test run
-	> **IMPORTANT**: sub envs will also be created during the test run.
+	> **IMPORTANT**: sub envs will be created during the test run.
 
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
@@ -50,7 +50,8 @@ This schematic diagram shows you how pipeline works:
 	$ vim ./workflow/config/config_test_run.yaml
 
 	## run with the internet connection as well
-	## !! it will at MEDEStrand due to the test datasets, it's fine for real cfMeDIP-seq data
+	## !! it's fine even it will fail at later steps, which is due to current test dataset.
+	## !! sub environments will be istalled to tcge-cfmedip-seq-pipeline-sub
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./workflow/config/config_template.yaml \
 		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
@@ -81,7 +82,7 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 
 1) A config YAML file specifies all the input parameters and files that are necessary for successfully running this pipeline. This includes a specification of the path to the genome reference files. Please make sure to specify absolute paths rather than relative paths in your config files. The template can be found at [here](./workflow/config/config_template.yaml)
 
-2) The samples's sequence data table template. PS: prepare the table for single-end and paired-end samples separately and, use exactly same `header`.
+2) The samples's sequence data table template. PS: prepare the table for single-end and paired-end samples separately and, use exactly same table `header`.
 
 |	sample_id   |     R1	     |  R2(p.r.n.)|
 |-------------|--------------|------------|
