@@ -47,8 +47,9 @@ rule extract_barcode:
         "gunzip {input[1]} -c > {params.outfile}_R2.fastq && "
 
         ## extract barcodes
+        #"python  {params.src} --bpattern NNT "
         "python  {params.src} --blist {params.blist} "
-        "--read1  {input[0]}  --read2   {input[0]} "
+        "--read1  {input[0]}  --read2   {input[1]} "
         "--outfile  {params.outfile} && "
 
         ## gzip

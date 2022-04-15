@@ -83,12 +83,12 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
 
 
 
-## tmp
-## creat dir for --cluster submission logs,
-## defined in .workflow/config/cluster_std_err.json
-rule mkdir_logs_cluster:
-    output:
-        ## {sample} required for --cluster
-        directory("logs_{sample}")
-    shell:
-        "mkdir -p {output}"
+## testing sample with umi
+snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_HNSC.yaml \
+          --unlock
+
+snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_HNSC.yaml \
+          --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
+          --cores 4 -pn
