@@ -14,6 +14,8 @@ SAMPLES = (
 
 ## read in refrence files' info
 REF = pd.read_csv(config["ref_files"], sep="\t", header = None, index_col = 0)
+blacklist = REF.loc["blacklist"][1]   ## ENCODE blacklist
+
 
 ## paths for pipeline and/or reference data
 wd = config["workdir"]
@@ -33,8 +35,9 @@ def get_rule_all_input():
     #meth_quant = expand("meth_qc_quant/{sample}_meth_quant.RData", sample = SAMPLES["sample_id"]),
 
     ## aggregated outputs for SAMPLES
-    meth_qc = "summary/meth_qc.txt",
-    meta_quant = "summary/meth_count.txt.gz",
+    meth_qc = "aggregated/meth_qc.txt",
+    meta_quant = "aggregated/meth_count.txt.gz",
+    meth_filt = "autos_bfilt/meth_autos_bfilt_bin.bed",
 
     ## single-end or paired-end
     if config["paired-end"]:
@@ -42,15 +45,15 @@ def get_rule_all_input():
         #fastqc_raw_pe = expand("fastqc/pe/{sample}_{mate}_fastqc.zip",
         #                        sample = SAMPLES["sample_id"],
         #                        mate = ["R1", "R2"]),
-        mult_qc = "summary/QC_pe/multiqc_report.html",
-        return  mult_qc + meth_qc + meta_quant
+        mult_qc = "aggregated/QC_pe/multiqc_report.html",
+        return  mult_qc + meth_qc + meta_quant + meth_filt
 
     else:
         ## FASQC out for raw and trimmed single-end fq
         #fastqc_raw_se = expand("fastqc/se/{sample}_fastqc.zip",
         #                        sample = SAMPLES["sample_id"]),
-        mult_qc = "summary/QC_se/multiqc_report.html",
-        return mult_qc + meth_qc + meta_quant
+        mult_qc = "aggregated/QC_se/multiqc_report.html",
+        return mult_qc + meth_qc + meta_quant + meth_filt
 
 
 ###############################

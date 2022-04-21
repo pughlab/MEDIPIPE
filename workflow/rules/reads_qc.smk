@@ -39,7 +39,7 @@ rule extract_barcode:
         "extra_env/ConsensusCruncher.yaml"
     params:
         src = pipe_dir + "/workflow/dependencies/ConsensusCruncher/ConsensusCruncher/extract_barcodes.py",
-        blist = umi_list,
+        blist = umi_list,                 ## barcode list
         outfile = "barcoded_fq/{sample}"
     shell:
         ## unzip gz files
