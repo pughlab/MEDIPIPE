@@ -7,7 +7,8 @@ rule meth_qc_quant:
     output:
         "meth_qc_quant/{sample}_meth_qc.txt",
         "meth_qc_quant/{sample}_meth_quant.RData",
-        temp("meth_qc_quant/{sample}_Granges_CpGs.bed"),
+        ## files below can be removed after aggregating
+        "meth_qc_quant/{sample}_Granges_CpGs.bed",
         "meth_qc_quant/{sample}_count.txt",
         "meth_qc_quant/{sample}_rpkm.txt",
         "meth_qc_quant/{sample}_CNV_qsea.txt",
@@ -15,7 +16,7 @@ rule meth_qc_quant:
         "meth_qc_quant/{sample}_nrpm_qsea.txt",
         "meth_qc_quant/{sample}_rms_medips.txt",
         "meth_qc_quant/{sample}_rms_medestrand.txt",
-        "meth_qc_quant/{sample}_logitbeta_qsea.txt"
+        "meth_qc_quant/{sample}_logitbeta_qsea.txt",
     resources:
         mem_mb=60000
     params:

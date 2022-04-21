@@ -77,15 +77,34 @@ rule aggregate_meth_quant:
     log:
         "logs/{sample}_quant_aggregate.log"
     resources:
-            mem_mb=60000
+        mem_mb=60000
     shell:
         "(cp {input.bin}  {output.bin} && "
-        "cut -f 5 {output.bin} > summary/bin_id.txt  && "
-        "paste summary/bin_id.txt {input.cnt}  | gzip > {output.cnt} && "
-        "paste summary/bin_id.txt {input.rpkm} | gzip > {output.rpkm} && "
-        "paste summary/bin_id.txt {input.CNV_qsea}   |  gzip > {output.CNV_qsea} && "
-        "paste summary/bin_id.txt {input.beta_qsea}  |  gzip > {output.beta_qsea} && "
-        "paste summary/bin_id.txt {input.nrpm_qsea}  |  gzip > {output.nrpm_qsea} && "
-        "paste summary/bin_id.txt {input.rms_medips} |  gzip > {output.rms_medips} && "
-        "paste summary/bin_id.txt {input.rms_medestrand} | gzip > {output.rms_medestrand} && "
-        "paste summary/bin_id.txt {input.logitbeta_qsea} | gzip > {output.logitbeta_qsea})  2> {log}"
+        "paste {output.bin} {input.cnt}  | bgzip > {output.cnt} && tabix  {output.cnt} && "
+        "paste {output.bin} {input.rpkm} | bgzip > {output.rpkm} && tabix  {output.rpkm} && "
+        "paste {output.bin} {input.CNV_qsea}   |  bgzip > {output.CNV_qsea} && tabix  {output.CNV_qsea} && "
+        "paste {output.bin} {input.beta_qsea}  |  bgzip > {output.beta_qsea} && tabix  {output.beta_qsea} && "
+        "paste {output.bin} {input.nrpm_qsea}  |  bgzip > {output.nrpm_qsea} && tabix  {output.nrpm_qsea} && "
+        "paste {output.bin} {input.rms_medips} |  bgzip > {output.rms_medips} && tabix  {output.rms_medips} && "
+        "paste {output.bin} {input.rms_medestrand} | bgzip > {output.rms_medestrand} && tabix  {output.rms_medestrand} && "
+        "paste {output.bin} {input.logitbeta_qsea} | bgzip > {output.logitbeta_qsea} && tabix  {output.logitbeta_qsea})  2> {log}"
+
+
+##
+"""
+## filter out chrX, chrY, chrM and ENCODE blacklist bins
+rule meth_bin_filter
+    input:
+        bin = "summary/{sample}_bin.bed"
+    output:
+        "summary/{sample}_autosomes_bin.bed",
+        "summary/{sample}_autosomes_bfilt_bin.bed"
+    params:
+        blist = REF.loc["blacklist"][1]
+    shell:
+        "grep -v 'chrM\|chrX\|chrY' {input.bin}  >  {output[0]} && "
+        "intersectBed -a {output} -b {params.blist} -v {output[1]} "
+
+## meth quantification after filtering bins
+rule meth_quant_filter
+"""

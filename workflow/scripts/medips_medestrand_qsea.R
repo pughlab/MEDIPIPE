@@ -119,7 +119,7 @@ medips_qc = data.frame(
   coverage.fracReadsWoCpG = coverage$numberReadsWO / coverage$numberReads,
 
   ## fraction of CpG isn't covered by a read
-  overage.fracCpGwoRead = cov_sum[names(cov_sum) == "0"] / numberCpG,
+  coverage.fracCpGwoRead = cov_sum[names(cov_sum) == "0"] / numberCpG,
 
   ## fraction of CpG isn't covered by 1,2,3,4,5,>5 read(s)
   coverage.fracCpGw1Read = cov_sum[names(cov_sum) == "1"] / numberCpG,
@@ -324,7 +324,8 @@ meth_quant <- data.frame(meth[!is.na(idx), ], qtb[, 6:9])
 #save(grange_cpg, file = paste0("meth_qc_quant/", sample_id, "_Granges_CpGs.Rdata"))
 
 bin_id <- 1:nrow(meth_quant)
-grange_cpg  <- data.frame(meth_quant[, 1:4], bin_id)
+strand <- rep(".", nrow(meth_quant))
+grange_cpg  <- data.frame(meth_quant[, 1:3], bin_id, meth_quant[, 4], strand)
 colnames(grange_cpg)[1] <- "#chr"
 write.table(grange_cpg, file = paste0("meth_qc_quant/", sample_id, "_Granges_CpGs.bed"),
             row.names = F, col.names = T, sep = "\t", quote = F)
