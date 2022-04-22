@@ -37,7 +37,7 @@ def get_rule_all_input():
     ## aggregated outputs for SAMPLES
     meth_qc = "aggregated/meth_qc.txt",
     meta_quant = "aggregated/meth_count.txt.gz",
-    meth_filt = "autos_bfilt/meth_autos_bfilt_bin.bed",
+    meth_filt = "autos_bfilt/meth_count_autos_bfilt.txt.gz",
 
     ## single-end or paired-end
     if config["paired-end"]:

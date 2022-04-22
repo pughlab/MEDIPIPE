@@ -97,44 +97,56 @@ rule meth_bin_filter:
     input:
         bin = "aggregated/{sample}_bin.bed"
     output:
-        #temp("autos_bfilt/{sample}_autos_bin.bed"),
-        "autos_bfilt/{sample}_autos_bfilt_bin.bed"
+        "autos_bfilt/{sample}_autos_bfilt_bin.bed",
+        "autos_bfilt/{sample}_autos_bfilt_bin_merged.bed"
     conda:
         "extra_env/bedtools.yaml"
     params:
         blacklist
     shell:
+        ## autosomes
+        "head -1 {input.bin} > autos_bfilt/tmp_header.bed && "
         "grep -v 'chrM\|chrX\|chrY' {input.bin}  >  autos_bfilt/tmp_1.bed && "
-        "head -1 autos_bfilt/tmp_1.bed > autos_bfilt/tmp_header.bed && "
+        ## mask blacklist
         "intersectBed -a autos_bfilt/tmp_1.bed -b {params} -v >  autos_bfilt/tmp_2.bed && "
-        "sortBed -i autos_bfilt/tmp_2.bed > autos_bfilt/tmp_3.bed && "
-        "cat autos_bfilt/tmp_header.bed  autos_bfilt/tmp_3.bed > {output} && "
+        "sort -k4,4n autos_bfilt/tmp_2.bed > autos_bfilt/tmp_3.bed && "
+        "cat autos_bfilt/tmp_header.bed  autos_bfilt/tmp_3.bed > {output[0]} && "
+
+        ## merge filtered bins for tabix
+        "bedtools merge -i {output[0]} -d 1 | sort -V -k1,1 -k2,2n > {output[1]} && "
         "rm autos_bfilt/tmp_*.bed "
 
-"""
+
 #################################################################################
 ## meth quantification after filtering chrX, chrY, chrM and ENCODE blacklist bins
 rule meth_quant_filter:
     input:
-        bin =  "autos_bfilt/{sample}_autos_bfilt_bin.bed",
-        cnt  = "aggregated/{sample}_count.txt.gz",
+        bin = "autos_bfilt/{sample}_autos_bfilt_bin_merged.bed",
+        cnt = "aggregated/{sample}_count.txt.gz",
         rpkm  = "aggregated/{sample}_rpkm.txt.gz",
-        CNV_qsea   = "aggregated/{sample}_CNV_qseatxt.gz",
+        CNV_qsea   = "aggregated/{sample}_CNV_qsea.txt.gz",
         beta_qsea  = "aggregated/{sample}_beta_qsea.txt.gz",
         nrpm_qsea  = "aggregated/{sample}_nrpm_qsea.txt.gz",
         rms_medips = "aggregated/{sample}_rms_medips.txt.gz",
         rms_medestrand  = "aggregated/{sample}_rms_medestrand.txt.gz",
         logitbeta_qsea  = "aggregated/{sample}_logitbeta_qsea.txt.gz",
-
     output:
-        cnt  = "autos_bfilt/{sample}_count_autos_bfilt.txt",
-        rpkm  = "autos_bfilt/{sample}_rpkm_autos_bfilt.txt",
-        CNV_qsea   = "autos_bfilt/{sample}_CNV_qsea_autos_bfilt.txt",
-        beta_qsea  = "autos_bfilt/{sample}_beta_qsea_autos_bfilt.txt",
-        nrpm_qsea  = "autos_bfilt/{sample}_nrpm_qsea_autos_bfilt.txt",
-        rms_medips = "autos_bfilt/{sample}_rms_medips_autos_bfilt.txt",
-        rms_medestrand  = "autos_bfilt/{sample}_rms_medestrand_autos_bfilt.txt",
-        logitbeta_qsea  = "autos_bfilt/{sample}_logitbeta_qsea_autos_bfilt.txt"
+        cnt = "autos_bfilt/{sample}_count_autos_bfilt.txt.gz",
+        rpkm  = "autos_bfilt/{sample}_rpkm_autos_bfilt.txt.gz",
+        CNV_qsea   = "autos_bfilt/{sample}_CNV_qsea_autos_bfilt.txt.gz",
+        beta_qsea  = "autos_bfilt/{sample}_beta_qsea_autos_bfilt.txt.gz",
+        nrpm_qsea  = "autos_bfilt/{sample}_nrpm_qsea_autos_bfilt.txt.gz",
+        rms_medips = "autos_bfilt/{sample}_rms_medips_autos_bfilt.txt.gz",
+        rms_medestrand  = "autos_bfilt/{sample}_rms_medestrand_autos_bfilt.txt.gz",
+        logitbeta_qsea  = "autos_bfilt/{sample}_logitbeta_qsea_autos_bfilt.txt.gz"
+    resources:
+        mem_mb=60000
     shell:
-        "tabix -p bed -R {input.bin} -h {input.cnt} > {output.cnt}"
-"""
+        "tabix -p bed -R {input.bin} -h {input.cnt} | bgzip > {output.cnt} && tabix -p bed {output.cnt} && "
+        "tabix -p bed -R {input.bin} -h {input.rpkm} | bgzip > {output.rpkm} && tabix -p bed {output.rpkm} && "
+        "tabix -p bed -R {input.bin} -h {input.CNV_qsea}   |  bgzip > {output.CNV_qsea} && tabix -p bed {output.CNV_qsea} && "
+        "tabix -p bed -R {input.bin} -h {input.beta_qsea}  |  bgzip > {output.beta_qsea} && tabix -p bed {output.beta_qsea} && "
+        "tabix -p bed -R {input.bin} -h {input.nrpm_qsea}  |  bgzip > {output.nrpm_qsea} && tabix -p bed {output.nrpm_qsea} && "
+        "tabix -p bed -R {input.bin} -h {input.rms_medips} |  bgzip > {output.rms_medips} && tabix -p bed {output.rms_medips} && "
+        "tabix -p bed -R {input.bin} -h {input.rms_medestrand} | bgzip > {output.rms_medestrand} && tabix -p bed {output.rms_medestrand} && "
+        "tabix -p bed -R {input.bin} -h {input.logitbeta_qsea} | bgzip > {output.logitbeta_qsea} && tabix -p bed {output.logitbeta_qsea}"

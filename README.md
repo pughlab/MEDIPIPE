@@ -52,7 +52,7 @@ This schematic diagram shows you how pipeline works:
 
 	## run with the internet connection as well
 	## !! it's fine even it will fail at later steps, which is due to current test dataset.
-	## !! sub environments will be istalled to tcge-cfmedip-seq-pipeline-sub
+	## !! sub environments will be installed to tcge-cfmedip-seq-pipeline-sub
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./workflow/config/config_template.yaml \
 		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
@@ -63,7 +63,7 @@ This schematic diagram shows you how pipeline works:
 ## Input files specification
 
 ### Download reference genome data
-You can download reference genome, pre-build BWA index and annotated regions from ENCODE for hg38 and hg19 via following command line. The manifest file hg38/hg19.tsv will be generated accordingly.
+You can download reference genome, pre-build BWA index and annotated regions, such as the blacklist, from ENCODE for hg38 and hg19 via following command line. The manifest file hg38/hg19.tsv will be generated accordingly.
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
