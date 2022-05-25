@@ -67,7 +67,6 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
 
 
 ## sbatch /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/sbatch_snakemake_real_run.sh
-
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_real_run.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
@@ -75,7 +74,10 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
           --cluster "sbatch -p himem -c 12 --mem=60G -J {cluster.jid} -o {cluster.std} -e {cluster.err}" \
           --latency-wait 60 --jobs 8 -p
 
+
+###############################
 ##### testing single end ######
+###############################
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_PanCancer.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \

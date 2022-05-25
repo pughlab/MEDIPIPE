@@ -14,7 +14,8 @@ ws = 300
 library(MEDIPS)
 
 ## all chromosomes failed MEDIPS enrichment
-## checking chr1-5 temporally
+## checking chr1 only temporally, which will lead to slightly higher enrichment scores
+## Problem has beed fixed by the function MEDIPS.CpGenrichNew below
 
 ## loading corresponding genome and major chrs
 ## for testing dataset
@@ -22,7 +23,7 @@ if (bsgenome == "BSgenome.Scerevisiae.UCSC.sacCer3")
 {
   library("BSgenome.Scerevisiae.UCSC.sacCer3")
   chr = "chrI"
-  chr_enrich  = "chrI"
+  #chr_enrich  = "chrI"
 }
 
 ## hg19
@@ -30,7 +31,7 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
 {
   library("BSgenome.Hsapiens.UCSC.hg19")
   chr = c(paste0("chr", 1:22), "chrX", "chrY", "chrM")
-  chr_enrich = "chr1"
+  #chr_enrich = "chr1"
 }
 
 ## hg38
@@ -39,7 +40,7 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
   library("BSgenome.Hsapiens.UCSC.hg38")
 
   chr = c(paste0("chr", 1:22), "chrX", "chrY", "chrM")
-  chr_enrich = "chr1"
+  #chr_enrich = "chr1"
 
 }
 
@@ -88,12 +89,90 @@ dev.off()
 #################
 ## CpG enrichment
 ################
+if(FALSE){
 cpg_enrich = MEDIPS.CpGenrich(
   file = sample_bam,
   BSgenome = bsgenome,
   paired = ispaired,
   chr.select = chr_enrich
+)}
+
+#########################################################
+## rewritten enrichment function based on SPPearce's code
+## https://github.com/chavez-lab/MEDIPS/issues/2b
+MEDIPS.CpGenrichNew <-function(file=NULL, BSgenome=NULL, extend=0, shift=0, uniq=1e-3, chr.select=NULL, paired=F){
+
+	## Proof correctness....
+  if(is.null(BSgenome)){stop("Must specify a BSgenome library.")}
+
+  ## Read region file
+  fileName=unlist(strsplit(file, "/"))[length(unlist(strsplit(file, "/")))]
+  path=paste(unlist(strsplit(file, "/"))[1:(length(unlist(strsplit(file, "/"))))-1], collapse="/")
+  if(path==""){path=getwd()}
+  if(!fileName%in%dir(path)){stop(paste("File", fileName, " not found in", path, sep =" "))}
+
+  #dataset = get(ls(paste("package:", BSgenome, sep = "")))
+  dataset = get(ls(paste("package:", BSgenome, sep = ""))[1])   ## first element
+
+  if(!paired){GRange.Reads = getGRange(fileName, path, extend, shift, chr.select, dataset, uniq)}	else{GRange.Reads = getPairedGRange(fileName, path, extend, shift, chr.select, dataset, uniq)}
+
+  ## Sort chromosomes
+  library(gtools)             ## need to load gtools
+  if(length(unique(seqlevels(GRange.Reads)))>1){chromosomes=mixedsort(unique(seqlevels(GRange.Reads)))}
+  if(length(unique(seqlevels(GRange.Reads)))==1){chromosomes=unique(seqlevels(GRange.Reads))}
+
+  ## Get chromosome lengths for all chromosomes within data set.
+  cat(paste("Loading chromosome lengths for ",BSgenome, "...\n", sep=""))
+
+  chr_lengths=as.numeric(seqlengths(dataset)[chromosomes])
+
+  ranges(GRange.Reads) <- restrict(ranges(GRange.Reads),+1)
+
+  ##Calculate CpG density for regions
+  total=length(chromosomes)
+  cat("Calculating CpG density for given regions...\n")
+
+  readsChars <- unlist(getSeq(dataset, GRange.Reads, as.character=TRUE))
+
+  regions.CG = sum(vcountPattern("CG",readsChars))
+  regions.C  = sum(vcountPattern("C",readsChars))
+  regions.G  = sum(vcountPattern("G",readsChars))
+  all.genomic= sum(width(readsChars))
+
+  nReads <- length(readsChars)
+
+  regions.relH=as.numeric(regions.CG)/as.numeric(all.genomic)*100
+  regions.GoGe=(as.numeric(regions.CG)*as.numeric(all.genomic))/(as.numeric(regions.C)*as.numeric(regions.G))
+
+ CG <- DNAStringSet("CG")
+  pdict0 <- PDict(CG)
+  params <- new("BSParams", X = dataset, FUN = countPDict, simplify = TRUE, exclude = c("rand", "chrUn"))
+  genome.CG=sum(bsapply(params, pdict = pdict0))
+  params <- new("BSParams", X = dataset, FUN = alphabetFrequency, exclude = c("rand", "chrUn"), simplify=TRUE)
+  alphabet=bsapply(params)
+  genome.l=sum(as.numeric(alphabet))
+  genome.C=as.numeric(sum(alphabet[2,]))
+  genome.G=as.numeric(sum(alphabet[3,]))
+  genome.relH=genome.CG/genome.l*100
+  genome.GoGe=(genome.CG*genome.l)/(genome.C*genome.G);
+
+  ##Calculate CpG density for reference genome
+
+  enrichment.score.relH=regions.relH/genome.relH
+  enrichment.score.GoGe=regions.GoGe/genome.GoGe
+
+  gc()
+  return(list(genome=BSgenome, regions.CG=regions.CG, regions.C=regions.C, regions.G=regions.G, regions.relH=regions.relH, regions.GoGe=regions.GoGe, genome.C=genome.C, genome.G=genome.G, genome.CG=genome.CG, genome.relH=genome.relH, genome.GoGe=genome.GoGe, enrichment.score.relH=enrichment.score.relH, enrichment.score.GoGe=enrichment.score.GoGe))
+}
+
+## apply new enrichment function
+cpg_enrich = MEDIPS.CpGenrichNew(
+  file = sample_bam,
+  BSgenome = bsgenome,
+  paired = ispaired,
+  chr.select = chr
 )
+
 
 ###################
 ## MEDIPS QC report
