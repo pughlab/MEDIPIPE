@@ -4,14 +4,16 @@ pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
 pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline
 workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 
-#################################
+################################################
 ## Sequencing samples information
+## !! Make sure the PATHs in the sample.tsv file are consistent !!
 samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv
 paired-end: True
 
 
-############
+##################################################################
 ## reference
+## !! Make sure the PATHs in the test.tsv file are consistent !! 
 ref_files: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/test.tsv
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 
