@@ -83,8 +83,6 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cores 4 -pn
 
-
-
 ## testing sample with umi
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_HNSC.yaml \
@@ -92,5 +90,15 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
 
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_HNSC.yaml \
+          --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
+          --cores 4 -pn
+
+
+###########################################
+##### testing samples with spike ins ######
+##### PADC
+###########################################
+snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
+          --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_PADC.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cores 4 -pn

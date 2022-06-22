@@ -51,6 +51,26 @@ rule samtools_markdup_stats:
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
+## extract spike-ins bam after deduplication
+## paired-end only so far
+rule samtools_spikein_sort_index_stats:
+    input:
+        #"raw_bam/{sample}_sorted.bam"      ## lead to ambiguous wildcards!?
+        "dedup_bam_pe/{sample}_dedup.bam"
+    output:
+        bam = "dedup_bam_spikein/{sample}_spikein.bam",
+        #bai = "raw_bam/{sample}_sorted.bam.bai",
+        stat= "dedup_bam_spikein/{sample}_spikein.bam.stats.txt"
+    threads: 12
+    params:
+        spikein_chr = config["spike_in_chr"]
+    shell:
+        ## --threads flag failed
+        "(samtools view  -@ {threads} -hbS {input} {params.spikein_chr} | "
+        "samtools  sort  -@ {threads} -o {output.bam} && "
+        "samtools  index -@ {threads} {output.bam} && "
+        "samtools  stats -@ {threads} {output.bam} > {output.stat})"
+
 
 ## single-end
 ## filtering differ
@@ -80,6 +100,24 @@ rule insert_size:
         pipeline_env = config["pipeline_env"]
     log:
         "logs/{sample}_picard_insert_size.log"
+    shell:
+        "(java -jar {params.pipeline_env}/share/picard-2.26.6-0/picard.jar "
+        "CollectInsertSizeMetrics M=0.05 I={input} O={output.txt} "
+        "H={output.hist}) 2> {log}"
+
+############################################
+## infer insert size for paired-end reads_qc
+## spike-ins
+rule insert_size_spikein:
+    input:
+        "dedup_bam_spikein/{sample}_spikein.bam"
+    output:
+        txt = "dedup_bam_spikein/{sample}_insert_size_metrics.txt",
+        hist = "dedup_bam_spikein/{sample}_insert_size_histogram.pdf"
+    params:
+        pipeline_env = config["pipeline_env"]
+    log:
+        "logs/{sample}_picard_insert_size_spikein.log"
     shell:
         "(java -jar {params.pipeline_env}/share/picard-2.26.6-0/picard.jar "
         "CollectInsertSizeMetrics M=0.05 I={input} O={output.txt} "

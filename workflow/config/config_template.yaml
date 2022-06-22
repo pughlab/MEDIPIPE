@@ -10,10 +10,9 @@ workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv
 paired-end: True
 
-
 ##################################################################
 ## reference
-## !! Make sure the PATHs in the test.tsv file are consistent !! 
+## !! Make sure the PATHs in the test.tsv file are consistent !!
 ref_files: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/test.tsv
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 
@@ -22,7 +21,13 @@ bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 ## as bwa_idx_spikein
 spike_in: False
 
+## Edit accordingly when spike_in == True !!!
+## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
+spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
+spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22
+spike_in_chr: AC011717.6 AL132957.1
+
 ######################################################
 ## UMI sequence, if it's Ture, barcode list is requied
-add_umi: TRUE       ## set as TRUE for the test run to deploy related conda env
+add_umi: True       ## set as TRUE for the test run to deploy related conda env
 umi_list: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt

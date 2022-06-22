@@ -1,6 +1,7 @@
 ################################################################################
 ## multiQC
 ## using files instead of directories to ensure all samples qc metircs included
+################################################################################
 rule multiqc_pe:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
@@ -17,6 +18,21 @@ rule multiqc_pe:
         "extra_env/multiQC.yaml"
     shell:
         "(multiqc {input} -o aggregated/QC_pe/) 2> {log}"
+
+
+## QC for sipke-ins separately
+rule multiqc_pe_spikein:
+    input:
+        get_spikein_stats()
+    output:
+        # "aggregated/QC_se/multiqc_report.html"      ## only works for stand-alone mode,
+        "aggregated_spikein/QC_pe/{sample}.html"              ## works for --cluster as we
+    log:
+        "logs/{sample}_pe_spikein.log"                        ## wildcard.sample needed for --cluster
+    conda:
+        "extra_env/multiQC.yaml"
+    shell:
+        "(multiqc {input} -o aggregated_spikein/QC_pe/) 2> {log}"
 
 
 ## single end
@@ -38,6 +54,7 @@ rule multiqc_se:
 
 ##############################
 ## Aggregating meth QC reports
+##############################
 rule aggregate_meth_qc:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
@@ -49,9 +66,22 @@ rule aggregate_meth_qc:
         "cat {input} | sed '1~2d' >> {output}"
 
 
+## Aggregating spike-ins QC
+rule aggregate_meth_qc_spikein:
+    input:
+        ## using "samples" to distinguish from wildcard.sample !!!
+        expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES["sample_id"])
+    output:
+        "aggregated_spikein/{sample}.txt"
+    shell:
+        "head -n 1 {input[0]} > {output} && "
+        "cat {input} | sed '1~2d' >> {output}"
+
+
 ##########################################
 ## Aggregating meth Quantification outputs
 ## bin_id used to save storage space
+##########################################
 rule aggregate_meth_quant:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
@@ -90,9 +120,32 @@ rule aggregate_meth_quant:
         "paste {output.bin} {input.logitbeta_qsea} | bgzip > {output.logitbeta_qsea} && tabix -p bed {output.logitbeta_qsea})  2> {log}"
 
 
+## aggregate spike-ins
+rule aggregate_meth_quant_spikein:
+    input:
+        ## using "samples" to distinguish from wildcard.sample !!!
+        bin  = expand("meth_qc_quant_spikein/{samples}_Granges_CpGs.bed", samples = SAMPLES["sample_id"][0]),
+        cnt = expand("meth_qc_quant_spikein/{samples}_count.txt", samples = SAMPLES["sample_id"]),
+        rpkm  = expand("meth_qc_quant_spikein/{samples}_rpkm.txt", samples = SAMPLES["sample_id"]),
+    output:
+        bin  = "aggregated_spikein/{sample}_bin.bed",
+        cnt  = "aggregated_spikein/{sample}_count.txt.gz",
+        rpkm  = "aggregated_spikein/{sample}_rpkm.txt.gz",
+    log:
+        "logs/{sample}_quant_aggregate_spikein.log"
+    resources:
+        mem_mb=60000
+    shell:
+        "(cp {input.bin}  {output.bin} && "
+        "paste {output.bin} {input.cnt}  | bgzip > {output.cnt} && tabix -p bed {output.cnt} && "
+        "paste {output.bin} {input.rpkm} | bgzip > {output.rpkm} && tabix -p bed {output.rpkm})  2> {log}"
+
+
+
 ########################################################
 ## filter out chrX, chrY, chrM and ENCODE blacklist bins
 ## autos_bfilt: autosomes + blacklist fitered
+########################################################
 rule meth_bin_filter:
     input:
         bin = "aggregated/{sample}_bin.bed"

@@ -18,3 +18,4 @@ include: "rules/aggregating.smk"       ## aggregating all samples' QC and quanti
 rule all:
     input:
         get_rule_all_input()     ## for all
+        #expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES["sample_id"])   ## testing

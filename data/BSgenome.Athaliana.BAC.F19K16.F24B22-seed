@@ -1,0 +1,17 @@
+Package: BSgenome.Athaliana.BAC.F19K16.F24B22
+Title: BAC F19K16 and F24B22 genome sequences for Arabidopsis thaliana (BAC.F19K16.F24B22)
+Description: F19K16 (TAIR Accession: AssemblyUnit:3600751); F24B22(TAIR Accession: AssemblyUnit:3601298)
+Version: 1.0.0
+organism: Arabidopsis thaliana
+common_name: Thale cress
+genome: BAC.F19K16.F24B22
+provider: TAIR
+release_date: 2010-11-18
+source_url: https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362; https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22
+organism_biocview: Arabidopsis_thaliana
+BSgenomeObjname: Athaliana
+SrcDataFiles: BAC_F19K16_F24B22.2bit from https://github.com/yzeng-lol/tcge-cfmedip-seq-pipeline/blob/main/data/BAC_F19K16_F24B22.fa
+PkgExamples: genome[["1"]]
+circ_seqs: character(0)
+seqs_srcdir: /Users/yong/OneDrive_UHN/Projects/snakemake/tmp
+seqfile_name: BAC_F19K16_F24B22.2bit 

@@ -31,27 +31,30 @@ def get_rule_all_input():
     ## outputs for each individual sample
     #map_out = expand("sorted_reads/{sample}_sorted.bam.bai", sample = SAMPLES["sample"]),
     #dedup_out = expand("dedup_bam/{sample}_dedup.bam.bai", sample = SAMPLES["sample_id"]),
-    #meth_qc = expand("meth_qc_quant/{sample}_meth_qc.txt", sample = SAMPLES["sample_id"]),
-    #meth_quant = expand("meth_qc_quant/{sample}_meth_quant.RData", sample = SAMPLES["sample_id"]),
 
     ## aggregated outputs for SAMPLES
     meth_qc = "aggregated/meth_qc.txt",
     meta_quant = "aggregated/meth_count.txt.gz",
     meth_filt = "autos_bfilt/meth_count_autos_bfilt.txt.gz",
 
-    ## single-end or paired-end
-    if config["paired-end"]:
-        ## FASQC out for raw and trimmed paired-end fqs (individual sample)
-        #fastqc_raw_pe = expand("fastqc/pe/{sample}_{mate}_fastqc.zip",
-        #                        sample = SAMPLES["sample_id"],
-        #                        mate = ["R1", "R2"]),
+    ## paired-end and spike-in
+    if config["paired-end"] and config["spike_in"]:
+        mult_qc = "aggregated/QC_pe/multiqc_report.html",
+
+        ## spike-ins
+        spikein_mult_qc = "aggregated_spikein/QC_pe/multiqc_report.html",
+        spikein_meth_qc = "aggregated_spikein/meth_qc.txt",
+        spikein_meta_quant = "aggregated_spikein/meth_count.txt.gz",
+
+        return  mult_qc + meth_qc + meta_quant + meth_filt + spikein_mult_qc + spikein_meth_qc + spikein_meta_quant
+
+    ## paired-end and no spike-in
+    elif config["paired-end"] and config["spike_in"] == False:
         mult_qc = "aggregated/QC_pe/multiqc_report.html",
         return  mult_qc + meth_qc + meta_quant + meth_filt
 
-    else:
-        ## FASQC out for raw and trimmed single-end fq
-        #fastqc_raw_se = expand("fastqc/se/{sample}_fastqc.zip",
-        #                        sample = SAMPLES["sample_id"]),
+    ## single-end
+    elif config["paired-end"] == False:
         mult_qc = "aggregated/QC_se/multiqc_report.html",
         return mult_qc + meth_qc + meta_quant + meth_filt
 
@@ -121,6 +124,11 @@ def get_dedup_bam(wildcards):
     else:
         return "dedup_bam_se/{}_dedup.bam".format(wildcards.sample)
 
+## spike-ins
+def get_dedup_bam_spikein(wildcards):
+    if config["paired-end"] and config["spike_in"]:
+        return "dedup_bam_spikein/{}_spikein.bam".format(wildcards.sample)
+
 
 ####################
 ## get FASTQC stats
@@ -143,3 +151,14 @@ def get_dedup_bam_stats():
         return expand("dedup_bam_pe/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
     else:
         return expand("dedup_bam_se/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
+
+
+#########################
+## get spikeins bam stats
+def get_spikein_stats():
+    if config["spike_in"] and config["paired-end"]:
+        bam_stats = expand("dedup_bam_spikein/{samples}_spikein.bam.stats.txt", samples = SAMPLES["sample_id"]),
+        frag_stats = expand("dedup_bam_spikein/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
+        return bam_stats + frag_stats
+    else:
+        return ""

@@ -3,9 +3,9 @@ args = commandArgs(trailingOnly=TRUE)
 ## assigning commandArgs
 sample_id  = args[1]
 sample_bam = args[2]
-bsgenome = args[3]
-ispaired = as.logical(args[4])
-medestrand_path = args[5]
+ispaired = as.logical(args[3])
+bsgenome = args[4]
+bsgenome_pkg = args[5]
 
 # default setting
 ws = 300
@@ -18,30 +18,18 @@ library(MEDIPS)
 ## Problem has beed fixed by the function MEDIPS.CpGenrichNew below
 
 ## loading corresponding genome and major chrs
-## for testing dataset
-if (bsgenome == "BSgenome.Scerevisiae.UCSC.sacCer3")
+## for spike-in
+
+if (is.element(bsgenome, installed.packages()[,1]))
 {
-  library("BSgenome.Scerevisiae.UCSC.sacCer3")
-  chr = "chrI"
-  #chr_enrich  = "chrI"
-}
+  library("BSgenome.Athaliana.BAC.F19K16.F24B22")
+  chr = c("AC011717.6", "AL132957.1")
+} else {
+  ## install custom spike-in BSgenome pkg
+  install.packages(bsgenome_pkg, repos = NULL, type="source")
 
-## hg19
-if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
-{
-  library("BSgenome.Hsapiens.UCSC.hg19")
-  chr = c(paste0("chr", 1:22), "chrX", "chrY", "chrM")
-  #chr_enrich = "chr1"
-}
-
-## hg38
-if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38")
-{
-  library("BSgenome.Hsapiens.UCSC.hg38")
-
-  chr = c(paste0("chr", 1:22), "chrX", "chrY", "chrM")
-  #chr_enrich = "chr1"
-
+  library("BSgenome.Athaliana.BAC.F19K16.F24B22")
+  chr = c("AC011717.6", "AL132957.1")
 }
 
 
@@ -62,7 +50,7 @@ saturation = MEDIPS.saturation(
 )
 
 ## saturation plot
-png(file = paste0("meth_qc_quant/", sample_id, "_saturation.png"), res = 300, width = 5, height = 5, units = "in")
+png(file = paste0("meth_qc_quant_spikein/", sample_id, "_saturation.png"), res = 300, width = 5, height = 5, units = "in")
 MEDIPS.plotSaturation(saturationObj = saturation)
 dev.off()
 
@@ -78,7 +66,7 @@ coverage = MEDIPS.seqCoverage(
 )
 
 ## coverage plot
-png(file = paste0("meth_qc_quant/", sample_id, "_seqCoverage.png"), res = 300, width = 5, height = 5, units = "in")
+png(file = paste0("meth_qc_quant_spikein/", sample_id, "_seqCoverage.png"), res = 300, width = 5, height = 5, units = "in")
 MEDIPS.plotSeqCoverage(
   seqCoverageObj=coverage,
   type="pie",
@@ -88,14 +76,7 @@ dev.off()
 
 #################
 ## CpG enrichment
-################
-if(FALSE){
-cpg_enrich = MEDIPS.CpGenrich(
-  file = sample_bam,
-  BSgenome = bsgenome,
-  paired = ispaired,
-  chr.select = chr_enrich
-)}
+#################
 
 #########################################################
 ## rewritten enrichment function based on SPPearce's code
@@ -183,6 +164,34 @@ numberCpG = length(coverage$cov.res)
 idx_6 <- (names(cov_sum) != "0" & names(cov_sum) != "1" & names(cov_sum) != "2" &
           names(cov_sum) != "3" & names(cov_sum) != "4" & names(cov_sum) != "5")
 
+## CpGs could be not covered by certain number of reads for spikeins
+## fraction of CpG isn't covered by a read
+if(length(cov_sum[names(cov_sum) == "0"]) == 0){
+coverage.fracCpGwoRead = 0} else {
+coverage.fracCpGwoRead = cov_sum[names(cov_sum) == "0"] / numberCpG}
+
+## fraction of CpG isn't covered by 1,2,3,4,5,>5 read(s)
+if(length(cov_sum[names(cov_sum) == "1"]) == 0){
+coverage.fracCpGw1Read = 0} else {
+coverage.fracCpGw1Read = cov_sum[names(cov_sum) == "1"] / numberCpG}
+
+if(length(cov_sum[names(cov_sum) == "2"]) == 0){
+coverage.fracCpGw2Read = 0} else {
+coverage.fracCpGw2Read = cov_sum[names(cov_sum) == "2"] / numberCpG}
+
+if(length(cov_sum[names(cov_sum) == "3"]) == 0){
+coverage.fracCpGw3Read = 0} else {
+coverage.fracCpGw3Read = cov_sum[names(cov_sum) == "3"] / numberCpG}
+
+if(length(cov_sum[names(cov_sum) == "4"]) == 0){
+coverage.fracCpGw4Read = 0} else {
+coverage.fracCpGw4Read = cov_sum[names(cov_sum) == "4"] / numberCpG}
+
+if(length(cov_sum[names(cov_sum) == "5"]) == 0){
+coverage.fracCpGw5Read = 0} else {
+coverage.fracCpGw5Read = cov_sum[names(cov_sum) == "5"] / numberCpG}
+
+
 ## output qc matrix
 medips_qc = data.frame(
 
@@ -198,14 +207,14 @@ medips_qc = data.frame(
   coverage.fracReadsWoCpG = coverage$numberReadsWO / coverage$numberReads,
 
   ## fraction of CpG isn't covered by a read
-  coverage.fracCpGwoRead = cov_sum[names(cov_sum) == "0"] / numberCpG,
+  coverage.fracCpGwoRead,
 
   ## fraction of CpG isn't covered by 1,2,3,4,5,>5 read(s)
-  coverage.fracCpGw1Read = cov_sum[names(cov_sum) == "1"] / numberCpG,
-  coverage.fracCpGw2Read = cov_sum[names(cov_sum) == "2"] / numberCpG,
-  coverage.fracCpGw3Read = cov_sum[names(cov_sum) == "3"] / numberCpG,
-  coverage.fracCpGw4Read = cov_sum[names(cov_sum) == "4"] / numberCpG,
-  coverage.fracCpGw5Read = cov_sum[names(cov_sum) == "5"] / numberCpG,
+  coverage.fracCpGw1Read,
+  coverage.fracCpGw2Read,
+  coverage.fracCpGw3Read,
+  coverage.fracCpGw4Read,
+  coverage.fracCpGw5Read,
   coverage.fracCpGgt5Reads = sum(cov_sum[idx_6]) / numberCpG,
 
 
@@ -231,15 +240,18 @@ medips_qc = data.frame(
 )
 
 ## consistent with multiQC sample X features output
-write.table(medips_qc, file = paste0("meth_qc_quant/", sample_id, "_meth_qc.txt"),
+write.table(medips_qc, file = paste0("meth_qc_quant_spikein/", sample_id, "_meth_qc.txt"),
             sep = "\t", row.names = F, quote = F)
 
 }
+
+
 
 ###################################
 ###   MEDIPS quantification     ###
 ###################################
 {
+
 ## MEDIPs set
 mset = MEDIPS.createSet(
           file = sample_bam,
@@ -251,176 +263,38 @@ mset = MEDIPS.createSet(
 
 ## coupling set
 cset = MEDIPS.couplingVector(pattern = "CG", refObj = mset)
-
+CpG = cset@genome_CF
 ####################################################################
 ##  region CF(# of CpG), count, rpkm, rms:relative methylation level
 meth =  MEDIPS.meth(
           MSet1 = mset,
           CSet = cset,
           CNV = F,
-          MeDIP = T ,     ## T: rms
+          MeDIP = F ,     ## Failed rms estimation for spikeins
 )
 
 ## rm redundant info for single sample
-meth = meth[, 1:7]
-colnames(meth)[c(4:7)] = c("CpG","count", "rpkm", "rms_medips")
+meth = data.frame(meth[, 1:5], CpG)
+colnames(meth)[c(4:5)] = c("count", "rpkm")
 
-########################################
-## export coverage profile in wig format
-# MEDIPS.exportWIG(Set = mset, CSet = cset, file = medips_rms_wig,
-#                 format = "rms", descr = sample_id)
+## Granges and CpG counts
+bin_id <- 1:nrow(meth)
+strand <- rep(".", nrow(meth))
+grange_cpg  <- data.frame(meth[, 1:3], bin_id, CpG, strand)
 
-}
-
-
-
-##################################################
-## infer relative methylation level via MeDEStrand
-#################################################
-{
-library(devtools)
-devtools::load_all(medestrand_path)
-
-## MeDEStrand set: reads mapped to the positive and negative DNA strands will be processed separately
-medset <-  MeDEStrand.createSet(file = sample_bam,
-            BSgenome = bsgenome,
-            paired = ispaired,
-            window_size = ws,
-            chr.select = chr)
-
-medcset <- MeDEStrand.countCG(pattern = 'CG', refObj = medset)
-
-rms_medestrand <- MeDEStrand.binMethyl(
-  MSetInput = medset,
-  CSet = medcset,
-  Granges = FALSE,
-)
-
-## adding to MEDIPS output
-meth <- data.frame(meth, rms_medestrand)
-
-}
-
-
-
-##########################
-### QSEA: under developing
-##########################
-{
-library(qsea)
-
-##################
-## create qsea set
-sample_info <- data.frame(sample_name = sample_id,
-                          file_name = sample_bam,
-                          group = sample_id)
-
-qset = createQseaSet(sampleTable = sample_info,
-                     BSgenome = bsgenome,
-                     window_size = ws,
-                     chr.select = chr)
-
-
-#######################################
-## count reads per genomic regions/bins
-## CNV: only fragments without CpG dinucleotides are considered for MEDIP .
-
-if(ispaired){
-
-  qset <- addCoverage(qset,
-                    uniquePos = FALSE,     ## using dedup_bam
-                    paired = ispaired)
-
-  qset = addCNV(qset,
-                file_name="file_name",
-                paired = ispaired,
-                MeDIP = TRUE)
-} else {
-  qset <- addCoverage(qset,
-                  uniquePos = FALSE,     ## using dedup_bam
-                  paired = ispaired,
-                  fragment_length = 300)
-
-  qset = addCNV(qset,
-               file_name="file_name",
-               paired = ispaired,
-               fragment_length = 300,
-               MeDIP = TRUE)
-
-}
-
-
-## add library factor and offset
-qset <- addLibraryFactors(qset)
-
-##################
-## add CpG density
-qset  <- addPatternDensity(qset, "CG", name="CpG")
-
-## addOffset
-qset <- addOffset(qset, "CpG")
-
-###############################
-## add enrichment parameters
-## and plot enrichment profiles
-
-## need to specify the windows for enrichment analysis
-# Blind calibration: QSEA assumes that regions with low CpG density is 80% methylated
-# on average, and regions within CpG islands are 25% methylated on average.
-wd_idx <-  which(getRegions(qset)$CpG_density > 1 & getRegions(qset)$CpG_density < 10)
-signal <- (15-getRegions(qset)$CpG_density[wd_idx])*.55/15+.25
-signal <- matrix(signal, length(signal), 1)
-
-qset <- addEnrichmentParameters(qset,
-                                enrichmentPattern = "CpG",
-                                windowIdx = wd_idx,
-                                signal = signal)
-
-################
-## normal method
-## nrpm: CNV normalized reads per million mappable reads
-## beta: transformation to % methylation, posterior mean point estimator
-## logitbeta: logit transformed beta values
-
-nm = c("counts", "nrpm", "beta", "logitbeta")
-qtb <- makeTable(qset,
-                 samples = sample_id,
-                 norm_methods = nm,
-                 CNV = T)
-colnames(qtb)[6:9] <- c("nrpm_qsea", "beta_qsea", "logitbeta_qsea", "CNV_qsea")
-
-
-## QSEA will truncate the bin shorter than ws at the end chromation
-## MEDIPS and MeDStrand will keep that bin by extending it to ws,
-m_id <- paste(meth$chr, meth$start, meth$stop, sep = "_")
-q_id <- paste(qtb$chr, qtb$window_start, qtb$window_end, sep = "_")
-idx <- match(m_id, q_id)
-
-meth_quant <- data.frame(meth[!is.na(idx), ], qtb[, 6:9])
-
-## shared genomic regions and cpg count
-#grange_cpg <- meth_quant[, 1:4]
-#save(grange_cpg, file = paste0("meth_qc_quant/", sample_id, "_Granges_CpGs.Rdata"))
-
-bin_id <- 1:nrow(meth_quant)
-strand <- rep(".", nrow(meth_quant))
-grange_cpg  <- data.frame(meth_quant[, 1:3], bin_id, meth_quant[, 4], strand)
 colnames(grange_cpg)[1] <- "#chr"
-write.table(grange_cpg, file = paste0("meth_qc_quant/", sample_id, "_Granges_CpGs.bed"),
+write.table(grange_cpg, file = paste0("meth_qc_quant_spikein/", sample_id, "_Granges_CpGs.bed"),
             row.names = F, col.names = T, sep = "\t", quote = F)
 
-
 ## export each quantification column as a separate file
-L <- ncol(meth_quant)
-for(i in 5:L) {
-  out <- meth_quant[, i]
-  feature <- colnames(meth_quant)[i]
-  write.table(out, file = paste0("meth_qc_quant/", sample_id, "_", feature, ".txt"),
-             row.names = F, col.names = sample_id, quote = F)
+for(i in 4:5) {
+    out <- meth[, i]
+    feature <- colnames(meth)[i]
+    write.table(out, file = paste0("meth_qc_quant_spikein/", sample_id, "_", feature, ".txt"),
+                row.names = F, col.names = sample_id, quote = F)
 }
 
 # print(object.size(meth_quant),units="auto")
-save(meth_quant, file = paste0("meth_qc_quant/", sample_id, "_meth_quant.RData"))
-
+save(meth, file = paste0("meth_qc_quant_spikein/", sample_id, "_meth_quant.RData"))
 
 }
