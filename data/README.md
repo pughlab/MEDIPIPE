@@ -1,5 +1,6 @@
 ## UMI barcode list
-
+1) NNT_barcodes.txt           ## full list of barcodes for the pattern of NNT
+2) UMI_barcodes_OICR.txt      ## Barcodes list applied by the OICR protocols
 
 ## forge the spike-in BSgenome packages
 1) Spike-in genome
@@ -18,3 +19,7 @@
   ```bash
   $ R CMD build /path/to/pkgdir
   ```  
+
+## Gaps and filters regions to be removed in fragment profile analysis  
+1) gaps_filters_hg19.rdata and gaps_filters_hg38.rdata were produced by the script gaps_filters_hg.R
+2) AB_hg19.rdata and ab_hg38.rdata were HiC_AB_Compartments downloaded & liftover from [here](https://raw.githubusercontent.com/Jfortin1/HiC_AB_Compartments/master/data/hic_compartments_100kb_ebv_2014.txt)
