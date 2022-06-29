@@ -13,13 +13,12 @@ conda env export -c bioconda  --from-history | grep -v "^prefix" >  conda_env.ya
 conda activate tcge-cfmedip-seq-pipeline
 
 
-
 ########################################
 ## generate the DGA plots with dot -Tsvg
 ## for paired-end inputs
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_template.yaml \
-          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/figures/dag.pdf
+          -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/figures/dag.pdf     ## dag_pe | dag_se
 
 
 
@@ -59,12 +58,9 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cores 4 -pn
 
-
-
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_real_run.yaml \
           -p --dag | dot -Tpdf > /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/figures/real_run.pdf
-
 
 ## sbatch /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/sbatch_snakemake_real_run.sh
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \

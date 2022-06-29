@@ -1,4 +1,4 @@
-## This script was developed based on : 
+## This script was developed based on :
 ## https://github.com/cancer-genomics/delfi_scripts
 args = commandArgs(trailingOnly=TRUE)
 
@@ -6,13 +6,14 @@ args = commandArgs(trailingOnly=TRUE)
 sample_id  = args[1]
 sample_bam = args[2]      ## should be indexed paired-end bam file
 bsgenome = args[3]
+data_path = args[4]
 
-## for testing 
+## for testing
 if(FALSE){
 rm(list = ls())
 setwd("/Users/yong/OneDrive - UHN/Projects/TCGE/Hansen_group/Fragment_ratio")
 sample_id = "test"
-sample_bam = "test.bam"          
+sample_bam = "test.bam"
 bsgenome = "BSgenome.Hsapiens.UCSC.hg19"
 }
 
@@ -21,22 +22,22 @@ if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
   library("BSgenome.Hsapiens.UCSC.hg19")
   Hsapiens <- BSgenome.Hsapiens.UCSC.hg19::Hsapiens
   ## load gaps and filters
-  load("gaps_filters_hg19.rdata")
+  load(paste0(data_path, "/data/gaps_filters_hg19.rdata"))
   ## load AB: hi_AB_compartments
-  load("AB_hg19.rdata")
-  
+  load(paste0(data_path, "/data/AB_hg19.rdata"))
+
 } else if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38") {
   library("BSgenome.Hsapiens.UCSC.hg38")
   Hsapiens <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens
   ## load gaps and filters
-  load("gaps_filters_hg38.rdata")
+  load(paste0(data_path, "/data/gaps_filters_hg38.rdata"))
   ## load AB: hi_AB_compartments
-  load("AB_hg38.rdata")
+  load(paste0(data_path, "/data/AB_hg38.rdata"))
 }
 
-## required packages 
+## required packages
 library(GenomicAlignments)
-library(biovizBase)            ##GCcontent function 
+library(biovizBase)            ##GCcontent function
 library(dplyr)
 
 #########################
@@ -60,12 +61,12 @@ galp <- readGAlignmentPairs(sample_bam, param = param)
 fragments <- granges(keepSeqlevels(galp, paste0("chr", 1:22), pruning.mode="coarse"),
                      on.discordant.seqnames="drop")
 
-## filter out extreme values 
+## filter out extreme values
 w.all <- width(fragments)
 q.all <- quantile(w.all, c(0.001, 0.999))
 fragments <- fragments[which(w.all > q.all[1] & w.all < q.all[2])]
 
-## add gc content 
+## add gc content
 fragments$gc <- GCcontent(Hsapiens, unstrand(fragments))
 
 ######################################
@@ -91,7 +92,7 @@ frag.list <- split(fragments, w)
 #AB <- makeGRangesFromDataFrame(AB, keep.extra.columns=TRUE)
 #save(AB, file = "AB_hg38.rdata")
 
-## filter out gaps 
+## filter out gaps
 chromosomes <- GRanges(paste0("chr", 1:22), IRanges(0, seqlengths(Hsapiens)[1:22]))
 tcmeres <- gaps[grepl("centromere|telomere", gaps$type)]
 
@@ -115,7 +116,7 @@ AB <- trim(AB)
 AB$gc <- GCcontent(Hsapiens, AB)
 
 
-######### 
+#########
 olaps <- findOverlaps(fragments, AB)
 bin.list <- split(fragments[queryHits(olaps)], subjectHits(olaps))
 
@@ -148,7 +149,7 @@ medians <- median(w)
 q25 <- quantile(w, 0.25)
 q75 <- quantile(w, 0.75)
 
-## cnt and ratio of short [100-150] and long [151: 220] fragments 
+## cnt and ratio of short [100-150] and long [151: 220] fragments
 short <- rowSums(counts[,1:51])
 long <- rowSums(counts[,52:121])
 ratio <- short/long
@@ -176,24 +177,24 @@ AB$frag.gc <- bingc
 
 ## combine AB and counts matrix
 for(i in 1:ncol(counts)) elementMetadata(AB)[,colnames(counts)[i]] <- counts[,i]
-saveRDS(AB, paste0(sample_id, "_100kb_fragment_profile.RDS"))
+saveRDS(AB, paste0("fragment_profile/", sample_id, "_100kb_fragment_profile.RDS"))
 
 ## transfer to data.frame
 dat <- as_tibble(AB)
 dat$arm <- factor(dat$arm, levels=armlevels)
 
-for (bin_size in c(10, 50))   ## bin size to be 1mb (10*100kb) and 5mb 
+for (bin_size in c(10, 50))   ## bin size to be 1mb (10*100kb) and 5mb
 {
   ## combine adjacent 100kb bins to form bin_size bins. We count starting from
   ## the telomeric end and remove the bin closest to the centromere if it is
   ## smaller than 5mb.
-  dat_s <-  dat %>% 
+  dat_s <-  dat %>%
             group_by(arm) %>%
             mutate(combine = ifelse(grepl("p", arm), ceiling((1:length(arm))/bin_size),
                              ceiling(rev((1:length(arm))/bin_size))))
-  
-  ## summarize by new bin_size 
-  dat_ss <- dat_s %>% 
+
+  ## summarize by new bin_size
+  dat_ss <- dat_s %>%
             group_by(seqnames, arm, combine) %>%
             summarize(short2=sum(short),
               long2=sum(long),
@@ -219,13 +220,23 @@ for (bin_size in c(10, 50))   ## bin size to be 1mb (10*100kb) and 5mb
               binsize = n())
   ## filter out bins less than selected bin_size
   dat_ss <- dat_ss %>% filter(binsize==bin_size);
-  saveRDS( dat_ss, paste0(sample_id, "_", bin_size, "_100kb_fragment_profile.RDS"))
-  
-  ## print out corrected frament ratio 
-  pr_out <- data.frame(dat_ss$seqnames, dat_ss$start, dat_ss$end, dat_ss$ratio.corrected2) 
-  write.table(pr_out, file = paste0(sample_id, "_", bin_size, "_100kb_fragment_profile_GC_corrected_Ratio.txt"),
-              quote = F, row.names = F, col.names = F)
-  
+  saveRDS(dat_ss, paste0("fragment_profile/", sample_id, "_", bin_size, "_100kb_fragment_profile.RDS"))
+
+  ## print out corrected fragment ratio
+  #pr_out <- data.frame(dat_ss$seqnames, dat_ss$start, dat_ss$end, dat_ss$ratio.corrected2)
+  #colnames(pr_out) <- c("chr", "start", "end", sample_id)
+  #write.table(pr_out, file = paste0("fragment_profile/", sample_id, "_", bin_size, "_100kb_fragment_profile_GC_corrected_Ratio.txt"),
+  #            quote = F, row.names = F, col.names = T, sep = "\t")
+
+  ## print out corrected fragment ratio and granges separately
+  bin_id <- 1:nrow(dat_ss)
+  grange_bin  <- data.frame(dat_ss$seqnames, dat_ss$start, dat_ss$end, bin_id, dat_ss$arm)
+  colnames(grange_bin) <- c("#chr", "start", "end", "bin_id", "arm")
+  write.table(grange_bin, file = paste0("fragment_profile/", sample_id, "_", bin_size, "_Granges.bed"),
+              row.names = F, col.names = T, sep = "\t", quote = F)
+
+  ## corrected short/long ratio
+  write.table(dat_ss$ratio.corrected2, file = paste0("fragment_profile/", sample_id, "_", bin_size, "_100kb_fragment_profile_GC_corrected_Ratio.txt"),
+                         row.names = F, col.names = sample_id, quote = F, sep = "\t")
+
 }
-
-

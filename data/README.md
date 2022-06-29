@@ -21,5 +21,5 @@
   ```  
 
 ## Gaps and filters regions to be removed in fragment profile analysis  
-1) gaps_filters_hg19.rdata and gaps_filters_hg38.rdata were produced by the script gaps_filters_hg.R
+1) gaps_filters_hg19.rdata and gaps_filters_hg38.rdata were produced by the script gaps_filters_hg.R, which includs telomeres, centromeres and ENOCDE blacklist regions!!
 2) AB_hg19.rdata and ab_hg38.rdata were HiC_AB_Compartments downloaded & liftover from [here](https://raw.githubusercontent.com/Jfortin1/HiC_AB_Compartments/master/data/hic_compartments_100kb_ebv_2014.txt)

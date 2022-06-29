@@ -21,11 +21,11 @@ bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 ## as bwa_idx_spikein
 spike_in: False
 
-## Edit accordingly when spike_in == True !!!
+## NA or Edit accordingly when spike_in == True !!!
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
-spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
-spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22
-spike_in_chr: AC011717.6 AL132957.1
+spike_in_bsgenome_pkg: NA  # BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
+spike_in_bsgenome: NA      # BSgenome.Athaliana.BAC.F19K16.F24B22
+spike_in_chr: NA           # AC011717.6 AL132957.1
 
 ######################################################
 ## UMI sequence, if it's Ture, barcode list is requied

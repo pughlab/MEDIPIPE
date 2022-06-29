@@ -40,18 +40,21 @@ def get_rule_all_input():
     ## paired-end and spike-in
     if config["paired-end"] and config["spike_in"]:
         mult_qc = "aggregated/QC_pe/multiqc_report.html",
+        fp_gc = "aggregated/fragment_profile_GC_corrected_1mb.tsv",        ## GC corrected fragment profile
 
         ## spike-ins
         spikein_mult_qc = "aggregated_spikein/QC_pe/multiqc_report.html",
         spikein_meth_qc = "aggregated_spikein/meth_qc.txt",
         spikein_meta_quant = "aggregated_spikein/meth_count.txt.gz",
 
-        return  mult_qc + meth_qc + meta_quant + meth_filt + spikein_mult_qc + spikein_meth_qc + spikein_meta_quant
+        return  mult_qc + fp_gc + meth_qc + meta_quant + meth_filt + spikein_mult_qc + spikein_meth_qc + spikein_meta_quant
 
     ## paired-end and no spike-in
     elif config["paired-end"] and config["spike_in"] == False:
         mult_qc = "aggregated/QC_pe/multiqc_report.html",
-        return  mult_qc + meth_qc + meta_quant + meth_filt
+        fp_gc = "aggregated/fragment_profile_GC_corrected_1mb.tsv",        ## GC corrected fragment profile
+
+        return  mult_qc + fp_gc + meth_qc + meta_quant + meth_filt
 
     ## single-end
     elif config["paired-end"] == False:

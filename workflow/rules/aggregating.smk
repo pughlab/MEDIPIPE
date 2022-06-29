@@ -52,6 +52,29 @@ rule multiqc_se:
         "(multiqc {input} -o aggregated/QC_se/) 2> {log}"
 
 
+################################
+## Aggregating fragment profiles
+################################
+rule aggregate_fragment_profile:
+    input:
+        bin1 = expand("fragment_profile/{samples}_10_Granges.bed", samples = SAMPLES["sample_id"][0]),
+        bin5 = expand("fragment_profile/{samples}_50_Granges.bed", samples = SAMPLES["sample_id"][0]),
+        mb1 = expand("fragment_profile/{samples}_10_100kb_fragment_profile_GC_corrected_Ratio.txt", samples = SAMPLES["sample_id"]),
+        mb5 = expand("fragment_profile/{samples}_50_100kb_fragment_profile_GC_corrected_Ratio.txt", samples = SAMPLES["sample_id"])
+    output:
+        bin1 = "aggregated/{sample}_Granges_1mb.bed",
+        bin5 = "aggregated/{sample}_Granges_5mb.bed",
+        mb1 = "aggregated/{sample}_GC_corrected_1mb.tsv",
+        mb5 = "aggregated/{sample}_GC_corrected_5mb.tsv",
+    log:
+        "logs/{sample}_aggregate.log"
+    resources:
+        mem_mb=60000
+    shell:
+        "(cp {input.bin1} {output.bin1} && paste {output.bin1} {input.mb1}  >  {output.mb1} && "
+        " cp {input.bin5} {output.bin5} && paste {output.bin5} {input.mb5}  >  {output.mb5}) 2> {log}"
+
+
 ##############################
 ## Aggregating meth QC reports
 ##############################

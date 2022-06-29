@@ -4,14 +4,14 @@
 #validate(config, "schema/config.schema.yaml")
 #validate(samples, "schema/samples.schema.yaml")
 
-
 #######################
 ## loading rule modules
-include: "rules/common.smk"         ## self-defined functions
-include: "rules/reads_qc.smk"       ## fsatqc & trim-galore for pe and se
-include: "rules/mapping.smk"        ## bwa, samtools, infer intert size
+include: "rules/common.smk"            ## self-defined functions
+include: "rules/reads_qc.smk"          ## fsatqc & trim-galore for pe and se
+include: "rules/mapping.smk"           ## bwa, samtools, infer intert size
+include: "rules/fragment_profile.smk"  ## fragment profile
 include: "rules/meth_qc_quant.smk"     ## medips + medestrand + qsea based qc and quantification
-include: "rules/aggregating.smk"       ## aggregating all samples' QC and quantifications
+include: "rules/aggregating.smk"       ## aggregating all samples' QC, fragment profiles and quantifications
 
 ###################
 ## targeted outputs

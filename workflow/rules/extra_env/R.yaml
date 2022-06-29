@@ -11,4 +11,7 @@ dependencies:
   - bioconductor-bsgenome.hsapiens.ucsc.hg38
   - bioconductor-bsgenome.scerevisiae.ucsc.saccer3
   - bioconductor-annotatr
+  - bioconductor-genomicalignments
+  - bioconductor-biovizbase
   - r-devtools
+  - r-dplyr
