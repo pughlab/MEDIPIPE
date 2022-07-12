@@ -46,6 +46,7 @@ saturation = MEDIPS.saturation(
   BSgenome = bsgenome,
   window_size = ws,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr
 )
 
@@ -62,6 +63,7 @@ coverage = MEDIPS.seqCoverage(
   file = sample_bam,
   BSgenome = bsgenome,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr
 )
 
@@ -151,6 +153,7 @@ cpg_enrich = MEDIPS.CpGenrichNew(
   file = sample_bam,
   BSgenome = bsgenome,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr
 )
 
@@ -258,6 +261,7 @@ mset = MEDIPS.createSet(
           BSgenome = bsgenome,
           paired = ispaired,
           window_size = ws,
+	  uniq = 0,
           chr.select = chr
 )
 
