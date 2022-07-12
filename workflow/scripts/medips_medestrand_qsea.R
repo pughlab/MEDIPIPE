@@ -58,6 +58,7 @@ saturation = MEDIPS.saturation(
   BSgenome = bsgenome,
   window_size = ws,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr
 )
 
@@ -74,6 +75,7 @@ coverage = MEDIPS.seqCoverage(
   file = sample_bam,
   BSgenome = bsgenome,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr
 )
 
@@ -94,6 +96,7 @@ cpg_enrich = MEDIPS.CpGenrich(
   file = sample_bam,
   BSgenome = bsgenome,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr_enrich
 )}
 
@@ -170,6 +173,7 @@ cpg_enrich = MEDIPS.CpGenrichNew(
   file = sample_bam,
   BSgenome = bsgenome,
   paired = ispaired,
+  uniq = 0,
   chr.select = chr
 )
 
@@ -246,6 +250,7 @@ mset = MEDIPS.createSet(
           BSgenome = bsgenome,
           paired = ispaired,
           window_size = ws,
+	  uniq = 0,
           chr.select = chr
 )
 
@@ -286,6 +291,7 @@ medset <-  MeDEStrand.createSet(file = sample_bam,
             BSgenome = bsgenome,
             paired = ispaired,
             window_size = ws,
+	    uniq = 0,
             chr.select = chr)
 
 medcset <- MeDEStrand.countCG(pattern = 'CG', refObj = medset)
@@ -303,9 +309,9 @@ meth <- data.frame(meth, rms_medestrand)
 
 
 
-##########################
-### QSEA: under developing
-##########################
+#########
+### QSEA
+#########
 {
 library(qsea)
 
