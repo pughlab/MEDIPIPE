@@ -412,6 +412,7 @@ bin_id <- 1:nrow(meth_quant)
 strand <- rep(".", nrow(meth_quant))
 grange_cpg  <- data.frame(meth_quant[, 1:3], bin_id, meth_quant[, 4], strand)
 colnames(grange_cpg)[1] <- "#chr"
+colnames(grange_cpg)[5] <- "CpG"
 write.table(grange_cpg, file = paste0("meth_qc_quant/", sample_id, "_Granges_CpGs.bed"),
             row.names = F, col.names = T, sep = "\t", quote = F)
 
