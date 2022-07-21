@@ -4,11 +4,12 @@ args = commandArgs(trailingOnly=TRUE)
 sample_id  = args[1]
 sample_bam = args[2]
 ispaired = as.logical(args[3])
-bsgenome = args[4]
-bsgenome_pkg = args[5]
+ws = as.numeric(args[4])
+bsgenome = args[5]
+bsgenome_pkg = args[6]
 
 # default setting
-ws = 300
+# ws = 300
 
 ## loading libraries
 library(MEDIPS)

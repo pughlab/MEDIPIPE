@@ -92,9 +92,9 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
 
 ###########################################
 ##### testing samples with spike ins ######
-##### PADC
+##### PDAC
 ###########################################
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
-          --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_PADC.yaml \
+          --configfile /cluster/projects/tcge/cell_free_epigenomics/processed_data/config_PDAC.yaml \
           --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cores 4 -pn

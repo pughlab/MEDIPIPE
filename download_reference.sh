@@ -156,13 +156,13 @@ echo -e "enh\t${DEST_DIR}/$(basename ${ENH})" >> ${TSV}
 ## bwa index
 if [[ "${GENOME}" == "hg38" ]]; then
 bwa_idx=$(ls $PWD/bwa_index_${GENOME}/*fna)
-echo -e "bwa_idx_${GENOME}\t${bwa_idx}" >> ${TSV}
+echo -e "bwa_index\t${bwa_idx}" >> ${TSV}
 fi
 
 if [[ "${GENOME}" == "hg19" ]]; then
 mv male.hg19.fa ./bwa_index_${GENOME}
 bwa_idx=$(ls $PWD/bwa_index_${GENOME}/*fa)
-echo -e "bwa_idx\t${bwa_idx}" >> ${TSV}
+echo -e "bwa_index\t${bwa_idx}" >> ${TSV}
 fi
 
 ## bwa index merged

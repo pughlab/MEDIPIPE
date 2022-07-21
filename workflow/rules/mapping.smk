@@ -37,6 +37,7 @@ rule samtools_sort_index_stats:
 ##########################################################################
 ## to filter out unmapped & non-uniquely mapped, not properly paired reads
 ## Deduplication with markup, index and stats deduplicated file
+## No UMIs !!!!
 rule samtools_markdup_stats:
     input:
         "raw_bam/{sample}_sorted.bam"
@@ -50,6 +51,32 @@ rule samtools_markdup_stats:
         "samtools markdup -@ {threads} -r - {output.bam} && "
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
+
+"""
+## to filter out unmapped & non-uniquely mapped, not properly paired reads
+## Deduplication with UMI-tools, which takes UMI and coordinates info into account
+## UMI-tools dosen't support parallel threads yet!!
+## index and stats deduplicated bams
+rule samtools_umi_tools:
+    input:
+        "raw_bam/{sample}_sorted.bam"
+    output:
+        temp(filter_bam = "dedup_bam_pe_umi/{sample}_filter.bam"),
+        dedup_bam = "dedup_bam_pe_umi/{sample}_dedup.bam",
+        umi_stat = "dedup_bam_pe_umi/{sample}_UMI.stats.txt",
+        bam_stat= "dedup_bam_pe_umi/{sample}_dedup.bam.stats.txt"
+    log:
+        "logs/{sample}_dedup_umi.log"
+    conda:
+        "extra_env/UMI-tools.yaml"
+    threads: 12
+    shell:
+        "(samtools view -b -f 2 -F 2828 --threads {threads} {input} > {output.filter_bam} && "
+        "umi_tools dedup --paired -I {output.filter_bam} -S {output.dedup_bam} --output-stats={output.umi_stat} && "
+        "samtools index -@ {threads} {output.dedup_bam} && "
+        "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
+
+"""
 
 ## extract spike-ins bam after deduplication
 ## paired-end only so far

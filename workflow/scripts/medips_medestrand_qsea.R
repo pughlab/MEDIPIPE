@@ -5,10 +5,12 @@ sample_id  = args[1]
 sample_bam = args[2]
 bsgenome = args[3]
 ispaired = as.logical(args[4])
-medestrand_path = args[5]
+ws = as.numeric(args[5])
+medestrand_path = args[6]
+
 
 # default setting
-ws = 300
+# ws = 300
 
 ## loading libraries
 library(MEDIPS)

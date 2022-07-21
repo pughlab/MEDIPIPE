@@ -6,6 +6,7 @@
 
 #######################
 ## loading rule modules
+include: "rules/extra_env.smk"         ## chekc & install all extra env
 include: "rules/common.smk"            ## self-defined functions
 include: "rules/reads_qc.smk"          ## fsatqc & trim-galore for pe and se
 include: "rules/mapping.smk"           ## bwa, samtools, infer intert size

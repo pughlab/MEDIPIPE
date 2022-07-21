@@ -61,6 +61,10 @@ rule extract_barcode:
 
 
 
+
+
+
+
 ###################################
 ### automatically trimming adapters
 ### -q 20  Quality gz_trimming

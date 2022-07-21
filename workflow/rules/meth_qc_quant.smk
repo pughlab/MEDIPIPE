@@ -23,13 +23,14 @@ rule meth_qc_quant:
         ispaired = config["paired-end"],
         bsgenome = config["bsgenome"],
         scr_dir = config["pipeline_dir"],
+        window_size = config["window_size"],
     log:
         "logs/{sample}_medips_medestrand_qsea.log"
     conda:
         "extra_env/R.yaml"
     shell:
         "(Rscript --vanilla {params.scr_dir}/workflow/scripts/medips_medestrand_qsea.R "
-        "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} "
+        "{wildcards.sample} {input} {params.bsgenome} {params.ispaired} {params.window_size} "
         "{params.scr_dir}/workflow/dependencies/MeDEStrand) 2> {log}"
 
 #####################################################################
@@ -52,11 +53,12 @@ rule meth_qc_quant_spikein:
         bsgenome_pkg = config["spike_in_bsgenome_pkg"],
         bsgenome = config["spike_in_bsgenome"],
         scr_dir = config["pipeline_dir"],
+        window_size = config["window_size"],
     log:
         "logs/{sample}_medips_spikein.log"
     conda:
         "extra_env/R.yaml"
     shell:
         "(Rscript --vanilla {params.scr_dir}/workflow/scripts/medips_4spikein.R "
-        "{wildcards.sample} {input} {params.ispaired} "
+        "{wildcards.sample} {input} {params.ispaired} {params.window_size} "
         "{params.bsgenome} {params.scr_dir}/data/{params.bsgenome_pkg}) 2> {log}"

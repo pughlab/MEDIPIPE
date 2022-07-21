@@ -18,7 +18,8 @@ bsgenome: BSgenome.Hsapiens.UCSC.hg38
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein
-spike_in: False
+spike_in: False   #False ## if True, integrate human and spike-ins genome bwa index
+spike_idx: NA     #or eg: /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
 
 ## NA or Edit accordingly when spike_in == True !!!
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
@@ -31,3 +32,7 @@ spike_in_chr: NA           # AC011717.6 AL132957.1
 ## UMI sequence, if it's Ture, barcode list is requied
 add_umi: False       ## set as TRUE for the test run to deploy related conda env
 umi_list: NA
+
+####################
+## other parameters
+window_size: 300       ## methlation bin size

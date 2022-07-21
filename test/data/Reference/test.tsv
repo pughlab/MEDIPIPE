@@ -1,4 +1,4 @@
 genome_name	sacCer3
-bwa_idx	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa
-bwa_idx_spikein  /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa
+bwa_index	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa
+bwa_index_spikein  /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/genome.fa
 blacklist	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/blacklist.bed

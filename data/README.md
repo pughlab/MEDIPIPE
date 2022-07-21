@@ -2,6 +2,11 @@
 1) NNT_barcodes.txt           ## full list of barcodes for the pattern of NNT
 2) UMI_barcodes_OICR.txt      ## Barcodes list applied by the OICR protocols
 
+## spike-ins genomes
+1) SyntheticDNA_Arabidopsis_BACs.fa consists of Arabidopsis BAC (F19K16_F24B22) and [sythetic DNA sequences](https://github.com/hoffmangroup/2020spikein/tree/master/Preprocessing).
+2) SyntheticDNA_Arabidopsis_BACs_seqNames.txt: sequences' name
+
+
 ## forge the spike-in BSgenome packages
 1) Spike-in genome
   ```bash

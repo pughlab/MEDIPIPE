@@ -10,7 +10,7 @@ The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on 
 ### Features
 
 - **Portability**: The pipeline run can be performed across different cluster engines such as SLURM (tested). For other platforms, please refer to [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
-- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis thaliana genome TAIR10. In addition, fasta sequence for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) from Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3 was enclosed in `data/BAC_F19K16_F24B22.fa`. You can also build genome database from FASTA for your custom genomes.
+- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis thaliana genome TAIR10. In addition, spike-in fasta sequences for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) from Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3, and sythetic DNAs were enclosed in `data/SyntheticDNA_Arabidopsis_BACs.fa`. You can also build genome database from FASTA for your custom genomes.
 
 
 ### How it works
@@ -52,8 +52,8 @@ This schematic diagram shows you how pipeline works:
 	$ vim ./workflow/config/config_test_run.yaml
 
 	## run with the internet connection as well
-	## !! it's fine even it will fail at later steps, which is due to current test dataset.
-	## !! sub environments will be installed to tcge-cfmedip-seq-pipeline-sub
+	## !! extra environments will be installed to tcge-cfmedip-seq-pipeline-sub
+	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./workflow/config/config_template.yaml \
 		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
@@ -64,7 +64,7 @@ This schematic diagram shows you how pipeline works:
 ## Input files specification
 
 ### Download reference genome data
-You can download reference genome, pre-build BWA index and annotated regions, such as the blacklist, from ENCODE for hg38 and hg19 via following command line. The manifest file hg38/hg19.tsv will be generated accordingly.
+You can download reference genome, pre-build BWA index and annotated regions, such as the blacklist, from ENCODE for hg38 and hg19 via following command line. The manifest file hg38/hg19.tsv will be generated accordingly. Currently, the ENCODE black list and bwa index are mandatory for the manifest file, which you can also create it based on `workflow/config/hg38_template.tsv` with existing data.
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
