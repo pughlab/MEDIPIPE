@@ -19,4 +19,7 @@ include: "rules/aggregating.smk"       ## aggregating all samples' QC, fragment 
 rule all:
     input:
         get_rule_all_input()     ## for all
+        ## for testing
         #expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES["sample_id"])   ## testing
+        #expand("aggregated/QC_pe/multiqc_report.html")
+        #"extra_env/all_extra_env_installed"

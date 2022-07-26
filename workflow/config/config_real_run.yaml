@@ -2,11 +2,12 @@
 ## PATH for pipeline and working diretory
 pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
 pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline
-workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/res
+workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/umi_spikein     ## arabidopsis only
 
 #################################
 ## Sequencing samples information
-samples: /cluster/projects/tcge/cell_free_epigenomics/test_run/samples-seq_2.tsv
+samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC.tsv
+#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000.tsv   ## for interactive testing
 paired-end: True
 
 ############
@@ -14,25 +15,30 @@ paired-end: True
 ref_files: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/hg38.tsv
 bsgenome: BSgenome.Hsapiens.UCSC.hg38
 
-
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein
-spike_in: False   #False ## if True, integrate human and spike-ins genome bwa index
-spike_idx: NA     #or eg: /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
+spike_in: True   #False ## if True, integrate human and spike-ins genome bwa index
+spike_idx: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/bwa_index_hg38_BAC_F19K16_F24B22/hg38_BAC_F19K16_F24B22.fa
 
 ## NA or Edit accordingly when spike_in == True !!!
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
-spike_in_bsgenome_pkg: NA  # BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
-spike_in_bsgenome: NA      # BSgenome.Athaliana.BAC.F19K16.F24B22
-spike_in_chr: NA           # AC011717.6 AL132957.1
+spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
+spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22
+spike_in_chr: AC011717.6 AL132957.1
 
 
 ######################################################
 ## UMI sequence, if it's Ture, barcode list is requied
-add_umi: False       ## set as TRUE for the test run to deploy related conda env
-umi_list: NA
+add_umi: True       ## set as TRUE for the test run to deploy related conda env
+umi_list: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
 
+## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
+## quotes are needed
+umi_pattern: "'(?P<umi_1>^.{3,4})(?P<discard_1>T)'"       ## for NNNT or NNNNT, where N = [ATCG]
+
+
+#"'(?P<umi_1>^.{})(?P<discard_2>T)'".format('3,4')
 ####################
 ## other parameters
 window_size: 300       ## methlation bin size

@@ -8,10 +8,10 @@ rule multiqc_pe:
         get_fastqc_stats(),
         get_dedup_bam_stats(),
         expand("raw_bam/{samples}_sorted.bam.stats.txt",  samples = SAMPLES["sample_id"]),
-        expand("dedup_bam_pe/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
+        expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
     output:
         # "aggregated/QC_se/multiqc_report.html"      ## only works for stand-alone mode,
-        "aggregated/QC_pe/{sample}.html"              ## works for --cluster as we
+        "aggregated/QC_pe/{sample}.html"              ## works for --cluster as well
     log:
         "logs/{sample}_pe.log"                        ## wildcard.sample needed for --cluster
     conda:

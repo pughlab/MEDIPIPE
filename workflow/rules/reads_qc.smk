@@ -22,10 +22,10 @@ rule rename_fq_pe:
         "cp {input[0]} {output[0]} && "
         "cp {input[1]} {output[1]} "
 
-
+"""
 ###########################################################
 ### extract UMI barcode and add it to FASTQ headers, p.r.n.
-### pair-end unzipped FASTQ only, so far
+### pair-end unzipped FASTQ only with ConsensusCruncher
 ###########################################################
 rule extract_barcode:
     input:
@@ -58,9 +58,71 @@ rule extract_barcode:
         ## change to consistant names for following steps
         "mv {params.outfile}_barcode_R1.fastq.gz  {params.outfile}_R1.fastq.gz && "
         "mv {params.outfile}_barcode_R2.fastq.gz  {params.outfile}_R2.fastq.gz"
+"""
 
 
+###########################################################
+### extract UMI barcode and add it to FASTQ headers, p.r.n.
+### UMI-tools can take care of single-end& pair-end!!
+###########################################################
+## paired-end
+rule umi_tools_extract_pe:
+    input:
+        get_renamed_fastq
+    output:
+        temp("barcoded_fq_pe/{sample}_R1.fastq.gz"),
+        temp("barcoded_fq_pe/{sample}_R2.fastq.gz"),
+        "barcoded_fq_pe/{sample}_extract.log"
+    conda:
+        "extra_env/umi_tools.yaml"
+    params:
+        bcp = lambda wildcards: config["umi_pattern"]        ##  deactivate automatic wildcard expansion of {}
+    shell:
+        "umi_tools extract --extract-method=regex --stdin={input[0]} --read2-in={input[1]} "
+        "--bc-pattern={params.bcp} --bc-pattern2={params.bcp} "
+        "--stdout={output[0]} --read2-out={output[1]} --log={output[2]}"
 
+#singe-end
+rule umi_tools_extract_se:
+    input:
+        get_renamed_fastq
+    output:
+        temp("barcoded_fq_se/{sample}.fastq.gz"),
+        "barcoded_fq_se/{sample}_extract.log"
+    conda:
+        "extra_env/umi_tools.yaml"
+    params:
+        bcp = lambda wildcards: config["umi_pattern"]        ##  deactivate automatic wildcard expansion of {}
+    shell:
+        "umi_tools extract --extract-method=regex "
+        "--stdin={input[0]} --bc-pattern={params.bcp} "
+        "--stdout={output[0]}  --log={output[1]}"
+
+    """
+    #testing
+    cd /cluster/projects/tcge/cell_free_epigenomics/test_dataset/tmp
+    conda activate /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub/c7a4a741ac273673c97b73d288b1b6b0
+
+    ##  "|" doesn't work ...
+    umi_tools extract --extract-method=regex \
+                      --bc-pattern="(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_2>^[ACGT]{3})(?P<discard_2>T)" \
+                      --bc-pattern2="(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_2>^[ACGT]{3})(?P<discard_2>T)" \
+                      --stdin=cfMe_PDAC_PCSI_1010_Ct_T_1000_R1.fastq.gz  \
+                      --read2-in=cfMe_PDAC_PCSI_1010_Ct_T_1000_R2.fastq.gz  \
+                      --stdout=cfMe_PDAC_PCSI_1010_Ct_T_1000_R1_barcoded.fastq.gz \
+                      --read2-out=cfMe_PDAC_PCSI_1010_Ct_T_1000_R2_barcoded.fastq.gz \
+                      --log=log.txt
+
+    ## similar to ConsensusCruncher's reuslt, floated a little bit,
+    umi_tools extract --extract-method=regex \
+                      --bc-pattern="(?P<umi_1>^.{3,4})(?P<discard_1>T)" \
+                      --bc-pattern2="(?P<umi_1>^.{3,4})(?P<discard_1>T)" \
+                      --stdin=cfMe_PDAC_PCSI_1010_Ct_T_1000_R1.fastq.gz  \
+                      --read2-in=cfMe_PDAC_PCSI_1010_Ct_T_1000_R2.fastq.gz  \
+                      --stdout=cfMe_PDAC_PCSI_1010_Ct_T_1000_R1_barcoded.fastq.gz \
+                      --read2-out=cfMe_PDAC_PCSI_1010_Ct_T_1000_R2_barcoded.fastq.gz \
+                      --log=log.txt
+    """
 
 
 

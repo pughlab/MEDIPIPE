@@ -17,6 +17,7 @@ wd = config["workdir"]
 pipe_dir = config["pipeline_dir"]
 umi_list = config["umi_list"]
 
+
 ## read in refrence files' info
 REF = pd.read_csv(config["ref_files"], sep="\t", header = None, index_col = 0)
 blacklist = REF.loc["blacklist"][1]   ## ENCODE blacklist
@@ -102,17 +103,18 @@ def get_renamed_fastq(wildcards):
 ## get fastq for TRIM GALORE
 ## UMI extracted for paired-end reads, if exist
 def get_fastq_4trim(wildcards):
-    if config["paired-end"] == False:
-        return "renamed_fq/{}.fastq.gz".format(wildcards.sample)
-    elif config["add_umi"]:
-        R1 = "barcoded_fq/{}_R1.fastq.gz".format(wildcards.sample),
-        R2 = "barcoded_fq/{}_R2.fastq.gz".format(wildcards.sample),
+    if config["paired-end"] and config["add_umi"]:
+        R1 = "barcoded_fq_pe/{}_R1.fastq.gz".format(wildcards.sample),
+        R2 = "barcoded_fq_pe/{}_R2.fastq.gz".format(wildcards.sample),
         return R1 + R2
-    else:
+    elif config["paired-end"] and config["add_umi"] == False:
         R1 = "renamed_fq/{}_R1.fastq.gz".format(wildcards.sample),
         R2 = "renamed_fq/{}_R2.fastq.gz".format(wildcards.sample),
         return R1 + R2
-
+    elif config["paired-end"] == False and config["add_umi"]:
+        return "barcoded_fq_se/{}.fastq.gz".format(wildcards.sample)
+    else:
+        return "renamed_fq/{}.fastq.gz".format(wildcards.sample)
 
 ##################################
 ## get trimmed fastq files for BWA
@@ -127,10 +129,15 @@ def get_trimmed_fastq(wildcards):
 ########################################
 ## get dedup bam files for meth_qc_quant
 def get_dedup_bam(wildcards):
-    if config["paired-end"]:
+    if config["paired-end"] and config["add_umi"]:
+        return "dedup_bam_umi_pe/{}_dedup.bam".format(wildcards.sample)
+    elif config["paired-end"] and config["add_umi"] == False:
         return "dedup_bam_pe/{}_dedup.bam".format(wildcards.sample)
+    elif config["paired-end"] == False and config["add_umi"]:
+        return "dedup_bam_umi_se/{}_dedup.bam".format(wildcards.sample)
     else:
         return "dedup_bam_se/{}_dedup.bam".format(wildcards.sample)
+
 
 ## spike-ins
 def get_dedup_bam_spikein(wildcards):
@@ -152,13 +159,19 @@ def get_fastqc_stats():
          r1_trim = expand("fastqc_se/{samples}_trimmed_fastqc.zip", samples = SAMPLES["sample_id"]),
          return r1_raw + r1_trim
 
+
 ######################
 ## get dedup bam stats
 def get_dedup_bam_stats():
-    if config["paired-end"]:
+    if config["paired-end"] and config["add_umi"]:
+        return expand("dedup_bam_umi_pe/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
+    elif config["paired-end"] and config["add_umi"] == False:
         return expand("dedup_bam_pe/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
+    elif config["paired-end"] == False and config["add_umi"]:
+        return expand("dedup_bam_umi_se/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
     else:
         return expand("dedup_bam_se/{samples}_dedup.bam.stats.txt", samples = SAMPLES["sample_id"])
+
 
 
 #########################
@@ -166,7 +179,7 @@ def get_dedup_bam_stats():
 def get_spikein_stats():
     if config["spike_in"] and config["paired-end"]:
         bam_stats = expand("dedup_bam_spikein/{samples}_spikein.bam.stats.txt", samples = SAMPLES["sample_id"]),
-        frag_stats = expand("dedup_bam_spikein/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
+        frag_stats = expand("fragment_size_spikein/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
         return bam_stats + frag_stats
     else:
         return ""

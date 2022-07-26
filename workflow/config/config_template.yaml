@@ -33,6 +33,10 @@ spike_in_chr: NA           # AC011717.6 AL132957.1
 add_umi: False      ## set as TRUE when UMI added in library prep
 umi_list: NA        ## eg: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
 
+## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
+## quotes are needed
+# umi_pattern: "'(?P<umi_1>^[ATCG]{2})(?P<discard_1>T)'"       ## for NNT, where N = [ATCG]
+umi_pattern: "'(?P<umi_1>^.{3,4})(?P<discard_1>T)'"       ## for NNNT or NNNNT, where N = [ATCG]
 
 ####################
 ## other parameters
