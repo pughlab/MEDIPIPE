@@ -94,7 +94,7 @@ rule samtools_umi_tools_pe:
         "logs/{sample}_dedup_umi.log"
     shell:
         "(umi_tools dedup --paired -I {input} -S {params.tmp_bam} --umi-separator=':' --output-stats={params.stat_prefix} && "
-        "samtools view -b -F 2820 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
+        "samtools view -b -f 2 -F 2828 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
         "samtools index -@ {threads} {output.dedup_bam}  && rm {params.tmp_bam} && "
         "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
 
@@ -116,7 +116,7 @@ rule samtools_umi_tools_se:
         "logs/{sample}_dedup_umi.log"
     shell:
         "(umi_tools dedup --paired -I {input} -S {params.tmp_bam} --umi-separator=':' --output-stats={params.stat_prefix} && "
-        "samtools view -b -f 2 -F 2828 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
+        "samtools view -b -F 2820 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
         "samtools index -@ {threads} {output.dedup_bam}  && rm {params.tmp_bam} && "
         "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
 
