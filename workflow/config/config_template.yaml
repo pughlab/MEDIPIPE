@@ -10,6 +10,11 @@ workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv
 paired-end: True
 
+## whether to aggreate samples
+aggreate: True       ## True or False
+## all processed samples to be aggreated
+samples_aggr: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_aggr.tsv
+
 ##################################################################
 ## reference
 ## !! Make sure the PATHs in the test.tsv file are consistent !!

@@ -1,14 +1,15 @@
 ################################################################################
 ## multiQC
 ## using files instead of directories to ensure all samples qc metircs included
+## require sample_aggr.tsv !!!
 ################################################################################
 rule multiqc_pe:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
         get_fastqc_stats(),
         get_dedup_bam_stats(),
-        expand("raw_bam/{samples}_sorted.bam.stats.txt",  samples = SAMPLES["sample_id"]),
-        expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
+        expand("raw_bam/{samples}_sorted.bam.stats.txt",  samples = SAMPLES_AGGR["sample_id"]),
+        expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES_AGGR["sample_id"]),
     output:
         # "aggregated/QC_se/multiqc_report.html"      ## only works for stand-alone mode,
         "aggregated/QC_pe/{sample}.html"              ## works for --cluster as well
@@ -41,7 +42,7 @@ rule multiqc_se:
         ## using "samples" to distinguish from wildcard.sample !!!
         get_fastqc_stats(),
         get_dedup_bam_stats(),
-        expand("raw_bam/{samples}_sorted.bam.stats.txt",  samples = SAMPLES["sample_id"]),
+        expand("raw_bam/{samples}_sorted.bam.stats.txt",  samples = SAMPLES_AGGR["sample_id"]),
     output:
         "aggregated/QC_se/{sample}.html"
     log:
@@ -57,10 +58,10 @@ rule multiqc_se:
 ################################
 rule aggregate_fragment_profile:
     input:
-        bin1 = expand("fragment_profile/{samples}_10_Granges.bed", samples = SAMPLES["sample_id"][0]),
-        bin5 = expand("fragment_profile/{samples}_50_Granges.bed", samples = SAMPLES["sample_id"][0]),
-        mb1 = expand("fragment_profile/{samples}_10_100kb_fragment_profile_GC_corrected_Ratio.txt", samples = SAMPLES["sample_id"]),
-        mb5 = expand("fragment_profile/{samples}_50_100kb_fragment_profile_GC_corrected_Ratio.txt", samples = SAMPLES["sample_id"])
+        bin1 = expand("fragment_profile/{samples}_10_Granges.bed", samples = SAMPLES_AGGR["sample_id"][0]),
+        bin5 = expand("fragment_profile/{samples}_50_Granges.bed", samples = SAMPLES_AGGR["sample_id"][0]),
+        mb1 = expand("fragment_profile/{samples}_10_100kb_fragment_profile_GC_corrected_Ratio.txt", samples = SAMPLES_AGGR["sample_id"]),
+        mb5 = expand("fragment_profile/{samples}_50_100kb_fragment_profile_GC_corrected_Ratio.txt", samples = SAMPLES_AGGR["sample_id"])
     output:
         bin1 = "aggregated/{sample}_Granges_1mb.bed",
         bin5 = "aggregated/{sample}_Granges_5mb.bed",
@@ -81,7 +82,7 @@ rule aggregate_fragment_profile:
 rule aggregate_meth_qc:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
-        expand("meth_qc_quant/{samples}_meth_qc.txt", samples = SAMPLES["sample_id"])
+        expand("meth_qc_quant/{samples}_meth_qc.txt", samples = SAMPLES_AGGR["sample_id"])
     output:
         "aggregated/{sample}.txt"
     shell:
@@ -93,7 +94,7 @@ rule aggregate_meth_qc:
 rule aggregate_meth_qc_spikein:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
-        expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES["sample_id"])
+        expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES_AGGR["sample_id"])
     output:
         "aggregated_spikein/{sample}.txt"
     shell:
@@ -108,15 +109,15 @@ rule aggregate_meth_qc_spikein:
 rule aggregate_meth_quant:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
-        bin  = expand("meth_qc_quant/{samples}_Granges_CpGs.bed", samples = SAMPLES["sample_id"][0]),
-        cnt = expand("meth_qc_quant/{samples}_count.txt", samples = SAMPLES["sample_id"]),
-        rpkm  = expand("meth_qc_quant/{samples}_rpkm.txt", samples = SAMPLES["sample_id"]),
-        CNV_qsea   = expand("meth_qc_quant/{samples}_CNV_qsea.txt", samples = SAMPLES["sample_id"]),
-        beta_qsea  = expand("meth_qc_quant/{samples}_beta_qsea.txt", samples = SAMPLES["sample_id"]),
-        nrpm_qsea  = expand("meth_qc_quant/{samples}_nrpm_qsea.txt", samples = SAMPLES["sample_id"]),
-        rms_medips = expand("meth_qc_quant/{samples}_rms_medips.txt", samples = SAMPLES["sample_id"]),
-        rms_medestrand  = expand("meth_qc_quant/{samples}_rms_medestrand.txt", samples = SAMPLES["sample_id"]),
-        logitbeta_qsea  = expand("meth_qc_quant/{samples}_logitbeta_qsea.txt", samples = SAMPLES["sample_id"]),
+        bin  = expand("meth_qc_quant/{samples}_Granges_CpGs.bed", samples = SAMPLES_AGGR["sample_id"][0]),
+        cnt = expand("meth_qc_quant/{samples}_count.txt", samples = SAMPLES_AGGR["sample_id"]),
+        rpkm  = expand("meth_qc_quant/{samples}_rpkm.txt", samples = SAMPLES_AGGR["sample_id"]),
+        CNV_qsea   = expand("meth_qc_quant/{samples}_CNV_qsea.txt", samples = SAMPLES_AGGR["sample_id"]),
+        beta_qsea  = expand("meth_qc_quant/{samples}_beta_qsea.txt", samples = SAMPLES_AGGR["sample_id"]),
+        nrpm_qsea  = expand("meth_qc_quant/{samples}_nrpm_qsea.txt", samples = SAMPLES_AGGR["sample_id"]),
+        rms_medips = expand("meth_qc_quant/{samples}_rms_medips.txt", samples = SAMPLES_AGGR["sample_id"]),
+        rms_medestrand  = expand("meth_qc_quant/{samples}_rms_medestrand.txt", samples = SAMPLES_AGGR["sample_id"]),
+        logitbeta_qsea  = expand("meth_qc_quant/{samples}_logitbeta_qsea.txt", samples = SAMPLES_AGGR["sample_id"]),
     output:
         bin  = "aggregated/{sample}_bin.bed",
         cnt  = "aggregated/{sample}_count.txt.gz",
@@ -147,9 +148,9 @@ rule aggregate_meth_quant:
 rule aggregate_meth_quant_spikein:
     input:
         ## using "samples" to distinguish from wildcard.sample !!!
-        bin  = expand("meth_qc_quant_spikein/{samples}_Granges_CpGs.bed", samples = SAMPLES["sample_id"][0]),
-        cnt = expand("meth_qc_quant_spikein/{samples}_count.txt", samples = SAMPLES["sample_id"]),
-        rpkm  = expand("meth_qc_quant_spikein/{samples}_rpkm.txt", samples = SAMPLES["sample_id"]),
+        bin  = expand("meth_qc_quant_spikein/{samples}_Granges_CpGs.bed", samples = SAMPLES_AGGR["sample_id"][0]),
+        cnt = expand("meth_qc_quant_spikein/{samples}_count.txt", samples = SAMPLES_AGGR["sample_id"]),
+        rpkm  = expand("meth_qc_quant_spikein/{samples}_rpkm.txt", samples = SAMPLES_AGGR["sample_id"]),
     output:
         bin  = "aggregated_spikein/{sample}_bin.bed",
         cnt  = "aggregated_spikein/{sample}_count.txt.gz",

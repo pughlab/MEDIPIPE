@@ -6,9 +6,14 @@ workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/umi_spikein     #
 
 #################################
 ## Sequencing samples information
-samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC.tsv
-#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000.tsv   ## for interactive testing
+#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC.tsv
+samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000.tsv   ## for interactive testing
 paired-end: True
+
+## whether to aggreate samples
+aggreate: False    ## True or False
+## all processed samples to be aggreated
+samples_aggr: NA #/cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000_aggr.tsv
 
 ############
 ## reference
