@@ -47,7 +47,7 @@ This schematic diagram shows you how pipeline works:
 	$ conda activate tcge-cfmedip-seq-pipeline
 
 	## then edit ./workflow/config/config_pe_template.yaml accordingly
-	## edit the PATHs in test.tsv and sample_pe.tsv as well!!!
+	## edit the PATHs in ./test/data/Reference/test.tsv and ./test/data/sample_pe.tsv as well!!!
 	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ vim ./workflow/config/config_test_run.yaml
 
