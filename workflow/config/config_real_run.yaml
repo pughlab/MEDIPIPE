@@ -2,18 +2,23 @@
 ## PATH for pipeline and working diretory
 pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
 pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline
-workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/umi_spikein     ## arabidopsis only
+workdir: /cluster/projects/tcge/cell_free_epigenomics/test_run/HNSC     ## arabidopsis only
 
 #################################
 ## Sequencing samples information
-#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC.tsv
-samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000.tsv   ## for interactive testing
+## PDAC
+#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC.tsv         ## umi-tools deup : AssertionError: not all umis are the same length(!):  7 - 8
+#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000.tsv   ## for interactive testing
+
+## HNSC
+samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/HNSC.tsv         ## umi-tools deup : AssertionError: not all umis are the same length(!):  7 - 8
+#samples: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/HNSC_1000.tsv   ## for interactive testing
 paired-end: True
 
 ## whether to aggreate samples
-aggreate: False    ## True or False
+aggreate: True    ## True or False
 ## all processed samples to be aggreated
-samples_aggr: NA #/cluster/projects/tcge/cell_free_epigenomics/test_dataset/PDAC_1000_aggr.tsv
+samples_aggr: /cluster/projects/tcge/cell_free_epigenomics/test_dataset/HNSC_aggr.tsv
 
 ############
 ## reference
@@ -23,7 +28,7 @@ bsgenome: BSgenome.Hsapiens.UCSC.hg38
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein
-spike_in: True   #False ## if True, integrate human and spike-ins genome bwa index
+spike_in: False   #False ## if True, integrate human and spike-ins genome bwa index
 spike_idx: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/bwa_index_hg38_BAC_F19K16_F24B22/hg38_BAC_F19K16_F24B22.fa
 
 ## NA or Edit accordingly when spike_in == True !!!
@@ -36,14 +41,13 @@ spike_in_chr: AC011717.6 AL132957.1
 ######################################################
 ## UMI sequence, if it's Ture, barcode list is requied
 add_umi: True       ## set as TRUE for the test run to deploy related conda env
-umi_list: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
+#umi_list: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
 
 ## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
 ## quotes are needed
-umi_pattern: "'(?P<umi_1>^.{3,4})(?P<discard_1>T)'"       ## for NNNT or NNNNT, where N = [ATCG]
+#umi_pattern: "'(?P<umi_1>^.{3,4})(?P<discard_1>T)'"       ## for NNNT or NNNNT, where N = [ATCG] : OICR
+umi_pattern: "'(?P<umi_1>^.{2})(?P<discard_1>T)'"          ## HNSC NNT
 
-
-#"'(?P<umi_1>^.{})(?P<discard_2>T)'".format('3,4')
 ####################
 ## other parameters
 window_size: 300       ## methlation bin size

@@ -1,3 +1,3 @@
 sample_id	R1	R2
-A	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_L001_R1.fastq.gz	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_L001_R2.fastq.gz
+A	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_L001_R1.fastq.gz,/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_L002_R1.fastq.gz	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_L001_R2.fastq.gz,/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/A_L002_R2.fastq.gz
 B	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_L001_R1.fastq.gz	/cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Fastq/B_L001_R2.fastq.gz

@@ -20,6 +20,5 @@ rule all:
     input:
         get_rule_all_input()     ## for all
         ## for testing
-        #expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES["sample_id"])   ## testing
+        #expand("dedup_bam_umi_pe/{samples}_dedup.bam", samples = SAMPLES["sample_id"])   ## testing
         #expand("aggregated/QC_pe/multiqc_report.html")
-        #"extra_env/all_extra_env_installed"

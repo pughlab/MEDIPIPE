@@ -1,28 +1,31 @@
 ###############################################
 ## get a copy of raw fq and rename to smaple ID
+## or combined multiple lanes data and rename
 ## to make sure consistant wildcard.sample
 ################################################
 ## single end
-rule rename_fq_se:
+rule merge_and_rename_fq_se:
     input:
-        get_raw_fastq
+        get_raw_fastq_se
     output:
         temp("renamed_fq/{sample}.fastq.gz"),
     shell:
-        "cp {input} {output} "
+        "cat {input} > {output}"
 
 ## paired-end
-rule rename_fq_pe:
+rule merge_and_rename_fq_pe:
     input:
-        get_raw_fastq
+        R1 = get_raw_fastq_pe_R1,
+        R2 = get_raw_fastq_pe_R2,
     output:
         temp("renamed_fq/{sample}_R1.fastq.gz"),
         temp("renamed_fq/{sample}_R2.fastq.gz"),
     shell:
-        "cp {input[0]} {output[0]} && "
-        "cp {input[1]} {output[1]} "
+        "cat {input.R1} > {output[0]} && "
+        "cat {input.R2} > {output[1]} "
 
 """
+## Obsoleted !!
 ###########################################################
 ### extract UMI barcode and add it to FASTQ headers, p.r.n.
 ### pair-end unzipped FASTQ only with ConsensusCruncher

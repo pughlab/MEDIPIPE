@@ -26,7 +26,7 @@ else:
 ## paths for pipeline and/or reference data
 wd = config["workdir"]
 pipe_dir = config["pipeline_dir"]
-umi_list = config["umi_list"]
+#umi_list = config["umi_list"]
 
 
 ## read in refrence files' info
@@ -125,6 +125,26 @@ def get_bwa_index():
 
 ################################################################
 ##  get raw fastq files for rename to consistant wildcard.sample
+def get_raw_fastq_se(wildcards):
+    if config["paired-end"] == False:
+        return SAMPLES.loc[wildcards.sample]["R1"].split(",")
+    else:
+        return ""
+
+def get_raw_fastq_pe_R1(wildcards):
+    if config["paired-end"]:
+        return SAMPLES.loc[wildcards.sample]["R1"].split(",")
+    else:
+        return ""
+
+def get_raw_fastq_pe_R2(wildcards):
+    if config["paired-end"]:
+        return SAMPLES.loc[wildcards.sample]["R2"].split(",")
+    else:
+        return ""
+
+"""
+# unable to merge lanes
 def get_raw_fastq(wildcards):
     if config["paired-end"]:
         R1 = SAMPLES.loc[wildcards.sample]["R1"],
@@ -132,7 +152,7 @@ def get_raw_fastq(wildcards):
         return R1 + R2
     else:
         return SAMPLES.loc[wildcards.sample]["R1"]
-
+"""
 
 #######################################################
 ##  get renamed fastq for FASQC and barcode extraction
