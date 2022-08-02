@@ -48,7 +48,8 @@ This schematic diagram shows you how pipeline works:
 
 	## then edit ./workflow/config/config_template.yaml accordingly, mainly change the PATHs!
 	## edit the PATHs in ./test/data/Reference/test.tsv and ./test/data/sample_pe.tsv as well!!!
-  $ cd tcge-cfmedip-seq-pipeline
+
+	$ cd tcge-cfmedip-seq-pipeline
 	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ vim ./workflow/config/config_template.yaml
 
