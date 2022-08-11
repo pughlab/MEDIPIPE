@@ -16,7 +16,7 @@ conda activate tcge-cfmedip-seq-pipeline
 
 ## mkdir for cluster submission logs
 ## defined in .workflow/config/cluster_std_err.json
-cd  /cluster/projects/tcge/cell_free_epigenomics/test_run/umi_spikein
+cd  /cluster/projects/tcge/cell_free_epigenomics/test_run/HNSC
 mkdir -p logs_cluster
 
 ## unlock workdir just in case the folder locked accidently before

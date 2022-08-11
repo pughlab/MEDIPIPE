@@ -35,7 +35,6 @@ rule samtools_sort_index_stats:
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
 
-
 ##########################################################################
 ## to filter out unmapped & non-uniquely mapped, not properly paired reads
 ## Deduplication with markup, index and stats deduplicated file
@@ -95,10 +94,19 @@ rule samtools_umi_tools_pe:
     shell:
         ## --umi-separator='_' by default, could also be ":"
         ## umi tools --method='unique', by default is 'directional'
+        ##  -output-stats can slow down the processing and increase memory usage considerably
         "(umi_tools dedup --paired -I {input} -S {params.tmp_bam} --umi-separator='_' --output-stats={params.stat_prefix} && "
         "samtools view -b -f 2 -F 2828 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
         "samtools index -@ {threads} {output.dedup_bam}  && rm {params.tmp_bam} && "
         "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
+
+"""
+# testing for OICR UMI
+        umi_tools dedup --paired -I PCSI_1010_Lv_M_sorted.bam -S dedup.bam --umi-separator='_' --output-stats=dedup
+
+"""
+
+
 
 
 ## single-end with UMIs: different samtools filtering flags
