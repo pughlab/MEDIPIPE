@@ -47,7 +47,7 @@ add_umi: True       ## set as TRUE for the test run to deploy related conda env
 ## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
 ## quotes are needed
 #umi_pattern: "'(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3})(?P<discard_1>T)'"       ## PDAC; for NNNT or NNNNT, where N = [ATCG] : OICR : extract works, not dedup
-#umi_pattern: "'(?P<umi_1>^[ACGT]{4})(?P<discard_1>[ATCG])'"        ## alternative for OICR UMIs, add all first 5 bases as the UMI
+#umi_pattern: "'(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)'"        ## ensure same UMI length for dedup
 umi_pattern: "'(?P<umi_1>^[ACGT]{2})(?P<discard_1>T)'"        # "'(?P<umi_1>^.{2})(?P<discard_1>T)'"          ## HNSC NNT
 
 ####################
