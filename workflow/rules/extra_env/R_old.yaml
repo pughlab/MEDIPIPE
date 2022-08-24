@@ -6,9 +6,9 @@ channels:
 dependencies:
   - bioconductor-medips
   - bioconductor-qsea
-  #- bioconductor-spiky   ## confiliction with hsapiens.ucsc.hg38=1.4.3
+  - bioconductor-spiky
   - bioconductor-bsgenome.hsapiens.ucsc.hg19
-  - bioconductor-bsgenome.hsapiens.ucsc.hg38=1.4.3
+  - bioconductor-bsgenome.hsapiens.ucsc.hg38
   - bioconductor-bsgenome.scerevisiae.ucsc.saccer3
   - bioconductor-annotatr
   - bioconductor-genomicalignments

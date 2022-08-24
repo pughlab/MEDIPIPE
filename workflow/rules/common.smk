@@ -26,6 +26,7 @@ else:
 ## paths for pipeline and/or reference data
 wd = config["workdir"]
 pipe_dir = config["pipeline_dir"]
+env_dir = config["pipeline_env"]  #${CONDA_PREFIX} dosen't work
 #umi_list = config["umi_list"]
 
 

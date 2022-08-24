@@ -45,23 +45,38 @@ This schematic diagram shows you how pipeline works:
 
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
-
-	## then edit ./workflow/config/config_template.yaml accordingly, mainly change the PATHs!
-	## edit the PATHs in ./test/data/Reference/test.tsv and ./test/data/sample_pe.tsv as well!!!
-
 	$ cd tcge-cfmedip-seq-pipeline
-	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
+
+
+  ## Prepare reference file and INPUT sample(s) info file
+	## template provided for testing, PATHs changes needed
+  $ vim ./test/data/Reference/test.tsv
+	$ vim ./test/data/sample_pe.tsv
+
+  ## Prepare config yaml file according to the template
+	## PATHs changes needed for testing
+  $ mkdir ../tcge-cfmedip-seq-pipeline-test-run
+	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
 	$ vim ./workflow/config/config_template.yaml
 
 	## run with the internet connection as well
 	## !! extra environments will be installed to tcge-cfmedip-seq-pipeline-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
 	$ snakemake --snakefile ./workflow/Snakefile \
-	            --configfile ./workflow/config/config_template.yaml \
-		    --conda-prefix /path/to/conda/envs/tcge-cfmedip-seq-pipeline-sub \
+	            --configfile ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml \
+		    --conda-prefix ${CONDA_PREFIX}-sub \
 	            --use-conda --cores 4 -p
 	```
 
+5) Run on HPCs
+
+	You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
+
+	```bash
+	## template is based on SLURM
+	$ vim ./workflow/sbatch_snakemake_template.sh
+	$ sbatch ./workflow/sbatch_snakemake_template.sh
+	```
 
 ## Input files specification
 
@@ -93,13 +108,3 @@ $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 |  A	|  full/path/to/A_L001_R1.fq.gz |                              |
 |  B	|  full/path/to/B_L001_R1.fq.gz | full/path/to/B_L001_R2.fq.gz |
 |  C  |  path/C_L001_R1.fq.gz,path/C_L002_R1.fq.gz | path/C_L001_R2.fq.gz,path/C_L002_R2.fq.gz  |
-
-
-## Run on HPCs
-
-You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
-
-```bash
-$ vim ./workflow/sbatch_snakemake_template.sh
-$ sbatch ./workflow/sbatch_snakemake_template.sh
-```

@@ -33,7 +33,7 @@ snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/wo
 
 snakemake --snakefile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/Snakefile \
           --configfile /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/config/config_template.yaml \
-          --use-conda  --conda-prefix /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
+          --use-conda  --conda-prefix ~/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub \
           --cores 4 -pn
 
 ## sbatch /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/workflow/sbatch_snakemake_template.sh

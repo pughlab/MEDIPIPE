@@ -169,7 +169,7 @@ rule insert_size:
         txt = "fragment_size/{sample}_insert_size_metrics.txt",
         hist = "fragment_size/{sample}_insert_size_histogram.pdf"
     params:
-        pipeline_env = config["pipeline_env"]
+        pipeline_env = env_dir
     log:
         "logs/{sample}_picard_insert_size.log"
     shell:
@@ -187,7 +187,7 @@ rule insert_size_spikein:
         txt = "fragment_size_spikein/{sample}_insert_size_metrics.txt",
         hist = "fragment_size_spikein/{sample}_insert_size_histogram.pdf"
     params:
-        pipeline_env = config["pipeline_env"]
+        pipeline_env = env_dir
     log:
         "logs/{sample}_picard_insert_size_spikein.log"
     shell:
