@@ -46,18 +46,15 @@ This schematic diagram shows you how pipeline works:
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
 	$ cd tcge-cfmedip-seq-pipeline
-
   ## Prepare reference file and INPUT sample(s) info file
 	## template provided for testing, PATHs changes needed
   $ vim ./test/data/Reference/test.tsv
 	$ vim ./test/data/sample_pe.tsv
-
   ## Prepare config yaml file according to the template
 	## PATHs changes needed for testing
   $ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
 	$ vim ./workflow/config/config_template.yaml
-
 	## run with the internet connection as well
 	## !! extra environments will be installed to tcge-cfmedip-seq-pipeline-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
