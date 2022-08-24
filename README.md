@@ -47,7 +47,6 @@ This schematic diagram shows you how pipeline works:
 	$ conda activate tcge-cfmedip-seq-pipeline
 	$ cd tcge-cfmedip-seq-pipeline
 
-
   ## Prepare reference file and INPUT sample(s) info file
 	## template provided for testing, PATHs changes needed
   $ vim ./test/data/Reference/test.tsv
