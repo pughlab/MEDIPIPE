@@ -55,7 +55,7 @@ This schematic diagram shows you how pipeline works:
 	
   	## Prepare config yaml file according to the template
 	## PATHs changes needed for testing
-      $ mkdir ../tcge-cfmedip-seq-pipeline-test-run
+	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
 	$ vim ./workflow/config/config_template.yaml
 	
