@@ -49,7 +49,6 @@ This schematic diagram shows you how pipeline works:
 	
   	## Prepare reference file and INPUT sample(s) info file
 	## template provided for testing, PATHs changes needed
-	
   	$ vim ./test/data/Reference/test.tsv
 	$ vim ./test/data/sample_pe.tsv
 	
