@@ -2,7 +2,7 @@
 
 ## Intoduction
 
-The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environment. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to quality metrics and methylation quantification/estimation matrixes. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The pipeline can be applied to individual sample, as well as to aggregate multiple samples' to create matrixes of QC metrics; fragment profiles and methylation quantifications.
+The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to quality metrics and methylation quantification/estimation matrixes. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The pipeline can be applied to individual sample, as well as to aggregate multiple samples' to create matrixes of QC metrics; fragment profiles and methylation quantifications.
 
 The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on some prior work of Wenbin Ye, [Eric Zhao](https://github.com/pughlab/cfMeDIP-seq-analysis-pipeline). The pipeline is available on [COBE](https://www.pmcobe.ca/pipeline/624d0bb4002b11003426f7d8) as well.
 
@@ -29,7 +29,6 @@ This schematic diagram shows you how pipeline works:
 2) Git clone this pipeline.
 	```bash
 	$ cd
-	## token request for private repository
 	$ git clone https://github.com/yzeng-lol/tcge-cfmedip-seq-pipeline
 	```
 
@@ -41,7 +40,7 @@ This schematic diagram shows you how pipeline works:
 	```
 
 4) Test run
-	> **IMPORTANT**: sub envs will be created during the test run.
+	> **IMPORTANT**: sub envs will be created during the test run. Again, make sure you have internet!!.
 
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
@@ -53,7 +52,7 @@ This schematic diagram shows you how pipeline works:
 	$ vim ./test/data/sample_pe.tsv
 	
   	## Prepare config yaml file according to the template
-	## PATHs changes needed for testing
+	## Specifically, you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
 	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
 	$ vim ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
@@ -69,7 +68,7 @@ This schematic diagram shows you how pipeline works:
 
 5) Run on HPCs
 
-	You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
+	You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. The file must have the appropriate path names and parameters given the input data. The example here is for submitting a job with SLURM, however, this template could be modified according to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
 
 	```bash
 	## template is based on SLURM
@@ -80,7 +79,7 @@ This schematic diagram shows you how pipeline works:
 ## Input files specification
 
 ### Download reference genome data
-You can download reference genome, pre-build BWA index and annotated regions, such as the blacklist, from ENCODE for hg38 and hg19 via following command line. The manifest file hg38/hg19.tsv will be generated accordingly. Currently, the ENCODE black list and bwa index are mandatory for the manifest file, which you can also create it based on `workflow/config/hg38_template.tsv` with existing data.
+You can download reference genome, pre-build BWA index and annotated regions (e.g., blacklist) from ENCODE for hg38 and hg19 on the command line. The manifest file hg38/hg19.tsv will be generated accordingly. Currently, the ENCODE black list and bwa index are mandatory for the manifest file, which you can also create it based on `workflow/config/hg38_template.tsv` with existing data.
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
@@ -95,7 +94,7 @@ If your sequencing libraries come with spike-ins, you can build new aligner inde
 $ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 ```
 
-### config file for input samples
+### Set up the config file for input samples
 > **IMPORTANT**: READ THROUGH THE GUIDE INFORMATION IN THE TEMPLATE TO MAKE A CORRECT CONFIG FILE. ESPECIALLY FOR SAMPLES WITH SPIKE-IN CONTROL AND/OR UMI BARCODES.
 
 1) A config YAML file specifies all the input parameters and files that are necessary for successfully running this pipeline. This includes a specification of the path to the genome reference files. Please make sure to specify absolute paths rather than relative paths in your config files. The template can be found at [here](./workflow/config/config_template.yaml)
