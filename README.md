@@ -1,6 +1,6 @@
 # TCGE cfMeDIP-seq pipeline
 
-## Intoduction
+## Intoduction (v1.0.0-beta since 2022-08-30)
 
 The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to quality metrics and methylation quantification/estimation matrixes. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The pipeline can be applied to individual sample, as well as to aggregate multiple samples' to create matrixes of QC metrics; fragment profiles and methylation quantifications.
 
