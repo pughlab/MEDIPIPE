@@ -20,7 +20,7 @@ This schematic diagram shows you how pipeline works:
 
 ## Installation
 
-1) Make sure that you have a Conda-based Python3 distribution. The recommended choice is [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge). In case you don't use Mambafore, you can always install [Mamba](https://github.com/mamba-org/mamba) into any other Conda-based Python distribution with:
+1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html). The installation of [Mamba](https://github.com/mamba-org/mamba) is recommended since it is better at handling environments and installations:
 
 	```bash
 	$ conda install -n base -c conda-forge mamba
@@ -45,18 +45,18 @@ This schematic diagram shows you how pipeline works:
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
 	$ cd tcge-cfmedip-seq-pipeline
-	
+
   	## Prepare reference file and INPUT sample(s) info file
 	## template provided for testing, PATHs changes needed
   	$ vim ./test/data/Reference/test.tsv
 	$ vim ./test/data/sample_pe.tsv
-	
+
   	## Prepare config yaml file according to the template
 	## Specifically, you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
 	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
 	$ vim ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
-	
+
 	## run with the internet connection as well
 	## !! extra environments will be installed to tcge-cfmedip-seq-pipeline-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
