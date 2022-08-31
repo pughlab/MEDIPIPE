@@ -20,7 +20,7 @@ This schematic diagram shows you how pipeline works:
 
 ## Installation
 
-1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html). The installation of [Mamba](https://github.com/mamba-org/mamba) is recommended since it is better at handling environments and installations:
+1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended since it is better at handling environments and installations:
 
 	```bash
 	$ conda install -n base -c conda-forge mamba
