@@ -10,6 +10,7 @@ rule install_all_extra_env:
         'extra_env/ConsensusCruncher_{sample}',
         'extra_env/multiQC_{sample}',
         'extra_env/R_{sample}',
+        'extra_env/r_aggr_qc_report_{sample}',
         'extra_env/umi_tools_{sample}'
     output:
         'extra_env/all_extra_env_{sample}'    ## using wildcard works for --cluster as well
@@ -48,6 +49,15 @@ rule install_extra_env_4_R:
         'extra_env/R.yaml'
     shell:
         'touch {output}'
+
+rule install_extra_env_4_R_aggr_qc_report:
+    output:
+        'extra_env/r_aggr_qc_report_{sample}'
+    conda:
+        'extra_env/R_aggr_qc_report.yaml'
+    shell:
+        'touch {output}'
+
 
 rule install_extra_env_4_umi_tools:
     output:

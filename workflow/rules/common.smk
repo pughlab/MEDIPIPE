@@ -46,7 +46,8 @@ def get_rule_all_input():
     extra_env = "extra_env/all_extra_env_installed",
 
     ## fixed outputs
-    meth_qc = "aggregated/meth_qc.txt",
+    #meth_qc = "aggregated/meth_qc.txt",
+    aggr_qc = "aggregated/aggr_qc_report.html",
     meta_quant = "aggregated/meth_count.txt.gz",
     meth_filt = "autos_bfilt/meth_count_autos_bfilt.txt.gz",
 
@@ -54,7 +55,7 @@ def get_rule_all_input():
     ## aggregated outputs for SAMPLES_aggr
     ## paired-end and spike-in
     if config["aggreate"] and config["paired-end"] and config["spike_in"]:
-        mult_qc = "aggregated/QC_pe/multiqc_report.html",
+        #mult_qc = "aggregated/QC_pe/multiqc_report.html",
 
         ## spike-ins
         spikein_mult_qc = "aggregated_spikein/QC_pe/multiqc_report.html",
@@ -64,20 +65,21 @@ def get_rule_all_input():
         #fragment profiles
         fp_gc = "aggregated/fragment_profile_GC_corrected_1mb.tsv",        ## GC corrected fragment profile
 
-        return  extra_env + mult_qc + meth_qc + meta_quant + meth_filt + spikein_mult_qc + spikein_meth_qc + spikein_meta_quant + fp_gc
+        return  extra_env + aggr_qc + meta_quant + meth_filt + spikein_mult_qc + spikein_meth_qc + spikein_meta_quant + fp_gc
 
     ## paired-end and no spike-in
     elif config["aggreate"] and config["paired-end"] and config["spike_in"] == False:
-        mult_qc = "aggregated/QC_pe/multiqc_report.html",
+        #mult_qc = "aggregated/QC_pe/multiqc_report.html",
         fp_gc = "aggregated/fragment_profile_GC_corrected_1mb.tsv",        ## GC corrected fragment profile
 
-        return  extra_env + mult_qc + meth_qc + meta_quant + meth_filt + fp_gc
+        return  extra_env + aggr_qc + meta_quant + meth_filt + fp_gc
 
     ## single-end
     elif config["aggreate"] and config["paired-end"] == False:
-        mult_qc = "aggregated/QC_se/multiqc_report.html",
-        return extra_env + mult_qc + meth_qc + meta_quant + meth_filt
+        #mult_qc = "aggregated/QC_se/multiqc_report.html",
+        return extra_env + aggr_qc + meta_quant + meth_filt
 
+    # + mult_qc + meth_qc
 
     #####################################
     ## outputs for each individual sample
@@ -254,3 +256,19 @@ def get_spikein_stats():
         return bam_stats + frag_stats
     else:
         return ""
+
+
+############################
+## get aggregated qc results
+def get_aggr_qc_stats():
+    if config["paired-end"]:
+        fastqc = "aggregated/QC_pe/multiqc_data/multiqc_fastqc.txt",
+        sam_stats = "aggregated/QC_pe/multiqc_data/multiqc_samtools_stats.txt",
+        frag_stats = "aggregated/QC_pe/multiqc_data/multiqc_picard_insertSize.txt",
+        meth_qc = "aggregated/meth_qc.txt",
+        return fastqc + sam_stats + frag_stats + meth_qc
+    else:
+         fastqc = "aggregated/QC_se/multiqc_data/multiqc_fastqc.txt",
+         sam_stats = "aggregated/QC_se/multiqc_data/multiqc_samtools_stats.txt",
+         meth_qc = "aggregated/meth_qc.txt",
+         return fastqc + sam_stats + meth_qc
