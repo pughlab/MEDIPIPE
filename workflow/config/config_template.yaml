@@ -26,19 +26,19 @@ bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein
-spike_in: False   #False ## if True, integrate human and spike-ins genome bwa index
-spike_idx: NA     #or eg: /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
+spike_in: True   #False ## if True, integrate human and spike-ins genome bwa index
+spike_idx: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/bwa_index_hg38_BAC_F19K16_F24B22/hg38_BAC_F19K16_F24B22.fa  # NA or /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
 
 ## NA or Edit accordingly when spike_in == True !!!
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
-spike_in_bsgenome_pkg: NA  # BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
-spike_in_bsgenome: NA      # BSgenome.Athaliana.BAC.F19K16.F24B22
-spike_in_chr: NA           # AC011717.6 AL132957.1
+spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
+spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22
+spike_in_chr: AC011717.6 AL132957.1
 
 ######################################################
 ## UMI sequence, if it's Ture, barcode list is requied
-add_umi: False      ## set as TRUE when UMI added in library prep
-umi_list: NA        ## eg: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
+add_umi: True      ## set as TRUE when UMI added in library prep
+#umi_list: NA        ## eg: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
 
 ## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
 ## quotes are needed

@@ -1,0 +1,12 @@
+name: R_aggr_qc_report
+channels:
+  - conda-forge
+dependencies:
+  - r-dplyr
+  - r-ggplot2
+  - r-plotly
+  - r-gapminder
+  - r-knitr
+  - r-heatmaply
+  - r-rmarkdown
+  - r-corrplot

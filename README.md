@@ -1,6 +1,6 @@
 # TCGE cfMeDIP-seq pipeline
 
-## Intoduction (v1.0.0-beta since 2022-08-30)
+## Intoduction (Under development based on v1.0.0-beta)
 
 The Cancer Genetics and Epigenetics (TCGE) program cfMeDIP-seq pipeline is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to quality metrics and methylation quantification/estimation matrixes. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The pipeline can be applied to individual sample, as well as to aggregate multiple samples' to create matrixes of QC metrics; fragment profiles and methylation quantifications.
 
@@ -20,7 +20,7 @@ This schematic diagram shows you how pipeline works:
 
 ## Installation
 
-1) Make sure that you have a Conda-based Python3 distribution. The recommended choice is [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge). In case you don't use Mambafore, you can always install [Mamba](https://github.com/mamba-org/mamba) into any other Conda-based Python distribution with:
+1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended since it is better at handling environments and installations:
 
 	```bash
 	$ conda install -n base -c conda-forge mamba
@@ -45,18 +45,18 @@ This schematic diagram shows you how pipeline works:
 	```bash
 	$ conda activate tcge-cfmedip-seq-pipeline
 	$ cd tcge-cfmedip-seq-pipeline
-	
+
   	## Prepare reference file and INPUT sample(s) info file
 	## template provided for testing, PATHs changes needed
   	$ vim ./test/data/Reference/test.tsv
 	$ vim ./test/data/sample_pe.tsv
-	
+
   	## Prepare config yaml file according to the template
 	## Specifically, you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
 	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
 	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
 	$ vim ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
-	
+
 	## run with the internet connection as well
 	## !! extra environments will be installed to tcge-cfmedip-seq-pipeline-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.

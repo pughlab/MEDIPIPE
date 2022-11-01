@@ -12,7 +12,11 @@ rule multiqc_pe:
         expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES_AGGR["sample_id"]),
     output:
         # "aggregated/QC_se/multiqc_report.html"      ## only works for stand-alone mode,
-        "aggregated/QC_pe/{sample}.html"              ## works for --cluster as well
+        "aggregated/QC_pe/{sample}_report.html",
+        ## inputs for aggr_qc_report
+        "aggregated/QC_pe/multiqc_data/{sample}_fastqc.txt",
+        "aggregated/QC_pe/multiqc_data/{sample}_samtools_stats.txt",
+        "aggregated/QC_pe/multiqc_data/{sample}_picard_insertSize.txt"
     log:
         "logs/{sample}_pe.log"                        ## wildcard.sample needed for --cluster
     conda:
@@ -44,13 +48,66 @@ rule multiqc_se:
         get_dedup_bam_stats(),
         expand("raw_bam/{samples}_sorted.bam.stats.txt",  samples = SAMPLES_AGGR["sample_id"]),
     output:
-        "aggregated/QC_se/{sample}.html"
+        "aggregated/QC_se/{sample}.html",
+        ## inputs for aggr_qc_report
+        "aggregated/QC_se/multiqc_data/{sample}_fastqc.txt",
+        "aggregated/QC_se/multiqc_data/{sample}_samtools_stats.txt"
     log:
         "logs/{sample}_se.log"
     conda:
         "extra_env/multiQC.yaml"
     shell:
         "(multiqc {input} -o aggregated/QC_se/) 2> {log}"
+
+
+
+##############################
+## Aggregating meth QC reports
+##############################
+rule aggregate_meth_qc:
+    input:
+        ## using "samples" to distinguish from wildcard.sample !!!
+        expand("meth_qc_quant/{samples}_meth_qc.txt", samples = SAMPLES_AGGR["sample_id"])
+    output:
+        "aggregated/{sample}_qc.txt"
+    shell:
+        "head -n 1 {input[0]} > {output} && "
+        "cat {input} | sed '1~2d' >> {output}"
+
+
+## Aggregating spike-ins QC
+rule aggregate_meth_qc_spikein:
+    input:
+        ## using "samples" to distinguish from wildcard.sample !!!
+        expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES_AGGR["sample_id"])
+    output:
+        "aggregated_spikein/{sample}.txt"
+    shell:
+        "head -n 1 {input[0]} > {output} && "
+        "cat {input} | sed '1~2d' >> {output}"
+
+###############################################
+## Aggregating QC reports: matrix + html report
+###############################################
+rule aggregate_qc_report:
+    input:
+        get_aggr_qc_stats()
+    output:
+        "aggregated/{sample}_qc_report.html"
+    resources:
+        mem_mb=60000
+    params:
+        scr_dir = config["pipeline_dir"],
+        out_dir = config['workdir'],
+        aggr = config["samples_aggr"],
+        ispaired = config["paired-end"],
+    log:
+        "logs/{sample}_qc_report.log"
+    conda:
+        "extra_env/R_aggr_qc_report.yaml"
+    shell:
+        "(Rscript --vanilla {params.scr_dir}/workflow/scripts/aggr_qc_report.R "
+        "{params.aggr} {params.ispaired} {input} {params.scr_dir} {params.out_dir}) 2> {log}"
 
 
 ################################
@@ -74,32 +131,6 @@ rule aggregate_fragment_profile:
     shell:
         "(cp {input.bin1} {output.bin1} && paste {output.bin1} {input.mb1}  >  {output.mb1} && "
         " cp {input.bin5} {output.bin5} && paste {output.bin5} {input.mb5}  >  {output.mb5}) 2> {log}"
-
-
-##############################
-## Aggregating meth QC reports
-##############################
-rule aggregate_meth_qc:
-    input:
-        ## using "samples" to distinguish from wildcard.sample !!!
-        expand("meth_qc_quant/{samples}_meth_qc.txt", samples = SAMPLES_AGGR["sample_id"])
-    output:
-        "aggregated/{sample}.txt"
-    shell:
-        "head -n 1 {input[0]} > {output} && "
-        "cat {input} | sed '1~2d' >> {output}"
-
-
-## Aggregating spike-ins QC
-rule aggregate_meth_qc_spikein:
-    input:
-        ## using "samples" to distinguish from wildcard.sample !!!
-        expand("meth_qc_quant_spikein/{samples}_meth_qc.txt", samples = SAMPLES_AGGR["sample_id"])
-    output:
-        "aggregated_spikein/{sample}.txt"
-    shell:
-        "head -n 1 {input[0]} > {output} && "
-        "cat {input} | sed '1~2d' >> {output}"
 
 
 ##########################################
