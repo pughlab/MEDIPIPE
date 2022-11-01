@@ -7,7 +7,7 @@
 rule install_all_extra_env:
     input:
         'extra_env/bedtools_{sample}',
-        'extra_env/ConsensusCruncher_{sample}',
+        #'extra_env/ConsensusCruncher_{sample}',     ## replaced by UMI-tools
         'extra_env/multiQC_{sample}',
         'extra_env/R_{sample}',
         'extra_env/r_aggr_qc_report_{sample}',
@@ -57,7 +57,6 @@ rule install_extra_env_4_R_aggr_qc_report:
         'extra_env/R_aggr_qc_report.yaml'
     shell:
         'touch {output}'
-
 
 rule install_extra_env_4_umi_tools:
     output:

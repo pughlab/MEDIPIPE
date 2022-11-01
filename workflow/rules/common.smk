@@ -146,16 +146,6 @@ def get_raw_fastq_pe_R2(wildcards):
     else:
         return ""
 
-"""
-# unable to merge lanes
-def get_raw_fastq(wildcards):
-    if config["paired-end"]:
-        R1 = SAMPLES.loc[wildcards.sample]["R1"],
-        R2 = SAMPLES.loc[wildcards.sample]["R2"],
-        return R1 + R2
-    else:
-        return SAMPLES.loc[wildcards.sample]["R1"]
-"""
 
 #######################################################
 ##  get renamed fastq for FASQC and barcode extraction
@@ -244,7 +234,6 @@ def get_dedup_bam_stats():
         return expand("dedup_bam_umi_se/{samples}_dedup.bam.stats.txt", samples = SAMPLES_AGGR["sample_id"])
     else:
         return expand("dedup_bam_se/{samples}_dedup.bam.stats.txt", samples = SAMPLES_AGGR["sample_id"])
-
 
 
 #########################

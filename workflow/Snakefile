@@ -1,9 +1,3 @@
-#############
-## validation
-## will be added
-#validate(config, "schema/config.schema.yaml")
-#validate(samples, "schema/samples.schema.yaml")
-
 #######################
 ## loading rule modules
 include: "rules/extra_env.smk"         ## chekc & install all extra env
@@ -20,5 +14,5 @@ rule all:
     input:
         get_rule_all_input()     ## for all
         ## for testing
-        #expand("dedup_bam_umi_pe/{samples}_dedup.bam", samples = SAMPLES["sample_id"])   ## testing
+        #expand("dedup_bam_umi_pe/{samples}_dedup.bam", samples = SAMPLES["sample_id"])
         #expand("aggregated/QC_pe/multiqc_report.html")

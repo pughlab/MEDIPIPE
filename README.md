@@ -83,7 +83,7 @@ You can download reference genome, pre-build BWA index and annotated regions (e.
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
-$ ./download_reference.sh [GENOME] [DEST_DIR]
+$ ./workflow/download_reference.sh [GENOME] [DEST_DIR]
 ```
 
 ### Build reference genomes index
@@ -91,7 +91,7 @@ If your sequencing libraries come with spike-ins, you can build new aligner inde
 
 ```bash
 ## eg: ./build_reference_index.sh hg38 ./data/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /your/genome/data/path/hg38
-$ ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
+$ ./workflow/build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 ```
 
 ### Set up the config file for input samples

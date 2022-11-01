@@ -101,26 +101,6 @@ rule umi_tools_extract_se:
         "--stdin={input[0]} --bc-pattern={params.bcp} "
         "--stdout={output[0]}  --log={output[1]}"
 
-"""
-#testing
-cd /cluster/projects/tcge/cell_free_epigenomics/test_dataset/tmp
-conda activate /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline-sub/c7a4a741ac273673c97b73d288b1b6b0
-
-## NNT : "(?P<umi_1>^[ACGT]{2})(?P<discard_1>T)"
-## NNNT & NNN[ACG]T : "(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3})(?P<discard_1>T)"   ## doesn't work for dedup
-## NNNT & NNN[ACG]T for dedup: "(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)"         ## ensure same UMI length
-
-umi_tools extract --extract-method=regex \
-                  --bc-pattern="(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)" \
-                  --bc-pattern2="(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)" \
-                  --stdin=cfMe_PDAC_PCSI_1010_Ct_T_1000_R1.fastq.gz  \
-                  --read2-in=cfMe_PDAC_PCSI_1010_Ct_T_1000_R2.fastq.gz  \
-                  --stdout=cfMe_PDAC_PCSI_1010_Ct_T_1000_R1_barcoded.fastq.gz \
-                  --read2-out=cfMe_PDAC_PCSI_1010_Ct_T_1000_R2_barcoded.fastq.gz \
-                  --log=log.txt
-
-"""
-
 
 ###################################
 ### automatically trimming adapters
@@ -162,7 +142,6 @@ rule trim_galore_pe:
     shell:
         "(trim_galore -q 20 --stringency 3 --length 20 "
         "--cores {threads} --paired -o {params.path} {input}) 2> {log}"
-
 
 
 ##########################################

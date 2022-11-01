@@ -2,5 +2,5 @@ name: umi_tools
 channels:
   - bioconda
 dependencies:
-  - umi_tools
-  - samtools
+  - umi_tools=1.0.1
+  - samtools=1.9

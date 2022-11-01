@@ -15,7 +15,6 @@ rule bwa_map:
         "(bwa mem -M -t {threads}  {input} | "
         "samtools view -Sb --threads {threads} - > {output}) 2> {log}"
 
-
 ##########################################
 ## raw bams without any filtering
 ## fixmate, sort, index and stats bam file
@@ -71,7 +70,6 @@ rule samtools_markdup_stats_se:
         "samtools index -@ {threads} {output.bam} && "
         "samtools stats -@ {threads} {output.bam} > {output.stat})"
 
-
 #######################################################################################
 ## with UMIs !!!!
 ## Deduplication with UMI-tools, which takes both UMI and coordinates info into account
@@ -100,15 +98,6 @@ rule samtools_umi_tools_pe:
         "samtools index -@ {threads} {output.dedup_bam}  && rm {params.tmp_bam} && "
         "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
 
-"""
-# testing for OICR UMI
-        umi_tools dedup --paired -I PCSI_1010_Lv_M_sorted.bam -S dedup.bam --umi-separator='_' --output-stats=dedup
-
-"""
-
-
-
-
 ## single-end with UMIs: different samtools filtering flags
 rule samtools_umi_tools_se:
     input:
@@ -130,7 +119,6 @@ rule samtools_umi_tools_se:
         "samtools view -b -F 2820 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
         "samtools index -@ {threads} {output.dedup_bam}  && rm {params.tmp_bam} && "
         "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
-
 
 
 ############################################
@@ -156,11 +144,9 @@ rule samtools_spikein_sort_index_stats:
         "samtools  stats -@ {threads} {output.bam} > {output.stat})"
 
 
-
 ############################################
 ## infer insert size for paired-end reads_qc
 ############################################
-
 rule insert_size:
     input:
         #"dedup_bam_pe/{sample}_dedup.bam"
@@ -179,7 +165,6 @@ rule insert_size:
 
 
 ## spike-ins
-
 rule insert_size_spikein:
     input:
         "dedup_bam_spikein/{sample}_spikein.bam"

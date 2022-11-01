@@ -60,7 +60,6 @@ rule multiqc_se:
         "(multiqc {input} -o aggregated/QC_se/) 2> {log}"
 
 
-
 ##############################
 ## Aggregating meth QC reports
 ##############################
@@ -74,7 +73,6 @@ rule aggregate_meth_qc:
         "head -n 1 {input[0]} > {output} && "
         "cat {input} | sed '1~2d' >> {output}"
 
-
 ## Aggregating spike-ins QC
 rule aggregate_meth_qc_spikein:
     input:
@@ -85,6 +83,7 @@ rule aggregate_meth_qc_spikein:
     shell:
         "head -n 1 {input[0]} > {output} && "
         "cat {input} | sed '1~2d' >> {output}"
+
 
 ###############################################
 ## Aggregating QC reports: matrix + html report
