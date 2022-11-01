@@ -1,9 +1,5 @@
 # MEDIPIPE: (cf)MeDIP-seq Data QC and Analysis Pipeline
 
-![GitHub](https://github.com/yzeng-lol/MEDIPIPE)
-
-
-
 ## Intoduction(v1.0.0)
 
 The MEDIPIPE is designed for automated end-to-end quality control and processing of cfMeDIP-seq and MeDIP-seq data. The pipeline was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. The pipeline can be run on compute clusters with job submission engines as well as on stand along machines. The pipeline starts from the raw FASTQ files all the way to quality metrics and methylation quantification/estimation matrixes. The pipeline supports both signle-end and paired-end sequencing data with or without spike-in/UMI sequences. The pipeline can be applied to individual sample, as well as to aggregate multiple samples' to create matrixes of QC metrics; fragment profiles and methylation quantifications.
@@ -20,7 +16,7 @@ The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on 
 ### How it works
 This schematic diagram shows you how pipeline works:
 
-<img src="figures/cfmedip-seq-pipeline.png" alt="Schematic_diagram" style="width:100.0%" />
+<img src="figures/MEDIPIPE_Flowchart.png" alt="Schematic_diagram" style="width:100.0%" />
 
 ## Installation
 
@@ -33,12 +29,12 @@ This schematic diagram shows you how pipeline works:
 2) Git clone this pipeline.
 	```bash
 	$ cd
-	$ git clone https://github.com/yzeng-lol/tcge-cfmedip-seq-pipeline
+	$ git clone https://github.com/yzeng-lol/MEDIPIPE
 	```
 
 3) Install pipeline\'s core enviroments
 	```bash
-	$ cd tcge-cfmedip-seq-pipeline
+	$ cd MEDIPIPE
 	$ conda activate base
 	$ mamba env create --file conda_env.yaml
 	```
@@ -47,8 +43,8 @@ This schematic diagram shows you how pipeline works:
 	> **IMPORTANT**: sub envs will be created during the test run. Again, make sure you have internet!!.
 
 	```bash
-	$ conda activate tcge-cfmedip-seq-pipeline
-	$ cd tcge-cfmedip-seq-pipeline
+	$ conda activate MEDIPIPE
+	$ cd MEDIPIPE
 
   	## Prepare reference file and INPUT sample(s) info file
 	## template provided for testing, PATHs changes needed
@@ -57,15 +53,15 @@ This schematic diagram shows you how pipeline works:
 
   	## Prepare config yaml file according to the template
 	## Specifically, you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
-	$ mkdir ../tcge-cfmedip-seq-pipeline-test-run
-	$ cp ./workflow/config/config_template.yaml ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
-	$ vim ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml
+	$ mkdir ../MEDIPIPE-test-run
+	$ cp ./workflow/config/config_template.yaml ../MEDIPIPE-test-run/config_testrun.yaml
+	$ vim ../MEDIPIPE-test-run/config_testrun.yaml
 
 	## run with the internet connection as well
-	## !! extra environments will be installed to tcge-cfmedip-seq-pipeline-sub
+	## !! extra environments will be installed to MEDIPIPE-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
 	$ snakemake --snakefile ./workflow/Snakefile \
-	            --configfile ../tcge-cfmedip-seq-pipeline-test-run/config_testrun.yaml \
+	            --configfile ../MEDIPIPE-test-run/config_testrun.yaml \
 		    --conda-prefix ${CONDA_PREFIX}-sub \
 	            --use-conda --cores 4 -p
 	```
