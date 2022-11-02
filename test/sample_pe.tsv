@@ -1,3 +1,3 @@
 sample_id	R1	R2
-A	/path/to/MEDIPIPE/test/Fastq/A_L001_R1.fastq.gz,/path/to/MEDIPIPE/test/Fastq/A_L002_R1.fastq.gz	/path/to/MEDIPIPE/test/Fastq/A_L001_R2.fastq.gz,/path/to/MEDIPIPE/test/Fastq/A_L002_R2.fastq.gz
-B	/path/to/MEDIPIPE/test/Fastq/B_L001_R1.fastq.gz	/path/to/MEDIPIPE/test/Fastq/B_L001_R2.fastq.gz
+A	/path/to/Fastq/A_L001_R1.fastq.gz,/path/to/Fastq/A_L002_R1.fastq.gz	/path/to/Fastq/A_L001_R2.fastq.gz,/path/to/Fastq/A_L002_R2.fastq.gz
+B	/path/to/Fastq/B_L001_R1.fastq.gz	/path/to/Fastq/B_L001_R2.fastq.gz

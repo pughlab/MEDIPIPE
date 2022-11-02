@@ -1,3 +1,3 @@
 sample_id R1
-C	/path/to/MEDIPIPE/test/Fastq/C_L001.fastq.gz
-D	/path/to/MEDIPIPE/test/Fastq/D_L001.fastq.gz
+C	/path/to/Fastq/C_L001.fastq.gz
+D	/path/to/Fastq/D_L001.fastq.gz
