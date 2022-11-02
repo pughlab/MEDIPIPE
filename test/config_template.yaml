@@ -9,18 +9,18 @@ workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
 ################################################
 ## Sequencing samples information
 ## !! Make sure the PATHs in the sample.tsv file are consistent !!
-samples: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_pe.tsv
+samples: /path/to/sample_pe_template.tsv
 paired-end: True
 
 ## whether to aggreate samples
 aggreate: True       ## True or False
 ## all processed samples to be aggreated
-samples_aggr: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/sample_aggr.tsv
+samples_aggr: /path/to/sample_aggr_template.tsv
 
 ##################################################################
 ## reference
 ## !! Make sure the PATHs in the test.tsv file are consistent !!
-ref_files: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/test/data/Reference/test.tsv
+ref_files: /path/to/reference_template.tsv
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 
 ##################################################################################################

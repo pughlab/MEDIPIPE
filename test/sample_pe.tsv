@@ -1,3 +1,0 @@
-sample_id	R1	R2
-A	/cluster/home/yzeng/snakemake/MEDIPIPE/test/Fastq/A_L001_R1.fastq.gz,/cluster/home/yzeng/snakemake/MEDIPIPE/test/Fastq/A_L002_R1.fastq.gz	/cluster/home/yzeng/snakemake/MEDIPIPE/test/Fastq/A_L001_R2.fastq.gz,/cluster/home/yzeng/snakemake/MEDIPIPE/test/Fastq/A_L002_R2.fastq.gz
-B	/cluster/home/yzeng/snakemake/MEDIPIPE/test/Fastq/B_L001_R1.fastq.gz	/cluster/home/yzeng/snakemake/MEDIPIPE/test/Fastq/B_L001_R2.fastq.gz

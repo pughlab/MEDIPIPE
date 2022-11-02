@@ -1,0 +1,4 @@
+genome_name	sacCer3
+bwa_index	/path/to/Reference/genome.fa
+bwa_index_spikein  /path/to/Reference/genome.fa
+blacklist	/path/to/Reference/blacklist.bed
