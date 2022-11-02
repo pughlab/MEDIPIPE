@@ -51,17 +51,16 @@ This schematic diagram shows you how pipeline works:
 	## For testing run, you can simply run the command below to specify PATHs for testing
   $ sed -i 's,/path/to/,'"$PWD"/',g' *template.*
 
-	## Specify the config file you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
 	$ cp ./workflow/config/config_template.yaml ../MEDIPIPE-test-run/config_testrun.yaml
 	$ vim ../MEDIPIPE-test-run/config_testrun.yaml
 
 	## run with the internet connection as well
 	## !! extra environments will be installed to MEDIPIPE-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
-	$ snakemake --snakefile ./workflow/Snakefile \
-	            --configfile ../MEDIPIPE-test-run/config_testrun.yaml \
+	$ snakemake --snakefile ../MEDIPIPE/workflow/Snakefile \
+	            --configfile ./config_template.yaml \
 		    --conda-prefix ${CONDA_PREFIX}_extra_env \
-	            --use-conda --cores 4 -p
+	            --use-conda --cores 4 -pn
 	```
 
 5) Run on HPCs

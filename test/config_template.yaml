@@ -1,5 +1,6 @@
-!! replace all /path/to/ to your own specific FULL PATHs !!
-!! setup all other parameters accordingly !!
+## !! replace all /path/to/ to your own specific FULL PATHs !!
+## !! Specify the config file you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
+## !! setup all other parameters accordingly !!
 
 #########################################
 ## PATH for pipeline and working diretor
