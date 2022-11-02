@@ -32,7 +32,7 @@ This schematic diagram shows you how pipeline works:
 	$ git clone https://github.com/yzeng-lol/MEDIPIPE
 	```
 
-3) Install pipeline\'s core enviroments
+3) Install pipeline\'s core enviroment
 	```bash
 	$ cd MEDIPIPE
 	$ conda activate base
@@ -40,7 +40,7 @@ This schematic diagram shows you how pipeline works:
 	```
 
 4) Test run
-	> **IMPORTANT**: sub envs will be created during the test run. Again, make sure you have internet!!.
+	> **IMPORTANT**: extra environments will be created during the test run. Again, make sure you have internet!!.
 
 	```bash
 	$ conda activate MEDIPIPE
@@ -62,7 +62,7 @@ This schematic diagram shows you how pipeline works:
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ../MEDIPIPE-test-run/config_testrun.yaml \
-		    --conda-prefix ${CONDA_PREFIX}-sub \
+		    --conda-prefix ${CONDA_PREFIX}_extra_env \
 	            --use-conda --cores 4 -p
 	```
 
