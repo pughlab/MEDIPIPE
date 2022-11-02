@@ -1,4 +1,4 @@
 genome_name	sacCer3
-bwa_index	/path/to/Reference/genome.fa
-bwa_index_spikein  /path/to/Reference/genome.fa
-blacklist	/path/to/Reference/blacklist.bed
+bwa_index	/cluster/home/yzeng/snakemake/MEDIPIPE/test/Reference/genome.fa
+bwa_index_spikein  /cluster/home/yzeng/snakemake/MEDIPIPE/test/Reference/genome.fa
+blacklist	/cluster/home/yzeng/snakemake/MEDIPIPE/test/Reference/blacklist.bed
