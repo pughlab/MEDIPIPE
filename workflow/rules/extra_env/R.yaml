@@ -4,12 +4,11 @@ channels:
   - bioconda
   - r
 dependencies:
-  - bioconductor-medips
-  - bioconductor-qsea
-  - bioconductor-spiky
+  - bioconductor-bsgenome.scerevisiae.ucsc.saccer3
   - bioconductor-bsgenome.hsapiens.ucsc.hg19
   - bioconductor-bsgenome.hsapiens.ucsc.hg38
-  - bioconductor-bsgenome.scerevisiae.ucsc.saccer3
+  - bioconductor-medips
+  - bioconductor-qsea
   - bioconductor-annotatr
   - bioconductor-genomicalignments
   - bioconductor-biovizbase

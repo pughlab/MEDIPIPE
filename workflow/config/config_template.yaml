@@ -1,6 +1,6 @@
 #########################################
 ## PATH for pipeline and working diretor
-## for enclosed packages failed to be autimatically installed by conda, like MEDStrand, ConsensusCruncher
+## for enclosed packages failed to be autimatically installed by conda, like MEDStrand
 pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
 ## essential for Picard
 pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline

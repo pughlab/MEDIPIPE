@@ -8,31 +8,22 @@ sample_bam = args[2]      ## should be indexed paired-end bam file
 bsgenome = args[3]
 data_path = args[4]
 
-## for testing
-if(FALSE){
-rm(list = ls())
-setwd("/Users/yong/OneDrive - UHN/Projects/TCGE/Hansen_group/Fragment_ratio")
-sample_id = "test"
-sample_bam = "test.bam"
-bsgenome = "BSgenome.Hsapiens.UCSC.hg19"
-}
-
 if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
 {
   library("BSgenome.Hsapiens.UCSC.hg19")
   Hsapiens <- BSgenome.Hsapiens.UCSC.hg19::Hsapiens
   ## load gaps and filters
-  load(paste0(data_path, "/data/gaps_filters_hg19.rdata"))
+  load(paste0(data_path, "/assets/Filter_regions/gaps_filters_hg19.rdata"))
   ## load AB: hi_AB_compartments
-  load(paste0(data_path, "/data/AB_hg19.rdata"))
+  load(paste0(data_path, "/assets/Filter_regions/AB_hg19.rdata"))
 
 } else if (bsgenome == "BSgenome.Hsapiens.UCSC.hg38") {
   library("BSgenome.Hsapiens.UCSC.hg38")
   Hsapiens <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens
   ## load gaps and filters
-  load(paste0(data_path, "/data/gaps_filters_hg38.rdata"))
+  load(paste0(data_path, "/assets/Filter_regions/gaps_filters_hg38.rdata"))
   ## load AB: hi_AB_compartments
-  load(paste0(data_path, "/data/AB_hg38.rdata"))
+  load(paste0(data_path, "/assets/Filter_regions/AB_hg38.rdata"))
 }
 
 ## required packages

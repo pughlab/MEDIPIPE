@@ -12,7 +12,7 @@ rule fragment_profile:
         mem_mb=60000
     params:
         bsgenome = config["bsgenome"],
-        scr_dir = config["pipeline_dir"],
+        scr_dir = config["pipeline_dir"],   ## filter regions enclosed in assets folder are needed
     log:
         "logs/{sample}_fragment_profile.log"
     conda:

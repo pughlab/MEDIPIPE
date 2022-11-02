@@ -61,4 +61,4 @@ rule meth_qc_quant_spikein:
     shell:
         "(Rscript --vanilla {params.scr_dir}/workflow/scripts/medips_4spikein.R "
         "{wildcards.sample} {input} {params.ispaired} {params.window_size} "
-        "{params.bsgenome} {params.scr_dir}/data/{params.bsgenome_pkg}) 2> {log}"
+        "{params.bsgenome} {params.scr_dir}/assets/Spike-in_genomes/{params.bsgenome_pkg}) 2> {log}"
