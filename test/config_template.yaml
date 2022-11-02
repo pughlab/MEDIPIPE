@@ -1,21 +1,24 @@
+!! replace all /path/to/ to your own specific FULL PATHs !!
+!! setup all other parameters accordingly !!
+
 #########################################
 ## PATH for pipeline and working diretor
 ## for enclosed packages failed to be autimatically installed by conda, like MEDStrand
-pipeline_dir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline
+pipeline_dir: /cluster/home/yzeng/snakemake/MEDIPIPE
 ## essential for Picard
-pipeline_env: /cluster/home/yzeng/miniconda3/envs/tcge-cfmedip-seq-pipeline
-workdir: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline-test-run
+pipeline_env: /cluster/home/yzeng/miniconda3/envs/MEDIPIPE
+workdir: /path/to/Res            # allowing submit
 
-################################################
-## Sequencing samples information
-## !! Make sure the PATHs in the sample.tsv file are consistent !!
-samples: /path/to/sample_pe_template.tsv
+#################################
+## Samples Sequencing information
+## Make sure using the full PATH of FASTQ files in the sample.tsv!!
+samples: /path/to/sample_template.tsv
 paired-end: True
 
 ## whether to aggreate samples
 aggreate: True       ## True or False
-## all processed samples to be aggreated
-samples_aggr: /path/to/sample_aggr_template.tsv
+samples_aggr: /path/to/sample_aggr_template.tsv  ## all samples with group info to be aggreated
+
 
 ##################################################################
 ## reference
@@ -23,27 +26,25 @@ samples_aggr: /path/to/sample_aggr_template.tsv
 ref_files: /path/to/reference_template.tsv
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 
+
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein
 spike_in: True   #False ## if True, integrate human and spike-ins genome bwa index
 spike_idx: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/bwa_index_hg38_BAC_F19K16_F24B22/hg38_BAC_F19K16_F24B22.fa  # NA or /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
 
-## NA or Edit accordingly when spike_in == True !!!
+## NA or Edit accordingly when spike_in == True
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
 spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
 spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22
 spike_in_chr: AC011717.6 AL132957.1
 
-######################################################
-## UMI sequence, if it's Ture, barcode list is requied
-add_umi: True      ## set as TRUE when UMI added in library prep
-#umi_list: NA        ## eg: /cluster/home/yzeng/snakemake/tcge-cfmedip-seq-pipeline/data/UMI_barcodes_OICR.txt
 
+#########################################################
+## UMI barcodes, if it's Ture, barcode pattern is requied
 ## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
-## quotes are needed
-# umi_pattern: "'(?P<umi_1>^[ATCG]{2})(?P<discard_1>T)'"       ## for NNT, where N = [ATCG]
-umi_pattern: "'(?P<umi_1>^.{3,4})(?P<discard_1>T)'"       ## for NNNT or NNNNT, where N = [ATCG]
+add_umi: True      ## set as TRUE when UMI added in library prep, otherwise, False
+umi_pattern: "'(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)'"     ## e.g. OICR UMI barcode; NA For add_umi == False
 
 ####################
 ## other parameters
