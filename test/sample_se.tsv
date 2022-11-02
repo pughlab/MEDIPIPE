@@ -1,3 +1,3 @@
 sample_id R1
-C	/cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/test/data/Fastq/C_L001.fastq.gz
-D	/cluster/home/yzeng/snakemake/cfmedip-seq-pipeline/test/data/Fastq/D_L001.fastq.gz
+C	/path/to/MEDIPIPE/test/Fastq/C_L001.fastq.gz
+D	/path/to/MEDIPIPE/test/Fastq/D_L001.fastq.gz
