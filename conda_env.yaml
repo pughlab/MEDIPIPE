@@ -1,4 +1,4 @@
-name: tcge-cfmedip-seq-pipeline
+name: MEDIPIPE
 channels:
   - anaconda
   - bioconda
@@ -10,4 +10,3 @@ dependencies:
   - samtools=1.9
   - graphviz=2.40.1
   - picard=2.26.6
-  - gnuplot=4.6.0
