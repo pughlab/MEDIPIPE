@@ -20,3 +20,13 @@ Schep AN, Buenrostro JD, Denny SK, Schwartz K, Sherlock G, Greenleaf WJ. Structu
 | SRR1822154	| paired-end	|     B	     |
 | SRR1822157	| single-end	|     C      |
 | SRR1822158	| single-end	|     D	     |
+
+
+
+2) The samples's sequence data table template. Note:Prepare the table for single-end and paired-end samples separately and use exactly same table `header`, if there are multiple lanes, use comma to separate the list.
+
+|	sample_id   |     R1	     |  R2(p.r.n.)|
+|-------------|--------------|------------|
+|  A	|  full/path/to/A_L001_R1.fq.gz |                              |
+|  B	|  full/path/to/B_L001_R1.fq.gz | full/path/to/B_L001_R2.fq.gz |
+|  C  |  path/C_L001_R1.fq.gz,path/C_L002_R1.fq.gz | path/C_L001_R2.fq.gz,path/C_L002_R2.fq.gz  |
