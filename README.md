@@ -35,11 +35,11 @@ This schematic diagram shows you how pipeline works:
 4) Test run
 	> **IMPORTANT**: EXTRA ENVIRONMENTS WILL BE INSTALLED, MAKE SURE YOU STILL HAVE INTERNET ACCESS.
 	* **Step 1:** Prepare reference, samples FASTQ and aggregation files according to templates in ./test.
-	* **Step 2:** Specify input configuration file by following the instructions in ./test/config_template.yaml.
+	* **Step 2:** Specify input configuration file by following the instructions [here](./test/README.md).
 	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2. The outputs can be found in ./test/Res.
 
 	```bash
-    $ sed -i 's,/path/to,'"$PWD"',g' ./test/\*template.\*
+    $ sed -i 's,/path/to,'"$PWD"',g' ./test/*template.*
 	$ conda activate MEDIPIPE
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./test/config_template.yaml \
@@ -49,20 +49,13 @@ This schematic diagram shows you how pipeline works:
 
 5) Run on HPCs
 
-	You can also submit this pipeline on clusters after editing ./workflow/sbatch_Snakefile_template.sh according different resource management system. The example here is for submitting a job with SLURM, however, this template could be modified according to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
+	You can also submit this pipeline to clusters with the template ./workflow/sbatch_Snakefile_template.sh. This template is for submitting a job with SLURM, however, it could be modified according to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
 
 	```bash
-	## template is based on SLURM
-	$ sed -i 's,/path/to,'"$PWD"',g' ./workflow/sbatch_Snakefile_template.sh
+	## Test run by SLURM submission
+	$ sed -i 's,/path/to,'"$PWD"',g' ./workflow/sbatch_Snakefile_template.sh    # replace PATHs for testing
 	$ sbatch ./workflow/sbatch_Snakefile_template.sh
 	```
 
-## Input configfile specification
-> **IMPORTANT**: READ THROUGH THE GUIDE INFORMATION IN THE TEMPLATE TO MAKE A CORRECT CONFIG FILE. ESPECIALLY FOR SAMPLES WITH SPIKE-IN CONTROL AND/OR UMI BARCODES.
-
-A config YAML file specifies all PATHs of input files and parameters that are necessary for successfully running this pipeline. This includes a specification of the path to the genome reference files. Please make sure to specify absolute paths rather than relative paths in your config files. More detail can be found at [here](./test/config_template.yaml)
-
-## Assets
+## Assets and Troubleshooting
 There are serveral several scripts are enclosed in the [Assets](./Assets/config_template.yaml), allowing you to download/build reference index and manifest table, to fogre BSgeome package for spike-in controls
-
-- **Supported genomes**: We provide genome database, which includes aligner indices and black list, downloader for human hg38, hg19 and along with Arabidopsis thaliana genome TAIR10. In addition, spike-in fasta sequences for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) from Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3, and [sytheticDNAs](https://github.com/hoffmangroup/2020spikein) were enclosed in `data/SyntheticDNA_Arabidopsis_BACs.fa`. You can also build genome database from FASTA for your custom genomes.
