@@ -1,17 +1,27 @@
-###############################
-## setting up working directory
-workdir: config['workdir']
-
-## read in sample list
+import os
 import pandas as pd
 
+
+################
+## read in PATHs
+workdir: config['workdir']
+
+## paths for pipeline and/or reference data
+wd = config["workdir"]
+pipe_dir = config["pipeline_dir"]
+#env_dir = config["pipeline_env"]  #${CONDA_PREFIX} dosen't work
+env_dir = os.getenv("CONDA_PREFIX")
+#umi_list = config["umi_list"]
+
+
+##################################################q
 ## read in sample and corresponding fq files talbe
+## and aggregatio talbe
 SAMPLES = (
     pd.read_csv(config["samples"], sep="\t")
     .set_index("sample_id", drop=False)
     .sort_index()
 )
-
 
 ## read in samples for aggregation
 if config["aggreate"]:
@@ -23,13 +33,8 @@ if config["aggreate"]:
 else:
     SAMPLES_AGGR = SAMPLES     ## must be defined
 
-## paths for pipeline and/or reference data
-wd = config["workdir"]
-pipe_dir = config["pipeline_dir"]
-env_dir = config["pipeline_env"]  #${CONDA_PREFIX} dosen't work
-#umi_list = config["umi_list"]
 
-
+###############################
 ## read in refrence files' info
 REF = pd.read_csv(config["ref_files"], sep="\t", header = None, index_col = 0)
 blacklist = REF.loc["blacklist"][1]   ## ENCODE blacklist
