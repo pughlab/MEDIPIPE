@@ -41,15 +41,13 @@ This schematic diagram shows you how pipeline works:
 
 4) Test run
 	> **IMPORTANT**: extra environments will be created during the test run. Again, make sure you have internet!!.
-	* step 1: need to prepare reference, samples FASTQ and aggregation files according to templates in ./test
+	* Step 1: need to prepare reference, samples FASTQ and aggregation files according to templates in ./test
 	* Step 2: need to specify the input configuration file by following the instructions in ./test/config_template.yaml
+	* For testing run, you can simply run the command below to specify files in Step1,2. The outputs can be found in ./test/Res
 
 	```bash
-  ## You need to prepare Reference, Samples FASTQ list and aggregation files accordingly.
-	## For testing run, you can simply run the command below to specify PATHs for testing
   $ sed -i 's,/path/to,'"$PWD"',g' ./test/\*template.\*
 	$ conda activate MEDIPIPE
-	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./test/config_template.yaml \
 		    --conda-prefix ${CONDA_PREFIX}_extra_env \
