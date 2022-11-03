@@ -40,7 +40,7 @@ This schematic diagram shows you how pipeline works:
 	```
 
 4) Test run
-	> **IMPORTANT**: extra environments will be created during the Test run. Again, make sure you have internet.
+	> **IMPORTANT**: EXTRA ENVIRONMENTS WILL BE INSTALLED, MAKE SURE YOU STILL HAVE INTERNET ACCESS.
 	* **Step 1:** Prepare reference, samples FASTQ and aggregation files according to templates in ./test.
 	* **Step 2:** Specify input configuration file by following the instructions in ./test/config_template.yaml.
 	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2. The outputs can be found in ./test/Res.
