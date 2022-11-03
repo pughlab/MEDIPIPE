@@ -4,8 +4,8 @@
 The MEDIPIPE is designed for automated end-to-end quality control (QC) and analysis of (cf)MeDIP-seq data. The pipeline starts from the raw FASTQ files all the way to QC, alignment, methylation quantifications and aggregation. The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on some prior work of Wenbin Ye, [Eric Zhao](https://github.com/pughlab/cfMeDIP-seq-analysis-pipeline).
 
 ### Features
-- **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines. For more details, please refer to [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
-- **Flexibility**: MEDIPIPE supports both signle-end and paired-end sequencing data. I can also deal with the reads with or without spike-in/UMI sequences. It can be applied to individual sample, as well as to aggregate multiple samples' to create matrixes of QC metrics; fragment profiles and methylation quantifications.
+- **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
+- **Flexibility**: MEDIPIPE supports both signle-end and paired-end sequencing reads. It can also deal with the reads with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples for large scale profiling.
 
 ### How it works
 This schematic diagram shows you how pipeline works:
@@ -13,7 +13,7 @@ This schematic diagram shows you how pipeline works:
 
 
 ## Installation
-1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended since it is better at handling environments and installations:
+1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended:
 
 	```bash
 	$ conda install -n base -c conda-forge mamba
@@ -49,12 +49,12 @@ This schematic diagram shows you how pipeline works:
 
 5) Run on HPCs
 
-	You can submit this pipeline on clusters after editing ./workflow/sbatch_snakemake_template.sh according different resource management system. The file must have the appropriate path names and parameters given the input data. The example here is for submitting a job with SLURM, however, this template could be modified according to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html). For example:
+	You can also submit this pipeline on clusters after editing ./workflow/sbatch_Snakefile_template.sh according different resource management system. The example here is for submitting a job with SLURM, however, this template could be modified according to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
 
 	```bash
 	## template is based on SLURM
-	$ vim ./workflow/sbatch_snakemake_template.sh
-	$ sbatch ./workflow/sbatch_snakemake_template.sh
+	$ sed -i 's,/path/to,'"$PWD"',g' ./workflow/sbatch_Snakefile_template.sh
+	$ sbatch ./workflow/sbatch_Snakefile_template.sh
 	```
 
 ## Input configfile specification
