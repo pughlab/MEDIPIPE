@@ -47,16 +47,13 @@ This schematic diagram shows you how pipeline works:
 
   ## You need to prepare Reference, Samples FASTQ list and aggregation files accordingly.
 	## For testing run, you can simply run the command below to specify PATHs for testing
-  $ sed -i 's,/path/to/,'"$PWD"/',g' ./test/*template.*
+  $ sed -i 's,/path/to,'"$PWD"',g' ./test/\*template.\*
 
-	$ cp ./workflow/config/config_template.yaml ../MEDIPIPE-test-run/config_testrun.yaml
-	$ vim ../MEDIPIPE-test-run/config_testrun.yaml
 
-	## run with the internet connection as well
 	## !! extra environments will be installed to MEDIPIPE-sub
 	## !! it will be killed in rule meth_qc_quant, which is fine and due to current test dataset.
-	$ snakemake --snakefile ../MEDIPIPE/workflow/Snakefile \
-	            --configfile ./config_template.yaml \
+	$ snakemake --snakefile ./workflow/Snakefile \
+	            --configfile ./test/config_template.yaml \
 		    --conda-prefix ${CONDA_PREFIX}_extra_env \
 	            --use-conda --cores 4 -pn
 	```

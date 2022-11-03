@@ -96,8 +96,8 @@ rule aggregate_qc_report:
     resources:
         mem_mb=60000
     params:
-        scr_dir = config["pipeline_dir"],
-        out_dir = config['workdir'],
+        scr_dir = config["pipe_dir"],
+        out_dir = config['work_dir'],
         aggr = config["samples_aggr"],
         ispaired = config["paired-end"],
     log:

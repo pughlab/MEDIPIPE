@@ -22,7 +22,7 @@ rule meth_qc_quant:
     params:
         ispaired = config["paired-end"],
         bsgenome = config["bsgenome"],
-        scr_dir = config["pipeline_dir"],
+        scr_dir = config["pipe_dir"],
         window_size = config["window_size"],
     log:
         "logs/{sample}_medips_medestrand_qsea.log"
@@ -52,7 +52,7 @@ rule meth_qc_quant_spikein:
         ispaired = config["paired-end"],
         bsgenome_pkg = config["spike_in_bsgenome_pkg"],
         bsgenome = config["spike_in_bsgenome"],
-        scr_dir = config["pipeline_dir"],
+        scr_dir = config["pipe_dir"],
         window_size = config["window_size"],
     log:
         "logs/{sample}_medips_spikein.log"
