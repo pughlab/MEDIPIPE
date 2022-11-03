@@ -1,17 +1,14 @@
+workdir: config['work_dir']      ## Configure Working Directory
+
 import os
 import pandas as pd
 
-
-################
-## read in PATHs
-workdir: config['workdir']
-
+###########################################
 ## paths for pipeline and/or reference data
-wd = config["workdir"]
-pipe_dir = config["pipeline_dir"]
+work_dir = config["work_dir"]
+pipe_dir = config["pipe_dir"]
 #env_dir = config["pipeline_env"]  #${CONDA_PREFIX} dosen't work
 env_dir = os.getenv("CONDA_PREFIX")
-#umi_list = config["umi_list"]
 
 
 ##################################################q

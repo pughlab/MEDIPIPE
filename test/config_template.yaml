@@ -1,30 +1,30 @@
-## !! replace all /path/to/ to your own specific FULL PATHs !!
+## !! Replace all /path/to/** to your own specific FULL PATHs
 ## !! Specify the config file you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
 ## !! setup all other parameters accordingly !!
 
 #########################################
 ## PATH for pipeline and working diretor
 ## for enclosed packages failed to be autimatically installed by conda, like MEDStrand
-pipeline_dir: /cluster/home/yzeng/snakemake/MEDIPIPE
+pipe_dir: /path/to              # Full PATH to the MEDIPIPE packe
 ## essential for Picard
-pipeline_env: /cluster/home/yzeng/miniconda3/envs/MEDIPIPE
-workdir: /path/to/Res            # allowing submit
+##pipeline_env: /cluster/home/yzeng/miniconda3/envs/MEDIPIPE
+work_dir: /path/to/test/Res            # allowing submit
 
 #################################
 ## Samples Sequencing information
 ## Make sure using the full PATH of FASTQ files in the sample.tsv!!
-samples: /path/to/sample_template.tsv
+samples: /path/to/test/sample_template.tsv
 paired-end: True
 
 ## whether to aggreate samples
 aggreate: True       ## True or False
-samples_aggr: /path/to/sample_aggr_template.tsv  ## all samples with group info to be aggreated
+samples_aggr: /path/to/test/sample_aggr_template.tsv  ## all samples with group info to be aggreated
 
 
 ##################################################################
-## reference
+## reference manifest table and bsgenome name for primary genome
 ## !! Make sure the PATHs in the test.tsv file are consistent !!
-ref_files: /path/to/reference_template.tsv
+ref_files: /path/to/test/reference_template.tsv
 bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
 
 
@@ -36,16 +36,16 @@ spike_idx: /cluster/projects/tcge/DB/tcge-cfmedip-seq-pepeline/hg38/bwa_index_hg
 
 ## NA or Edit accordingly when spike_in == True
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)
-spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz
-spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22
-spike_in_chr: AC011717.6 AL132957.1
+spike_in_bsgenome_pkg: BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz    # or NA
+spike_in_bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22                     # or NA
+spike_in_chr: AC011717.6 AL132957.1                                         # or NA
 
 
 #########################################################
 ## UMI barcodes, if it's Ture, barcode pattern is requied
 ## umi regex : https://umi-tools.readthedocs.io/en/latest/regex.html
-add_umi: True      ## set as TRUE when UMI added in library prep, otherwise, False
-umi_pattern: "'(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)'"     ## e.g. OICR UMI barcode; NA For add_umi == False
+add_umi: True      ## or False
+umi_pattern: "'(?P<umi_1>^[ACGT]{3}[ACG])(?P<discard_1>T)|(?P<umi_1>^[ACGT]{3}T)'"     ## e.g. OICR UMI barcode; or NA For add_umi == False
 
 ####################
 ## other parameters

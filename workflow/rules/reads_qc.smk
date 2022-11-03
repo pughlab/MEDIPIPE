@@ -116,7 +116,7 @@ rule trim_galore_se:
         "trimmed_fq/{sample}.fastq.gz_trimming_report.txt",
     params:
         ## path needs to be full path: failed to recognize space
-        path = wd + "/trimmed_fq"
+        path = work_dir + "/trimmed_fq"
     threads: 12
     log:
         "logs/{sample}_trim_galore_se.log"
@@ -135,7 +135,7 @@ rule trim_galore_pe:
         "trimmed_fq/{sample}_R2.fastq.gz_trimming_report.txt",
     params:
         ## path needs to be full path: failed to recognize space
-        path = wd + "/trimmed_fq"
+        path = work_dir + "/trimmed_fq"
     threads: 12
     log:
         "logs/{sample}_trim_galore_pe.log"
