@@ -58,4 +58,4 @@ This schematic diagram shows you how pipeline works:
 	```
 
 ## Assets and Troubleshooting
-There are several scripts are enclosed in the folder [assets](./assets/README.md), allowing you to download/build reference index and manifest table, to fogre BSgeome package for spike-in controls, to filter regions for fragment profiling calculation. Please also see [this document](./assets/Trobuleshooting.md) for troubleshooting. I will keep updating this document for errors reported by users.
+There are several scripts are enclosed in the folder [assets](./assets/README.md), allowing you to download/build reference index and manifest table, to fogre BSgeome package for spike-in controls, to filter regions for fragment profiling calculation. Please also see [this document](./assets/Troubleshooting.md) for troubleshooting. I will keep updating this document for errors reported by users.
