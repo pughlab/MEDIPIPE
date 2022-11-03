@@ -1,11 +1,11 @@
-## !! Replace all /path/to/** to your own specific FULL PATHs
+## !! Replace all /path/to** to your own specific FULL PATHs
 ## !! Specify the config file you will need to change the PATHs on lines 3, 4, 5, 10, 16, and 21
 ## !! setup all other parameters accordingly !!
 
 #########################################
 ## PATH for pipeline and working diretor
 ## for enclosed packages failed to be autimatically installed by conda, like MEDStrand
-pipe_dir: /path/to              # Full PATH to the MEDIPIPE packe
+pipe_dir: /path/to/              # Full PATH to the MEDIPIPE packe
 ## essential for Picard
 ##pipeline_env: /cluster/home/yzeng/miniconda3/envs/MEDIPIPE
 work_dir: /path/to/test/Res            # allowing submit

@@ -44,12 +44,10 @@ This schematic diagram shows you how pipeline works:
 
 	```bash
 	$ conda activate MEDIPIPE
-	$ cp -r test ../MEDIPIPE_TEST
-	$ cd ../MEDIPIPE_TEST
 
   ## You need to prepare Reference, Samples FASTQ list and aggregation files accordingly.
 	## For testing run, you can simply run the command below to specify PATHs for testing
-  $ sed -i 's,/path/to/,'"$PWD"/',g' *template.*
+  $ sed -i 's,/path/to/,'"$PWD"/',g' ./test/*template.*
 
 	$ cp ./workflow/config/config_template.yaml ../MEDIPIPE-test-run/config_testrun.yaml
 	$ vim ../MEDIPIPE-test-run/config_testrun.yaml
