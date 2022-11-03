@@ -5,7 +5,7 @@ The MEDIPIPE is designed for automated end-to-end quality control (QC) and analy
 
 ### Features
 - **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
-- **Flexibility**: MEDIPIPE supports both signle-end and paired-end sequencing reads. It can also deal with the reads with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples for large scale profiling.
+- **Flexibility**: MEDIPIPE can deal with single-end or paired-end reads, which comes along with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples from large-scale profiling.
 
 ### How it works
 This schematic diagram shows you how pipeline works:
@@ -49,7 +49,7 @@ This schematic diagram shows you how pipeline works:
 
 5) Run on HPCs
 
-	You can also submit this pipeline to clusters with the template ./workflow/sbatch_Snakefile_template.sh. This template is for submitting a job with SLURM, however, it could be modified according to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
+	You can also submit this pipeline to clusters with the template ./workflow/sbatch_Snakefile_template.sh. This template is for SLURM, however, it could be modified to different resource management systems. More details about cluster configuration can be found at [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
 
 	```bash
 	## Test run by SLURM submission
@@ -58,4 +58,4 @@ This schematic diagram shows you how pipeline works:
 	```
 
 ## Assets and Troubleshooting
-There are serveral several scripts are enclosed in the [Assets](./Assets/config_template.yaml), allowing you to download/build reference index and manifest table, to fogre BSgeome package for spike-in controls
+There are several scripts are enclosed in the folder [assets](./assets/README.md), allowing you to download/build reference index and manifest table, to fogre BSgeome package for spike-in controls, to filter regions for fragment profiling calculation. Please also see [this document](./assets/Trobuleshooting.md) for troubleshooting. I will keep updating this document for errors reported by users.

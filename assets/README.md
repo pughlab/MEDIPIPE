@@ -5,7 +5,8 @@ Gaps and filters regions to be removed in fragment profile analysis!!
 
 ## Reference
 * Download reference genome data
-You can download reference genome, pre-build BWA index and annotated regions (e.g., blacklist) from ENCODE for hg38 and hg19 on the command line. The manifest file hg38/hg19.tsv will be generated accordingly. Currently, the ENCODE black list and bwa index are mandatory for the manifest file, which you can also create it based on `workflow/config/hg38_template.tsv` with existing data.
+You can download reference genome, pre-build BWA index and annotated regions (e.g., blacklist) from ENCODE for hg38 and hg19 on the command line. The manifest file hg38/hg19.tsv will be generated accordingly. Currently, the ENCODE black list and bwa index are mandatory for the manifest file, which you can also create it by yourself based on `.Reference/hg38_template.tsv` with existing data.
+
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
@@ -22,6 +23,8 @@ $ ./workflow/build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST
 
 
 ## Spike-in_genomes
+Spike-in FASTA sequences for two BACs: [F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) from Arabidopsis Chr1 and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22) from Arabidopsis Chr3, and [sytheticDNAs](https://github.com/hoffmangroup/2020spikein) were enclosed.
+
 * SyntheticDNA_Arabidopsis_BACs.fa consists of Arabidopsis BAC (F19K16_F24B22) and [sythetic DNA sequences](https://github.com/hoffmangroup/2020spikein/tree/master/Preprocessing).
 
 * SyntheticDNA_Arabidopsis_BACs_seqNames.txt: sequences' name
