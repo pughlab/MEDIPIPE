@@ -46,7 +46,7 @@ This schematic diagram shows you how pipeline works:
 	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2. The outputs can be found in ./test/Res.
 
 	```bash
-      $ sed -i 's,/path/to,'"$PWD"',g' ./test/\*template.\*
+    $ sed -i 's,/path/to,'"$PWD"',g' ./test/\*template.\*
 	$ conda activate MEDIPIPE
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./test/config_template.yaml \
