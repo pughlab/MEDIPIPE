@@ -1,32 +1,4 @@
 
-# test-datasets: `atacseq`
+## Test run outputs
 
-This test data (ATAC-seq) was download from [nf-core/atacseq](https://github.com/nf-core/test-datasets/tree/0c58a9f36205cc5f8c6bbb2ca03c401c61cb849d).
-
-`Reference/`: Genome reference and BWA index (iGenomes sacCer3 release)   
-`Fastq/` : FastQ files sub-sampled to 100,000 paired-end reads   
-
-## test dataset origin:
-
-*S. cerevisiae* paired-end ATAC-seq dataset was obtained from:
-
-Schep AN, Buenrostro JD, Denny SK, Schwartz K, Sherlock G, Greenleaf WJ. Structured nucleosome fingerprints enable high-resolution mapping of chromatin architecture within regulatory regions. Genome Res 2015 Nov;25(11):1757-70. [Pubmed](https://www.ncbi.nlm.nih.gov/pubmed/26314830) [GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE66386)
-
-### Sample information
-
-| GEO_ID	    |   LAYOUT	  | SAMPLE_NAME|
-|-------------|-------------|------------|
-| SRR1822153	| paired-end	|     A	     |
-| SRR1822154	| paired-end	|     B	     |
-| SRR1822157	| single-end	|     C      |
-| SRR1822158	| single-end	|     D	     |
-
-
-
-2) The samples's sequence data table template. Note:Prepare the table for single-end and paired-end samples separately and use exactly same table `header`, if there are multiple lanes, use comma to separate the list.
-
-|	sample_id   |     R1	     |  R2(p.r.n.)|
-|-------------|--------------|------------|
-|  A	|  full/path/to/A_L001_R1.fq.gz |                              |
-|  B	|  full/path/to/B_L001_R1.fq.gz | full/path/to/B_L001_R2.fq.gz |
-|  C  |  path/C_L001_R1.fq.gz,path/C_L002_R1.fq.gz | path/C_L001_R2.fq.gz,path/C_L002_R2.fq.gz  |
+NOTE: since test data is ATAC-seq instead of real (cf)MeDIP-seq data, the outputs here are only give you a sense of the organization of the outputs. the methylation quantification outputs are missing due the limitation of testing dataset as well!!!

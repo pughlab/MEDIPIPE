@@ -36,7 +36,7 @@ This schematic diagram shows you how pipeline works:
 	> **IMPORTANT**: EXTRA ENVIRONMENTS WILL BE INSTALLED, MAKE SURE YOU STILL HAVE INTERNET ACCESS.
 	* **Step 1:** Prepare reference, samples FASTQ and aggregation files according to [templates](./test/README.md).
 	* **Step 2:** Specify input configuration file by following the instructions [here](./test/README.md).
-	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2. The outputs can be found in ./test/Res.
+	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2. The outputs can be found in ./test/Res. The pipeline will be killed for the methylation quantification due to the current testing dataset, which is fine for moving to real dataset.
 
 	```bash
     $ sed -i 's,/path/to,'"$PWD"',g' ./test/*template.*
