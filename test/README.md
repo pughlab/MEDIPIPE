@@ -33,7 +33,7 @@ A config YAML file specifies all PATHs of input files and parameters that are ne
 
 ## Test dataset
 
-The current toy data is randomly derived from the two BACs ([F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22)) Arabidopsis by [Min Han](https://github.com/mhanbioinfo/make_toy_fastqs)
+The current toy cfMeDIP-seq data is randomly derived from the two BACs ([F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22)) Arabidopsis by [Min Han](https://github.com/mhanbioinfo/make_toy_fastqs)
 
 `Reference/`: Genome reference and BWA index (Athaliana.BAC.F19K16.F24B22 )   
 `Fastq/` : Randomly generated paired-end FastQ reads   
