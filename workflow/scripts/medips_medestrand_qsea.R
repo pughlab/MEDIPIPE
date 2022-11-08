@@ -28,6 +28,22 @@ if (bsgenome == "BSgenome.Scerevisiae.UCSC.sacCer3")
   #chr_enrich  = "chrI"
 }
 
+## for new testing dataset
+
+if (is.element(bsgenome, installed.packages()[,1]) & bsgenome == "BSgenome.Athaliana.BAC.F19K16.F24B22")
+{
+  library("BSgenome.Athaliana.BAC.F19K16.F24B22")
+  chr = c("AC011717.6", "AL132957.1")
+} else {
+  ## install custom spike-in BSgenome pkg enclosed in asset folder
+  pkg_path <- gsub("test/Res","assets/Spike-in_genomes/BSgenome.Athaliana.BAC.F19K16.F24B22_1.0.0.tar.gz", getwd())
+  install.packages(pkg_path, repos = NULL, type="source")
+
+  library("BSgenome.Athaliana.BAC.F19K16.F24B22")
+  chr = c("AC011717.6", "AL132957.1")
+}
+
+q
 ## hg19
 if (bsgenome == "BSgenome.Hsapiens.UCSC.hg19")
 {

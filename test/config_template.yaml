@@ -1,36 +1,37 @@
-## !! Replace all  /path/to** to your own specific FULL PATHs
+## !! Replace all   /path/to** to your own specific FULL PATHs
 ## !! Specify the config file you will need to change the PATHs on lines 8, 9, 14, 18, 25, and/or 33
 ## !! setup all other parameters accordingly !!
 
 #########################################
 ## PATH for pipeline and working diretor
 ## for enclosed packages failed to be autimatically installed by conda, like MEDStrand
-pipe_dir: /path/to              # Full PATH to the MEDIPIPE packe
-work_dir: /path/to/test/Res            # allowing submit
+pipe_dir:  /path/to              # Full PATH to the MEDIPIPE packe
+work_dir:  /path/to/test/Res            # allowing submit
 
 #################################
 ## Samples Sequencing information
 ## Make sure using the full PATH of FASTQ files in the sample.tsv!!
-samples: /path/to/test/sample_template.tsv
+samples:  /path/to/test/sample_template.tsv
 paired-end: True
+frag_profile: False      ## True for paired-end reads only
 
 ## whether to aggreate samples
 aggreate: True       ## True or False
-samples_aggr: /path/to/test/sample_aggr_template.tsv  ## all samples with group info to be aggreated
+samples_aggr:  /path/to/test/sample_aggr_template.tsv  ## all samples with group info to be aggreated
 
 
 ##################################################################
 ## reference manifest table and bsgenome name for primary genome
 ## !! Make sure the PATHs in the test.tsv file are consistent !!
-ref_files: /path/to/test/reference_template.tsv
-bsgenome: BSgenome.Scerevisiae.UCSC.sacCer3
+ref_files:  /path/to/test/reference_template.tsv
+bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22   #BSgenome.Scerevisiae.UCSC.sacCer3   
 
 
 ##################################################################################################
 ## Spike-in, if it is Ture, the bwa index fore merged genomes is required and added to [ref_files]
 ## as bwa_idx_spikein
 spike_in: False   #False ## if True, integrate human and spike-ins genome bwa index
-spike_idx: NA    # or eg. /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
+spike_idx: NA    # or eg.  /path/to/bwa_index_hg38_SyntheticDNA_Arabidopsis_BACs/hg38_SyntheticDNA_Arabidopsis_BACs.fa
 
 ## NA or Edit accordingly when spike_in == True
 ## e.g.: for Arabidopsis thaliana BAC F19K16 (AC011717.6, chr1) and F24B22 (AL132957.1, chr 3)

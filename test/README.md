@@ -1,5 +1,5 @@
 ## Input configfile specification
-> **IMPORTANT**: READ THROUGH THE GUIDE INFORMATION IN THE TEMPLATES TO MAKE CORRECT MANIFEST TALBES AND CONFIG FILE. 
+> **IMPORTANT**: READ THROUGH THE GUIDE INFORMATION IN THE TEMPLATES TO MAKE CORRECT MANIFEST TALBES AND CONFIG FILE.
 
 ### Step 1: Prepare reference, samples FASTQ and aggregation files
 1) You can download reference genome, pre-build BWA index and annotated regions (e.g., blacklist) from ENCODE for hg38 and hg19 using the scripts in .assets/Reference. The reference manifest table hg38/hg19.tsv will be generated accordingly. Currently, the ENCODE black list and bwa index are mandatory for the manifest file, which means you can also create it by yourself based on `.Reference/hg38_template.tsv` or example below:
@@ -31,10 +31,9 @@
 A config YAML file specifies all PATHs of input files and parameters that are necessary for successfully running this pipeline. This includes a specification of the path to the genome reference files. Please make sure to specify absolute paths rather than relative paths in your config files. More detailed instructions can be found at the [config_template](./test/config_template.yaml)
 
 
-
 ## Test dataset
 
-The current test data is an ATAC-seq dataset download from [nf-core/atacseq](https://github.com/nf-core/test-datasets/tree/0c58a9f36205cc5f8c6bbb2ca03c401c61cb849d).
+The current toy data is randomly derived from the two BACs ([F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22)) Arabidopsis by [Min Han](https://github.com/mhanbioinfo/make_toy_fastqs)
 
-`Reference/`: Genome reference and BWA index (iGenomes sacCer3 release)   
-`Fastq/` : FastQ files sub-sampled to 100,000 paired-end reads   
+`Reference/`: Genome reference and BWA index (Athaliana.BAC.F19K16.F24B22 )   
+`Fastq/` : Randomly generated paired-end FastQ reads   

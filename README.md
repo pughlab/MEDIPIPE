@@ -36,7 +36,7 @@ This schematic diagram shows you how pipeline works:
 	> **IMPORTANT**: EXTRA ENVIRONMENTS WILL BE INSTALLED, MAKE SURE YOU STILL HAVE INTERNET ACCESS.
 	* **Step 1:** Prepare reference, samples FASTQ and aggregation files according to [templates](./test/README.md).
 	* **Step 2:** Specify input configuration file by following the instructions [here](./test/README.md).
-	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2. The outputs can be found in ./test/Res. The pipeline will be killed for the methylation quantification due to the current testing dataset, which is fine for moving to real dataset.
+	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2.The toy dataset will fail to fit sigmoid model for MEDStrand due to low read depth, but you can still find other results in ./test/Res.
 
 	```bash
     $ sed -i 's,/path/to,'"$PWD"',g' ./test/*template.*
@@ -44,7 +44,7 @@ This schematic diagram shows you how pipeline works:
 	$ snakemake --snakefile ./workflow/Snakefile \
 	            --configfile ./test/config_template.yaml \
 		    --conda-prefix ${CONDA_PREFIX}_extra_env \
-	            --use-conda --cores 4 -pn
+	            --use-conda --cores 4 -p
 	```
 
 5) Run on HPCs

@@ -1,4 +1,4 @@
-genome_name	sacCer3
-bwa_index	/path/to/test/Reference/genome.fa
-bwa_index_spikein	/path/to/test/Reference/genome.fa
-blacklist	/path/to/Reference/test/blacklist.bed
+genome_name	BAC_F19K16_F24B22
+bwa_index	 /path/to/test/Reference/BAC_F19K16_F24B22.fa
+bwa_index_spikein	 /path/to/test/Reference/BAC_F19K16_F24B22.fa
+blacklist	 /path/to/test/Reference/blacklist.bed

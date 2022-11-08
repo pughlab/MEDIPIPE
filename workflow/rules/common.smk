@@ -56,7 +56,7 @@ def get_rule_all_input():
     ######################################
     ## aggregated outputs for SAMPLES_aggr
     ## paired-end and spike-in
-    if config["aggreate"] and config["paired-end"] and config["spike_in"]:
+    if config["aggreate"] and config["paired-end"] and config["spike_in"] and config["frag_profile"]:
         #mult_qc = "aggregated/QC_pe/multiqc_report.html",
 
         ## spike-ins
@@ -70,23 +70,26 @@ def get_rule_all_input():
         return  extra_env + aggr_qc + meta_quant + meth_filt + spikein_mult_qc + spikein_meth_qc + spikein_meta_quant + fp_gc
 
     ## paired-end and no spike-in
-    elif config["aggreate"] and config["paired-end"] and config["spike_in"] == False:
+    elif config["aggreate"] and config["paired-end"] and config["spike_in"] == False and config["frag_profile"]:
         #mult_qc = "aggregated/QC_pe/multiqc_report.html",
         fp_gc = "aggregated/fragment_profile_GC_corrected_1mb.tsv",        ## GC corrected fragment profile
 
         return  extra_env + aggr_qc + meta_quant + meth_filt + fp_gc
+
+    elif config["aggreate"] and config["paired-end"] and config["spike_in"] == False and config["frag_profile"] == False:
+        #mult_qc = "aggregated/QC_pe/multiqc_report.html",
+        return  extra_env + aggr_qc + meta_quant + meth_filt
 
     ## single-end
     elif config["aggreate"] and config["paired-end"] == False:
         #mult_qc = "aggregated/QC_se/multiqc_report.html",
         return extra_env + aggr_qc + meta_quant + meth_filt
 
-    # + mult_qc + meth_qc
 
     #####################################
     ## outputs for each individual sample
     ## paired-end and spike-in
-    elif config["aggreate"] == False and config["paired-end"] and config["spike_in"]:
+    elif config["aggreate"] == False and config["paired-end"] and config["spike_in"] and config["frag_profile"]:
         fq_qc = expand("fastqc_pe/{samples}_R2_fastqc.zip", samples = SAMPLES["sample_id"]),
         meth_out = expand("meth_qc_quant/{samples}_count.txt", samples = SAMPLES["sample_id"]),
         meth_spikein = expand("meth_qc_quant_spikein/{samples}_count.txt", samples = SAMPLES["sample_id"]),
@@ -95,14 +98,31 @@ def get_rule_all_input():
 
         return extra_env + fq_qc + frag_size + meth_out + meth_spikein + fp_gc
 
+    ## no frag_profile
+    elif config["aggreate"] == False and config["paired-end"] and config["spike_in"] and config["frag_profile"] == False:
+        fq_qc = expand("fastqc_pe/{samples}_R2_fastqc.zip", samples = SAMPLES["sample_id"]),
+        meth_out = expand("meth_qc_quant/{samples}_count.txt", samples = SAMPLES["sample_id"]),
+        meth_spikein = expand("meth_qc_quant_spikein/{samples}_count.txt", samples = SAMPLES["sample_id"]),
+        frag_size = expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
+
+        return extra_env + fq_qc + frag_size + meth_out + meth_spikein
+
     ## paired-end without spike-in
-    elif config["aggreate"] == False and config["paired-end"] and config["spike_in"] == False:
+    elif config["aggreate"] == False and config["paired-end"] and config["spike_in"] == False and config["frag_profile"]:
         fq_qc = expand("fastqc_pe/{samples}_R2_fastqc.zip", samples = SAMPLES["sample_id"]),
         meth_out = expand("meth_qc_quant/{samples}_count.txt", samples = SAMPLES["sample_id"]),
         frag_size = expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
         fp_gc = expand("fragment_profile/{samples}_50_Granges.bed", samples = SAMPLES["sample_id"]),
 
         return extra_env + fq_qc + frag_size + meth_out + fp_gc
+
+    ## paired-end without spike-in, and frag_profile
+    elif config["aggreate"] == False and config["paired-end"] and config["spike_in"] == False and config["frag_profile"] == False:
+        fq_qc = expand("fastqc_pe/{samples}_R2_fastqc.zip", samples = SAMPLES["sample_id"]),
+        meth_out = expand("meth_qc_quant/{samples}_count.txt", samples = SAMPLES["sample_id"]),
+        frag_size = expand("fragment_size/{samples}_insert_size_metrics.txt", samples = SAMPLES["sample_id"]),
+
+        return extra_env + fq_qc + frag_size + meth_out
 
     ## single-end
     elif config["aggreate"] == False and config["paired-end"] == False:
