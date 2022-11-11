@@ -27,7 +27,7 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(gapminder)
-library(gplots)
+#library(gplots)
 library(knitr)
 library(heatmaply)
 ```
