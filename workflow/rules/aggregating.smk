@@ -22,7 +22,7 @@ rule multiqc_pe:
     conda:
         "extra_env/multiQC.yaml"
     shell:
-        "(multiqc {input} -o aggregated/QC_pe/) 2> {log}"
+        "(multiqc -f {input} -o aggregated/QC_pe/) 2> {log}"
 
 
 ## QC for sipke-ins separately
@@ -37,7 +37,7 @@ rule multiqc_pe_spikein:
     conda:
         "extra_env/multiQC.yaml"
     shell:
-        "(multiqc {input} -o aggregated_spikein/QC_pe/) 2> {log}"
+        "(multiqc -f {input} -o aggregated_spikein/QC_pe/) 2> {log}"
 
 
 ## single end
@@ -57,7 +57,7 @@ rule multiqc_se:
     conda:
         "extra_env/multiQC.yaml"
     shell:
-        "(multiqc {input} -o aggregated/QC_se/) 2> {log}"
+        "(multiqc -f {input} -o aggregated/QC_se/) 2> {log}"
 
 
 ##############################

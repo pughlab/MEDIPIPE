@@ -22,16 +22,18 @@ rule samtools_sort_index_stats:
     input:
         "raw_bam/{sample}.bam"
     output:
-        bam = "raw_bam/{sample}_sorted.bam",
+        #temp(bam = "raw_bam/{sample}_sorted.bam"), doesn't work
         #bai = "raw_bam/{sample}_sorted.bam.bai",
-        stat= "raw_bam/{sample}_sorted.bam.stats.txt"
+        #stat= "raw_bam/{sample}_sorted.bam.stats.txt"
+        temp("raw_bam/{sample}_sorted.bam"),
+        "raw_bam/{sample}_sorted.bam.stats.txt"
     threads: 12
     shell:
         ## --threads flag failed
         "(samtools fixmate -@ {threads} -m {input} - | "
-        "samtools sort  -@ {threads} -o {output.bam} && "
-        "samtools index -@ {threads} {output.bam} && "
-        "samtools stats -@ {threads} {output.bam} > {output.stat})"
+        "samtools sort  -@ {threads} -o {output[0]} && "
+        "samtools index -@ {threads} {output[0]} && "
+        "samtools stats -@ {threads} {output[0]} > {output[1]})"
 
 
 ##########################################################################
