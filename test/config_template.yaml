@@ -16,7 +16,7 @@ paired-end: True
 frag_profile: False      ## True for paired-end reads only
 
 ## whether to aggreate samples
-aggreate: True       ## True or False
+aggregate: True       ## True or False
 samples_aggr: /path/to/test/sample_aggr_template.tsv  ## all samples with group info to be aggreated
 
 
@@ -24,7 +24,7 @@ samples_aggr: /path/to/test/sample_aggr_template.tsv  ## all samples with group 
 ## reference manifest table and bsgenome name for primary genome
 ## !! Make sure the PATHs in the test.tsv file are consistent !!
 ref_files: /path/to/test/reference_template.tsv
-bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22   #BSgenome.Scerevisiae.UCSC.sacCer3   
+bsgenome: BSgenome.Athaliana.BAC.F19K16.F24B22   #BSgenome.Scerevisiae.UCSC.sacCer3
 
 
 ##################################################################################################
