@@ -11,4 +11,4 @@ INFO: activate-gfortran_linux-64.sh made the following environmental changes:
 ```
 
 ## Missing input files for rule merge_and_rename_fq_se
-You might come across above error even you spcified your input reads are pair-end. This might be due to your modified sample_template.tsv file is not tab-delimited. Fix that will allow the pipeline get throught. 
+You might come across above error even you spcified your input reads are pair-end. This might be due to your modified sample_template.tsv file is not tab-delimited or with duplicated sample_id. Fix that will allow the pipeline get throught. 

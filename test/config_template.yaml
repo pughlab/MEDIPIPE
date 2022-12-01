@@ -15,9 +15,9 @@ samples: /path/to/test/sample_template.tsv
 paired-end: True
 frag_profile: False      ## True for paired-end reads only
 
-## whether to aggreate samples
+## whether to aggregate samples
 aggregate: True       ## True or False
-samples_aggr: /path/to/test/sample_aggr_template.tsv  ## all samples with group info to be aggreated
+samples_aggr: /path/to/test/sample_aggr_template.tsv  ## all samples with group info to be aggregated
 
 
 ##################################################################

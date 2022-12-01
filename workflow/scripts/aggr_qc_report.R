@@ -5,10 +5,17 @@ aggr_sample =     args[1]
 ispaired = as.logical(args[2])
 aggr_fastqc =     args[3]
 aggr_sam_stats =  args[4]
+
+if(ispaired){
 aggr_frag_stats = args[5]
 aggr_meth_qc =    args[6]
 scr_dir =         args[7]
 out_dir =         args[8]
+} else {
+aggr_meth_qc =    args[5]
+scr_dir =         args[6]
+out_dir =         args[7]
+}
 
 ##
 sample_aggr <- read.table(aggr_sample, header = T, sep = "\t")
@@ -38,7 +45,9 @@ if(ispaired)
   prefilter_reads <- prefilter_reads[idx_m, ]
 
 } else {
-  raw_reads <- fastqc[seq(1, nrow(fastqc), 2), ]
+  #raw_reads <- fastqc[seq(1, nrow(fastqc), 2), ]
+  ## only trimed fq reports aggreated for single-end
+  raw_reads <- fastqc
   sample <- raw_reads$Sample
 
   ## match with sample_aggr.tsv samples and group labels
@@ -47,11 +56,12 @@ if(ispaired)
   group <- sample_aggr$group[idx_g[!is.na(idx_g)]]
   raw_reads <- raw_reads[!is.na(idx_g), ]
 
-  prefilter_reads <- fastqc[seq(2, nrow(fastqc), 2), ]
-  prefilter_reads$Sample <-  gsub("_val_1", "", prefilter_reads$Sample)
+  prefilter_reads <- raw_reads
+
+  ##prefilter_reads$Sample <-  gsub("_val_1", "", prefilter_reads$Sample)
   ## ensure the samples matched
-  idx_m <- match(sample, prefilter_reads$Sample)
-  prefilter_reads <- fastqc[seq(2, nrow(fastqc), 2), ]
+  ##idx_m <- match(sample, prefilter_reads$Sample)
+  ##prefilter_reads <- fastqc[seq(2, nrow(fastqc), 2), ]
 }
 
 raw_reads_depth <- raw_reads$Total.Sequences
@@ -68,7 +78,7 @@ qc_matrix <- data.frame(sample,  group, raw_reads_depth, prefilter_reads_depth,
 ## alignment QC
 ###############
 {
-  sam_stats <- read.table(aggr_sam_stats, header = T, sep = "\t")
+  sam_stats <- read.table(paste0(out_dir, "/", aggr_sam_stats), header = T, sep = "\t")
 
   raw_bam_stats <- sam_stats[seq(2, nrow(sam_stats), 2), ]
   raw_bam_stats$Sample <- gsub("_sorted", "", raw_bam_stats$Sample)
@@ -110,7 +120,7 @@ qc_matrix <- data.frame(sample,  group, raw_reads_depth, prefilter_reads_depth,
 ## Fragment QC
 ###############
 if(ispaired){
-  frag_stats <- read.table(aggr_frag_stats, header = T, sep = "\t")
+  frag_stats <- read.table(paste0(out_dir, "/", aggr_frag_stats), header = T, sep = "\t")
   frag_stats$Sample <- gsub("_dedup_FR", "", frag_stats$Sample)
 
   ## match with qc_matrix order
@@ -136,7 +146,7 @@ if(ispaired){
 ## MeDIP QC
 ###########
 {
-  meth_qc <- read.table(aggr_meth_qc, header = T, sep = "\t")
+  meth_qc <- read.table(paste0(out_dir, "/", aggr_meth_qc), header = T, sep = "\t")
   idx_m <- match(qc_matrix$sample, meth_qc$Sample)
   meth_qc <- meth_qc[idx_m, ]
 
@@ -170,5 +180,5 @@ dev.off()
 
 library(rmarkdown)
 render(paste0(scr_dir, "/workflow/scripts/aggr_qc_report.Rmd"), output_dir = "aggregated",
-       params = list(readin = paste0(out_dir, "/aggregated/aggr_qc_report.csv")))
+       params = list(readin = paste0(out_dir, "/aggregated/aggr_qc_report.csv"), ispaired = ispaired))
 }

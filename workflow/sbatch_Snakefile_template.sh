@@ -23,14 +23,16 @@ snakemake --snakefile /path/to/workflow/Snakefile \
           --configfile /path/to/test/config_template.yaml \
           --unlock
 
-## --jobs   ## number of samples
-## sbatch -c :  maximal 8 threads per multithreading job by default, less -c INT  will be scaled down to INT
+## -p   partition to submit for SLURM
+## --mem    request memory, specify as much as you can. As we tested, 60G can handle all real cfMeDIP-seq datasets so far.
+## --jobs   ## number of samples in modified sample_tmplate.tsv files (independent steps will be scheduled per sample)
+## sbatch -c :  maximal 12 threads per multithreading job by default, less -c INT  will be scaled down to INT
 
 snakemake --snakefile /path/to/workflow/Snakefile \
           --configfile /path/to/test/config_template.yaml \
           --use-conda  --conda-prefix ${CONDA_PREFIX}_extra_env \
           --cluster-config /path/to/workflow/config/cluster_std_err.json \
-          --cluster "sbatch -p long -c 8 --mem=16G -o {cluster.std} -e {cluster.err}" \
+          --cluster "sbatch -p himem -c 12 --mem=60G -o {cluster.std} -e {cluster.err}" \
           --latency-wait 60 --jobs 4 -p
 
 conda deactivate
