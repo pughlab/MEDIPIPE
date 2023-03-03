@@ -8,7 +8,7 @@ The MEDIPIPE is designed for automated end-to-end quality control (QC) and analy
 - **Flexibility**: MEDIPIPE can deal with single-end or paired-end reads, which comes along with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples from large-scale profiling.
 
 ### Citation
-Please see and cite the preprint [here](https://biorxiv.org/cgi/content/short/2023.02.28.530481v1)for now.
+Please see and cite the preprint [here](https://biorxiv.org/cgi/content/short/2023.02.28.530481v1) for now.
 
 ### How it works
 This schematic diagram shows you how pipeline works:
