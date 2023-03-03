@@ -7,6 +7,9 @@ The MEDIPIPE is designed for automated end-to-end quality control (QC) and analy
 - **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
 - **Flexibility**: MEDIPIPE can deal with single-end or paired-end reads, which comes along with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples from large-scale profiling.
 
+### Citation
+Please see and cite the preprint [here](https://biorxiv.org/cgi/content/short/2023.02.28.530481v1)for now.
+
 ### How it works
 This schematic diagram shows you how pipeline works:
 <img src="figures/MEDIPIPE_Flowchart.png" alt="Schematic_diagram" style="width:100.0%" />
