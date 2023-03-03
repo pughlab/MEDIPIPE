@@ -159,7 +159,7 @@ if(ispaired){
   enrichment_GoGe <- round(meth_qc$enrichment.GoGe, digits = 2)
 
   qc_matrix <- data.frame(qc_matrix, saturation_maxEstCor, coverage_pctReadsWoCpG,
-                          coverage_pctCpGwoRead, coverage_pctCpGwo1Read, coverage_pctCpGgt5Read,
+                          coverage_pctCpGwoRead, coverage_pctCpGw1Read, coverage_pctCpGgt5Read,
                           enrichment_relH, enrichment_GoGe)
 }
 
