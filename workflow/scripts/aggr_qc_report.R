@@ -153,7 +153,7 @@ if(ispaired){
   saturation_maxEstCor <- round(meth_qc$saturation.maxEstCor, digits = 2)
   coverage_pctReadsWoCpG <- round(meth_qc$coverage.fracReadsWoCpG, digits = 4) * 100
   coverage_pctCpGwoRead <- round(meth_qc$coverage.fracCpGwoRead, digits = 4) * 100
-  coverage_pctCpGwo1Read <- round(meth_qc$coverage.fracCpGw1Read, digits = 4) * 100
+  coverage_pctCpGw1Read <- round(meth_qc$coverage.fracCpGw1Read, digits = 4) * 100
   coverage_pctCpGgt5Read <- round(meth_qc$coverage.fracCpGgt5Reads, digits = 4) * 100
   enrichment_relH <- round(meth_qc$enrichment.relH, digits = 2)
   enrichment_GoGe <- round(meth_qc$enrichment.GoGe, digits = 2)
