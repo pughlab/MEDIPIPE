@@ -16,7 +16,7 @@ This schematic diagram shows you how pipeline works:
 
 
 ## Installation
-1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The Miniconda3-py38_23.3.1-0-Linux-x86_64.sh for Linux is prefred to avoid potential cnflicts. The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended:
+1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The Miniconda3-py38_23.3.1-0-Linux-x86_64.sh for Linux is prefered to avoid potential cnflicts. The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended:
 
 	```bash
 	$ conda install -n base -c conda-forge mamba
