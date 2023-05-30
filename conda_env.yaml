@@ -7,6 +7,6 @@ dependencies:
   - snakemake=6.12.3
   - bwa=0.7.17
   - trim-galore=0.6.7
-  - samtools=1.9
+  - samtools=1.17
   - graphviz=2.40.1
   - picard=2.26.6

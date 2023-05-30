@@ -4,7 +4,7 @@
 The MEDIPIPE is designed for automated end-to-end quality control (QC) and analysis of (cf)MeDIP-seq data. The pipeline starts from the raw FASTQ files all the way to QC, alignment, methylation quantifications and aggregation. The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on some prior work of Wenbin Ye, [Eric Zhao](https://github.com/pughlab/cfMeDIP-seq-analysis-pipeline).
 
 ### Features
-- **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
+- **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. Users can also specify the version of softwares to be install in YMAL files. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
 - **Flexibility**: MEDIPIPE can deal with single-end or paired-end reads, which comes along with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples from large-scale profiling.
 
 ### Citation
@@ -39,7 +39,7 @@ This schematic diagram shows you how pipeline works:
 	> **IMPORTANT**: EXTRA ENVIRONMENTS WILL BE INSTALLED, MAKE SURE YOU STILL HAVE INTERNET ACCESS.
 	* **Step 1:** Prepare reference, samples FASTQ and aggregation files according to [templates](./test/README.md).
 	* **Step 2:** Specify input configuration file by following the instructions [here](./test/README.md).
-	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1,2.The toy dataset will fail to fit sigmoid model for MEDStrand due to low read depth, but you can still find other results in ./test/Res.
+	* **NOTE:** For testing run, you can simply run the SED command below to specify files in Step1, 2. This test dataset aims for a swift extra enviroments installation, which will fail to fit sigmoid model for MEDStrand due to low read depth, but you can still find other results in ./test/Res.
 
 	```bash
     $ sed -i 's,/path/to,'"$PWD"',g' ./test/*template.*
@@ -49,6 +49,8 @@ This schematic diagram shows you how pipeline works:
 		    --conda-prefix ${CONDA_PREFIX}_extra_env \
 	            --use-conda --cores 4 -p
 	```
+
+	* **Step 3 (Optional):** You can perform the full-scale test run  using another [toy dataset](./test/README.md) by following step 1, 2. 
 
 5) Run on HPCs
 

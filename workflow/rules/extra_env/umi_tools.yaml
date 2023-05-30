@@ -3,4 +3,4 @@ channels:
   - bioconda
 dependencies:
   - umi_tools=1.0.1
-  - samtools=1.9
+  - samtools=1.17
