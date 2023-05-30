@@ -4,7 +4,7 @@
 The MEDIPIPE is designed for automated end-to-end quality control (QC) and analysis of (cf)MeDIP-seq data. The pipeline starts from the raw FASTQ files all the way to QC, alignment, methylation quantifications and aggregation. The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on some prior work of Wenbin Ye, [Eric Zhao](https://github.com/pughlab/cfMeDIP-seq-analysis-pipeline).
 
 ### Features
-- **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. Users can also specify the version of softwares to be install in YMAL files. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
+- **Portability**: MEDIPIPE was developed with [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html), which will automatically deploy the execution environments. Users can also specify the version of softwares to be install in YAML files. It can also be performed across different cluster engines (e.g. SLURM) or stand-alone machines.
 - **Flexibility**: MEDIPIPE can deal with single-end or paired-end reads, which comes along with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples from large-scale profiling.
 
 ### Citation
@@ -16,7 +16,7 @@ This schematic diagram shows you how pipeline works:
 
 
 ## Installation
-1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The Miniconda3-py38_23.3.1-0-Linux-x86_64.sh for Linux is prefered to avoid potential cnflicts. The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended:
+1) Make sure that you have a Conda-based Python3 distribution(e.g.,the [Miniconda](https://docs.conda.io/en/latest/miniconda.html)). The Miniconda3-py38_23.3.1-0-Linux-x86_64.sh for Linux is prefered to avoid potential conflicts. The installation of [Mamba](https://github.com/mamba-org/mamba) is also recommended:
 
 	```bash
 	$ conda install -n base -c conda-forge mamba
