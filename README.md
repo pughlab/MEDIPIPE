@@ -1,4 +1,4 @@
-# MEDIPIPE: (cf)MeDIP-seq Data QC and Analysis Pipeline (v1.0.0)
+# MEDIPIPE: (cf)MeDIP-seq Data QC and Analysis Pipeline (v1.1.0)
 
 ## Intoduction
 The MEDIPIPE is designed for automated end-to-end quality control (QC) and analysis of (cf)MeDIP-seq data. The pipeline starts from the raw FASTQ files all the way to QC, alignment, methylation quantifications and aggregation. The pipeline was developed by [Yong Zeng](mailto:yzeng@uhnresearch.ca) based on some prior work of Wenbin Ye, [Eric Zhao](https://github.com/pughlab/cfMeDIP-seq-analysis-pipeline).
