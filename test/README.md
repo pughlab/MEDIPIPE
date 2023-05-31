@@ -31,9 +31,12 @@
 A config YAML file specifies all PATHs of input files and parameters that are necessary for successfully running this pipeline. This includes a specification of the path to the genome reference files. Please make sure to specify absolute paths rather than relative paths in your config files. More detailed instructions can be found at the [config_template](./test/config_template.yaml)
 
 
-## Test dataset
+## Test datasets
 
-The current toy cfMeDIP-seq data is randomly derived from the two BACs ([F19K16](https://www.arabidopsis.org/servlets/TairObject?type=assembly_unit&id=362) and [F24B22](https://www.arabidopsis.org/servlet/TairObject?type=AssemblyUnit&name=F24B22)) Arabidopsis by [Min Han](https://github.com/mhanbioinfo/make_toy_fastqs)
+There are two randomly generate cfMeDIP-seq testing datasets, more details can be found [here](https://github.com/mhanbioinfo/make_toy_fastqs).  
 
-`Reference/`: Genome reference and BWA index (Athaliana.BAC.F19K16.F24B22 )   
-`Fastq/` : Randomly generated paired-end FastQ reads   
+`Reference/`: Genome reference and BWA index (Athaliana.BAC.F19K16.F24B22) for extra environments installation.   
+
+`Fastq/` : Randomly generated paired-end FASTQ reads. Sample A, B were derived from two Athaliana BACs; toy sample 1, 2 incopporated both human and two BACs sequences with UMI barcodes.
+
+`Res/` : The outcomes for test run (sample A, B) will be depoisted here. In addtion, the aggregated QC reports for the 2 toy samples and 163 brain cancer samples from this [study](https://www.nature.com/articles/s41591-020-0932-2) were attched.     

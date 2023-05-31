@@ -10,15 +10,15 @@ You can download reference genome, pre-build BWA index and annotated regions (e.
 
 ```bash
 ## eg: ./download_build_reference.sh hg38 /your/genome/data/path/hg38
-$ ./workflow/download_reference.sh [GENOME] [DEST_DIR]
+$ ./assets/Reference/download_reference.sh [GENOME] [DEST_DIR]
 ```
 
 * Build reference genomes index
 If your sequencing libraries come with spike-ins, you can build new aligner index after combining spike-in genome with human genome. The new index information will be appended to corresponding manifest file.
 
 ```bash
-## eg: ./build_reference_index.sh hg38 ./data/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /your/genome/data/path/hg38
-$ ./workflow/build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
+## eg: ./assets/Reference/build_reference_index.sh hg38 ./data/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /your/genome/data/path/hg38
+$ ./assets/Reference/build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]
 ```
 
 

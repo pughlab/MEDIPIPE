@@ -7,8 +7,8 @@
 ## "A TSV file [DEST_DIR]/[GENOME].tsv will be generated. Use it for pipeline."
 ## "Supported genomes: hg19 and hg38"; Arabidopsis TAIR10 genome will be downloaded,
 ##  as well as building bwa index for merged genomes.
-## "Usage: ./download_build_reference.sh [GENOME] [DEST_DIR]"
-## "Example: ./download_build_reference.sh hg38 /your/genome/data/path/hg38"
+## "Usage: ./assets/Reference/download_build_reference.sh [GENOME] [DEST_DIR]"
+## "Example: ./assets/Reference/download_build_reference.sh hg38 /your/genome/data/path/hg38"
 
 
 #################
@@ -47,7 +47,7 @@ if [[ "${GENOME}" == "hg38" ]]; then
   PROM="https://www.encodeproject.org/files/ENCFF140XLU/@@download/ENCFF140XLU.bed.gz"
   ENH="https://www.encodeproject.org/files/ENCFF212UAV/@@download/ENCFF212UAV.bed.gz"
 
-  REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
+  #REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
 
 fi
 
@@ -68,7 +68,7 @@ if [[ "${GENOME}" == "hg19" ]]; then
   ENH="https://storage.googleapis.com/encode-pipeline-genome-data/hg19/ataqc/reg2map_honeybadger2_dnase_enh_p2.bed.gz"
 
   ## Arabidopsis
-  REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
+  # REF_FA_TAIR10="https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas"
 
 fi
 
@@ -84,12 +84,12 @@ wget -c -O $(basename ${REF_MITO_FA}) ${REF_MITO_FA}
 wget -c -O $(basename ${CHRSZ}) ${CHRSZ}
 
 ## TAIR10
-wget -c -O $(basename ${REF_FA_TAIR10}) ${REF_FA_TAIR10}
-sed -i -e 's/^>/>tair10_chr/' TAIR10_chr_all.fas
-gzip  TAIR10_chr_all.fas
+#wget -c -O $(basename ${REF_FA_TAIR10}) ${REF_FA_TAIR10}
+#sed -i -e 's/^>/>tair10_chr/' TAIR10_chr_all.fas
+#gzip  TAIR10_chr_all.fas
 
 ## combine genomes
-cat $(basename ${REF_FA}) TAIR10_chr_all.fas.gz > ${GENOME}_tair10.fa.gz
+# cat $(basename ${REF_FA}) TAIR10_chr_all.fas.gz > ${GENOME}_tair10.fa.gz
 
 ## annotated regions
 wget -N -c ${BLACKLIST}

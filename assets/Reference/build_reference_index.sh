@@ -1,9 +1,8 @@
 #!/bin/bash
 
 ## the script will build BWA index for combined human and spike-in genomes.
-## "Usage: ./build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]"
-## "Example: ./build_reference_index.sh hg38 ./data/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /your/genome/data/path/hg38"
-## "Example: ./build_reference_index.sh hg19 ./data/BAC_F19K16_F24B22.fa  hg19_BAC_F19K16_F24B22  /cluster/projects/tcge/DB/cfmedip-seq-pepeline/hg19"
+## "Usage: ./assets/Reference/build_reference_index.sh [GENOME] [SPIKEIN_FA] [INDEX_PREFIX] [DEST_DIR]"
+## "Example: ./assets/Reference/build_reference_index.sh hg38 ./assets/Spike-in_genomes/BAC_F19K16_F24B22.fa hg38_BAC_F19K16_F24B22 /your/genome/data/path/hg38"
 
 #################
 ## initilizaiton
@@ -33,7 +32,7 @@ cat ${hg_fa} ${SPIKEIN_FA} > ${DEST_DIR}/${INDEX_PREFIX}.fa
 cd ${DEST_DIR}
 
 echo "=== Building bwa index for mereged genomes ..."
-conda activate tcge-cfmedip-seq-pipeline
+conda activate MEDIPIPE
 
 bwa index -a bwtsw ${INDEX_PREFIX}.fa
 
