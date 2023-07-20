@@ -8,7 +8,7 @@ The MEDIPIPE is designed for automated end-to-end quality control (QC) and analy
 - **Flexibility**: MEDIPIPE can deal with single-end or paired-end reads, which comes along with or without spike-in/UMI sequences. It can be applied to individual samples, as well as to aggregate multiple samples from large-scale profiling.
 
 ### Citation
-Please see and cite the preprint [here](https://biorxiv.org/cgi/content/short/2023.02.28.530481v1) for now.
+Yong Zeng and others, MEDIPIPE: an automated and comprehensive pipeline for cfMeDIP-seq data quality control and analysis, Bioinformatics, Volume 39, Issue 7, July 2023, btad423, https://doi.org/10.1093/bioinformatics/btad423
 
 ### How it works
 This schematic diagram shows you how pipeline works:
@@ -25,7 +25,7 @@ This schematic diagram shows you how pipeline works:
 2) Git clone this pipeline.
 	```bash
 	$ cd
-	$ git clone https://github.com/yzeng-lol/MEDIPIPE
+	$ git clone https://github.com/pughlab/MEDIPIPE
 	```
 
 3) Install pipeline\'s core enviroment
