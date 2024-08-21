@@ -25,3 +25,24 @@ The following package could not be installed
    └─ libgcc-ng >=12 , which does not exist (perhaps a missing channel).
 ```
 This issue could be fixed by adding channels "conda-forge" and "defaults" into umi_tools.yaml, which has also been updated in the latest version.
+
+## "str' object has no attribute "name'
+```bash
+Traceback (most recent call last):
+File "/cluster/home/arna/miniconda3/envs/MEDIPIPE/lib/python3.8/site-packages/snakemake/__init__py", line 699, in snakemake
+success = workflow. execute(
+File "/cluster/home/arna/miniconda/envs/MEDIPIPE/lib/python3.8/site-packages/snakemake/workflow.py", line 1056, in execute logger.run_info("\n" join(dag.statsO))
+File "/cluster/home/arna/miniconda3/envs/MEDIPIPE/lib/python3.8/site-packages/snakemake/dag-py", line 2192, in stats yield tabulate(rows, headers="keys")
+File "/cluster/home/arna/miniconda3/envs/MEDIPIPE/lib/python3.8/site-packages/tabulate/__init__.py", line 2048, in tabulate
+list_of_lists, headers = _normalize_tabular_data
+File "/cluster/home/arna/miniconda/envs/MEDIPIPE/lib/python3.8/site-packages/tabulate/__init__py", line 1471, in _normalize_tabular_data
+rows = list(map(lambda r: r if _is_separating_line(r) else list(r), rows))
+File "/cluster/home/arna/miniconda3/envs/MEDIPIPE/lib/python3.8/site-packages/tabulate/__init__-py", line 1471, in «lambda»
+rows = list(map(lambda r: r if _is_separating line(r) else list(r), rows))
+File "/cluster/home/arna/miniconda/envs/MEDIPIPE/lib/python3.8/site-packages/tabulate/__init__.py", line 107, in _is separating_line
+(len (row) > 1 and row[0] = SEPARATING LINE)
+File "/cluster/home/arna/miniconda3/envs/MEDIPIPE/lib/python3.8/site-packages/snakemake/rules.py", line 1127, in __eq-
+return self.name = other.name and self.output = other.output
+AttributeError: "str' object has no attribute "name'
+```
+This issure could be fix by "conda install tabulate=0.8.10", more details refer to snakemake issue [1892](https://github.com/snakemake/snakemake/issues/1892)
