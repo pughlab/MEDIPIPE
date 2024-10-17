@@ -117,7 +117,7 @@ rule samtools_umi_tools_se:
         "logs/{sample}_dedup_umi.log"
     shell:
         ## --umi-separator='_' by default, could also be ":"
-        "(umi_tools dedup -I {input} -S {params.tmp_bam} --umi-separator=':' --output-stats={params.stat_prefix} && "
+        "(umi_tools dedup -I {input} -S {params.tmp_bam} --umi-separator='_' --output-stats={params.stat_prefix} && "
         "samtools view -b -F 2820 --threads {threads} {params.tmp_bam} > {output.dedup_bam} && "
         "samtools index -@ {threads} {output.dedup_bam}  && rm {params.tmp_bam} && "
         "samtools stats -@ {threads} {output.dedup_bam} > {output.bam_stat}) 2> {log}"
