@@ -11,7 +11,7 @@ INFO: activate-gfortran_linux-64.sh made the following environmental changes:
 ```
 
 ## Missing input files for rule merge_and_rename_fq_se
-You might come across above error even you spcified your input reads are pair-end. This might be due to your modified sample_template.tsv file is not tab-delimited or with duplicated sample_id. Fix that will allow the pipeline get throught. 
+You might come across above error even you spcified your input reads are pair-end. This might be due to your modified sample_template.tsv file is **not tab-delimited** or **with duplicated sample_id**. Fix that will allow the pipeline get throught. 
 
 
 ## Could not create conda environment from umi_tools.yaml
@@ -46,3 +46,6 @@ return self.name = other.name and self.output = other.output
 AttributeError: "str' object has no attribute "name'
 ```
 This issure could be fix by "conda install tabulate=0.8.10", more details refer to snakemake issue [1892](https://github.com/snakemake/snakemake/issues/1892)
+
+## Issue for installing mamba
+You might encounter the issue when you intall the mamaba with your connda version. Downgrading your mamba to 1.#.# versions might fix it. The version used for building the pipeline is v0.15.3. 
