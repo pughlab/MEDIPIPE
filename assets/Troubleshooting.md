@@ -49,3 +49,6 @@ This issure could be fix by "conda install tabulate=0.8.10", more details refer 
 
 ## Issue for installing mamba
 You might encounter the issue when you intall the mamaba with your connda version. Downgrading your mamba to 1.#.# versions might fix it. The version used for building the pipeline is v0.15.3. 
+
+## "ImportError: libffi.so.6: cannot open shared object file: No such file or directory" after OS upgrading 
+This could be fixed by creating a softlink name that points to the exsiting file in the folder of /miniconda3/envs/MEDIPIPE/lib/,  more details refer to [here](https://stackoverflow.com/questions/61875869/ubuntu-20-04-upgrade-python-missing-libffi-so-6/63329830#63329830)
